@@ -2,7 +2,7 @@
 
 > *Miles apart, a heartbeat away.*
 
-**Status:** Draft v0.1 (idea and planning stage, no code yet)
+**Status:** Draft v0.2 (idea and planning stage, no code yet)
 **Platform:** Android first
 **Audience:** Long-distance couples first. Other relationships (family, siblings, friends) later.
 
@@ -30,7 +30,7 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - **Principles:**
   1. *Less but more meaningful:* every action takes seconds.
   2. *No guilt:* no streaks, no "you haven't messaged in 24 hours!"
-  3. *Private by default:* things disappear unless you choose to keep them.
+  3. *Private by design:* everything is end-to-end encrypted. Only the two partners can ever read their messages, photos and personal details. Not Hearby, not Google, not anyone else. Things also disappear unless you choose to keep them.
   4. *Love isn't paywalled:* sending love and the heartbeat stay free forever.
 
 > **Name check (to finish before launch):** a quick search found no app named Hearby. A "HEARBY" trademark exists in class 41 (live music information, Area4 Labs Inc.), an unrelated category. Do a formal trademark check for classes 9 and 45, and check the Play Store name and domains (hearby.app, gethearby.com) before launch.
@@ -74,9 +74,13 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - *Later:* generate an avatar from a selfie.
 
 ### 4.6 Privacy and disappearing messages (v1)
-- Messages and photos **auto-disappear after 24 hours by default**.
-- Per-message **"keep"** option. Kept items go to the Memory Jar.
+- **Everything is end-to-end encrypted** (see section 5, a hard requirement).
+- Messages and photos **auto-disappear after 24 hours by default**, on both phones and on the server.
+- Per-message **"keep"** option. Kept items go to the Memory Jar and stay encrypted.
 - A global setting to change the default.
+- **Discreet mode:** blur the widget's message and photo until you tap, for when other people can see your home screen.
+- **App lock:** optional fingerprint, face or PIN lock.
+- **Lock-screen notifications never show content.** They show "💗 Hearby" at most.
 
 ### 4.7 Gentle reminders (v1)
 - If you haven't sent anything in a day, a soft nudge: *"Your person might love hearing from you today 🌙"*.
@@ -86,6 +90,7 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - The widget shows the partner's **local time**.
 - The partner's chibi **sleeps during their night**.
 - Messages sent during their quiet hours **arrive silently**. The heartbeat vibration waits until they wake (quiet hours are user-set, with a default of 11pm to 7am in their time zone).
+- The **receiving phone** decides when to vibrate, based on its own quiet hours, so the server never needs to know anyone's sleep schedule.
 
 ### 4.9 Tiny status (v1)
 - Set a status: *at work · studying · sleepy · busy · free to talk · missing you*.
@@ -105,7 +110,7 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 
 ### 4.13 Their weather (later)
 - The partner's character reflects the weather in **their city** (umbrella in the rain, scarf in the cold, sunglasses in the sun).
-- Uses a city the user picks, **never live GPS**.
+- Uses a city the user picks, **never live GPS**. The city is shared with the partner end-to-end encrypted, and each phone fetches the weather itself (no account, no user ID sent to the weather service).
 
 ### 4.14 Days together and anniversaries (later)
 - A days-together counter and anniversary reminders, with special anniversary scenes.
@@ -123,7 +128,60 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 
 ---
 
-## 5. Things to design carefully
+## 5. Privacy and security (hard requirement)
+
+**Promise to users:** *only you and your partner can ever see what you share.* Every user has their own privacy, with no data leakage. Hearby's servers only relay and temporarily store **encrypted data they cannot read**.
+
+### 5.1 End-to-end encryption (v1, non-negotiable)
+- **Everything personal is encrypted on the sender's phone and only decrypted on the partner's phone:**
+  - messages, presets sent, emojis, "felt it" tap-backs
+  - photos (encrypted before upload, with the key sent inside an encrypted message)
+  - status, meet-up countdown date, chosen city, time zone, avatar choices, widget scene state
+  - Memory Jar items
+- **Protocol:** use a proven, audited protocol. **Never invent our own crypto.** The candidate is the **Signal Protocol** (X3DH or PQXDH key agreement + Double Ratchet), which gives forward secrecy (old messages stay safe even if a key leaks later) and post-compromise security.
+  - Option A: **libsignal** (Signal's official library). Most battle-tested. It's licensed under **AGPL-3.0**, which has implications for how the app's source code must be shared, so this needs a licensing decision.
+  - Option B: a permissively licensed, audited Double Ratchet implementation built on Google Tink or libsodium primitives. This needs extra care and an audit.
+- **Keys live only on the device**, in the Android Keystore (hardware-backed where available). Private keys never leave the phone and are never sent to the server.
+- **Key verification at pairing:** QR-code pairing doubles as key verification (each phone checks the other's key fingerprint), which stops anyone from impersonating a partner. Link and code pairing show a "safety code" both partners can compare.
+- **Key changes are visible:** if a partner's key changes (new phone, reinstall), the app clearly shows it.
+
+### 5.2 What the server can and cannot see
+| Server **cannot** see | Server **can** see (kept to a minimum) |
+|---|---|
+| Message text, photos, emojis, presets | That two accounts are paired |
+| Status, countdown, city, time zone, avatar | That an encrypted message was sent, and roughly when |
+| Memory Jar contents | Encrypted blob size (padded to fixed sizes to hide length) |
+| Quiet hours and sleep schedule | Push-notification tokens |
+
+- **Metadata minimization:** pad message sizes, keep minimal server logs with short retention, never log IP addresses with user IDs, and evaluate "sealed sender"-style techniques that hide the sender from the server.
+- **Push notifications:** FCM payloads carry only an encrypted blob or a content-free "wake up" ping. Google sees nothing readable.
+
+### 5.3 No data leakage, by design
+- **No third-party advertising, tracking or analytics SDKs.** Ever.
+- Crash reporting (if any) is scrubbed of all personal content and is opt-in.
+- **Data minimization:** sign-up asks only for what's needed. No contacts access, no location, no phone-number requirement if it can be avoided.
+- Encrypted ciphertext on the server is **deleted after 24 hours** (or right after delivery, whichever comes first) unless it's a kept item in an encrypted backup.
+- **Screenshot protection** (optional) on the message view, and photos stay in app-private storage unless the user saves them.
+- Each user's data is isolated, with strict server-side access rules so no account can ever read another account's records.
+
+### 5.4 Backup, new phones and recovery
+- Because keys live only on the device, **losing a phone means losing the keys.** With 24-hour disappearing messages this is mostly fine, and the couple simply re-pairs and verifies keys again.
+- **Kept memories:** an optional **encrypted backup** protected by a user-chosen passphrase or recovery key that Hearby never knows (later version). If the passphrase is lost, the backup can't be recovered. That's the trade-off for real privacy.
+
+### 5.5 Unpair and account deletion
+- **Unpairing** deletes the session keys on both sides and wipes shared data from the server immediately.
+- **Account deletion** removes everything from the server immediately and wipes local data.
+
+### 5.6 Verification and compliance
+- An **independent security audit** of the encryption and backend before public launch.
+- A publicly documented security model ("how Hearby protects you"), in plain words.
+- Accurate **Google Play Data Safety** disclosures.
+- Compliance with applicable privacy laws for the launch region (e.g. GDPR, India's DPDP Act).
+- A responsible-disclosure contact for security researchers.
+
+---
+
+## 6. Things to design carefully
 
 - **Unpairing:** relationships sometimes end. Unpairing must be simple, respectful and immediate, with clear choices about deleting shared history. Either person can unpair without the other's consent.
 - **No location tracking:** live location in couple apps can enable controlling behavior. Time zone and weather come from a chosen city only.
@@ -131,7 +189,7 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - **Battery:** widget animation must be light (short loops, idle periods, only animating while visible).
 - **Notifications:** respect Do Not Disturb and the user's own system settings.
 
-## 6. Making money (later)
+## 7. Making money (later)
 
 - **Free forever:** pairing, sending love, the heartbeat, the widget, default avatars, disappearing messages.
 - **Optional premium ("Hearby+"):** extra outfits, scenes, widget themes, animation packs, a bigger Memory Jar, Wear OS extras.
@@ -139,11 +197,13 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 
 ---
 
-## 7. v1 scope summary
+## 8. v1 scope summary
 
 | Area | v1 | Later |
 |---|---|---|
 | Pairing (link, QR, ID, code), 1 partner | ✅ | Family circles, other relationships |
+| End-to-end encryption of everything personal | ✅ | Encrypted passphrase backup |
+| Discreet mode, app lock, content-free notifications | ✅ | |
 | 4x4 resizable, customizable widget | ✅ | More layouts and themes |
 | Living chibi couple scenes + partner peek-in | ✅ | More scenes |
 | Photo (no gallery save by default), text, presets, emojis | ✅ | Voice notes, doodles |
@@ -165,7 +225,7 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 
 ---
 
-## 8. Key screens
+## 9. Key screens
 
 1. **Welcome and sign-up:** a short, cute intro to the heartbeat idea.
 2. **Pairing:** share link, show QR code, scan QR code, enter ID or code.
@@ -179,7 +239,7 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 
 ---
 
-## 9. Technical approach (initial thinking)
+## 10. Technical approach (initial thinking)
 
 | Concern | Approach |
 |---|---|
@@ -187,13 +247,13 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 | Widget | App widget built on RemoteViews (Jetpack Glance where it fits). Frame animations via `ViewFlipper`-style flipbook loops of sprite frames. |
 | Art style | Chibi or pixel-art characters at a low frame rate, which looks intentionally cute within widget limits. Layered sprites (body, hair, outfit, accessories). |
 | Heartbeat vibration | A dedicated notification channel with a custom vibration pattern (a "lub-dub," roughly `[0, 120, 90, 200]` ms), fine-tuned by testing on real devices. Note that a channel's pattern is fixed once created and users can override it in system settings. |
-| Real-time delivery | Firebase Cloud Messaging (high-priority data messages) to wake the app and update the widget. |
-| Backend | Firebase Auth, Firestore (pairs, messages, status), Cloud Storage (photos), Cloud Functions (fan-out, quiet-hours scheduling, 24-hour deletion). |
+| Real-time delivery | Firebase Cloud Messaging (high-priority data messages carrying only ciphertext or a content-free ping) to wake the app, which decrypts and updates the widget locally. |
+| Backend | Firebase Auth, Firestore (pairing records and encrypted message blobs), Cloud Storage (encrypted photos), Cloud Functions (delivery fan-out, 24-hour deletion). Strict security rules isolate every account. Firebase is a starting point; a self-hosted relay is an option if it reduces metadata exposure. |
 | Disappearing messages | A server-side scheduled delete (Firestore TTL + a Storage cleanup function), plus local cleanup on the device. |
-| Camera | CameraX. Captures go to app-private storage and are only written to the gallery if the user chooses. |
-| Sleep-aware delivery | The partner's time zone and quiet hours are stored server-side. Messages sent during quiet hours are delivered silently, and the heartbeat is scheduled for wake-up time. |
+| Camera | CameraX. Captures go to app-private storage, are encrypted before upload, and are only written to the gallery if the user chooses. |
+| Sleep-aware delivery | Handled on the receiving phone: messages always arrive as silent data, and the phone plays the heartbeat now or at the end of its own quiet hours. The server never learns anyone's schedule. |
 | Weather (later) | A weather API queried by the chosen city. |
-| Security | Encrypted in transit and at rest. Consider end-to-end encryption for messages and photos in a later version. |
+| Security | **End-to-end encryption from v1** with the Signal Protocol (see section 5). Keys in the Android Keystore. TLS in transit. The server stores only ciphertext. |
 
 ### Known platform limits
 - Widgets can only play **short flipbook-style loops**, not smooth free-form animation. The art style is designed around this.
@@ -205,17 +265,17 @@ Scenes × animation frames × customization options multiply quickly. Layered sp
 
 ---
 
-## 10. Competitors to study
+## 11. Competitors to study
 
 - **Couple and widget apps:** Milo (Couple Widget), Couples Widget, Locket, Widgetable (animated pets in widgets).
 - **Couple apps:** Paired, Between, Lovewick, Nearish, Cupla.
 - **Hardware:** Bond Touch bracelets (the tap-to-vibrate feeling).
 
-**Hearby's edge:** the signature heartbeat vibration + a living chibi couple in the widget + a calm, guilt-free, low-effort design.
+**Hearby's edge:** the signature heartbeat vibration + a living chibi couple in the widget + a calm, guilt-free, low-effort design + true end-to-end encrypted privacy.
 
 ---
 
-## 11. Open questions
+## 12. Open questions
 
 1. Which art style exactly: chibi illustration or pixel art? Who draws it?
 2. Which animation "meanings" ship in v1 (kiss, hug, wave, miss you, good night, proud of you, ...)?
@@ -223,3 +283,5 @@ Scenes × animation frames × customization options multiply quickly. Layered sp
 4. Should "felt it" be automatic (on viewing the widget) or always a deliberate tap? *Current lean: a deliberate tap.*
 5. Launch region and languages?
 6. Exact heartbeat vibration pattern (to be tuned on real devices).
+7. E2EE library: libsignal (AGPL-3.0, affects source-code licensing) or a permissively licensed audited alternative?
+8. Backend: Firebase, or a self-hosted relay to reduce metadata exposure?

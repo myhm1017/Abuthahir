@@ -1,0 +1,667 @@
+<title>Hearby Preview</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: a centered stage of two Android phones, each running the Hearby widget, with "things to try" below. */
+:root {
+  --bg: #f6f0f7;
+  --fg: #2e2338;
+  --muted: #6e6180;
+  --accent: #db4f84;
+  --accent-soft: #f7d6e4;
+  --card: #ffffff;
+  --line: #e6dbea;
+  --display: "Fredoka", "Nunito", ui-rounded, system-ui, sans-serif;
+  --body: "Nunito", ui-rounded, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #19141f; --fg: #f3eaf6; --muted: #b6a8c4; --accent: #ff7eab;
+    --accent-soft: #3a2433; --card: #241c2c; --line: #3a2f44; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #19141f; --fg: #f3eaf6; --muted: #b6a8c4; --accent: #ff7eab;
+  --accent-soft: #3a2433; --card: #241c2c; --line: #3a2f44; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 48px;
+}
+button, select, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.top { max-width: 760px; margin: 0 auto 22px; text-align: center; display: grid; gap: 4px; }
+.logo { font-family: var(--display); font-weight: 600; font-size: 44px; letter-spacing: -0.5px; line-height: 1; color: var(--fg); }
+.logo .hb { color: var(--accent); display: inline-block; font-size: .62em; vertical-align: .35em; margin-left: 2px; animation: badumLogo 2.4s ease-in-out infinite; }
+@keyframes badumLogo { 0%, 60%, 100% { transform: scale(1) } 8% { transform: scale(1.25) } 16% { transform: scale(1) } 26% { transform: scale(1.35) } 38% { transform: scale(1) } }
+.tag { font-family: var(--display); font-size: 18px; color: var(--accent); margin: 0; }
+.intro { color: var(--muted); margin: 6px auto 0; max-width: 56ch; text-wrap: balance; }
+
+.tabs { display: none; justify-content: center; gap: 8px; margin: 0 auto 16px; }
+.tabs button { border: 1.5px solid var(--line); background: var(--card); border-radius: 999px; padding: 7px 14px; font-weight: 700; font-size: 14px; }
+.tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.stage { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; align-items: flex-start; }
+.device { display: grid; gap: 14px; justify-items: center; width: 300px; max-width: 100%; }
+.device-label { font-family: var(--display); font-weight: 500; font-size: 17px; }
+.device-label span { color: var(--muted); font-family: var(--body); font-size: 14px; }
+
+/* ---------- Phone (fixed visual world, same in both themes) ---------- */
+.phone {
+  position: relative; width: 300px; max-width: 100%; height: 620px; border-radius: 44px;
+  background: #15111b; padding: 9px; box-shadow: 0 22px 50px -18px rgba(60, 20, 70, .45), inset 0 0 0 2px #2b2433;
+}
+.phone .ring { position: absolute; inset: 0; border-radius: 44px; pointer-events: none; }
+.phone.beat { animation: badum 1.2s ease-out; }
+.phone.beat .ring { animation: ring 1.2s ease-out; }
+@keyframes badum { 0% { transform: scale(1) } 7% { transform: scale(1.022) rotate(-.4deg) } 15% { transform: scale(1) } 25% { transform: scale(1.035) rotate(.5deg) } 38% { transform: scale(1) } 100% { transform: scale(1) } }
+@keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(255, 110, 160, .0) } 10% { box-shadow: 0 0 0 6px rgba(255, 110, 160, .55) } 22% { box-shadow: 0 0 0 2px rgba(255, 110, 160, .2) } 30% { box-shadow: 0 0 0 12px rgba(255, 110, 160, .5) } 100% { box-shadow: 0 0 0 26px rgba(255, 110, 160, 0) } }
+.screen {
+  position: relative; height: 100%; border-radius: 36px; overflow: hidden; color: #33263f;
+  background:
+    radial-gradient(120% 60% at 10% 0%, #ffd9e8 0%, transparent 60%),
+    radial-gradient(90% 55% at 100% 30%, #d9d2ff 0%, transparent 60%),
+    radial-gradient(100% 60% at 20% 100%, #ffe6cf 0%, transparent 65%),
+    linear-gradient(160deg, #f9e3f0, #e5defb 55%, #fbe9dc);
+  display: flex; flex-direction: column;
+}
+.statusbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 22px 4px; font-size: 12px; font-weight: 700; color: #3a2c47; }
+.statusbar .cam { width: 12px; height: 12px; border-radius: 50%; background: #15111b; }
+.sb-icons { letter-spacing: 2px; font-size: 11px; }
+
+.banner {
+  position: absolute; top: 34px; left: 12px; right: 12px; z-index: 6; background: rgba(255, 255, 255, .88);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 18px; padding: 9px 14px; font-weight: 700; font-size: 13px;
+  box-shadow: 0 8px 20px -10px rgba(70, 30, 80, .4); animation: drop 2.8s ease both;
+}
+.banner small { display: block; font-weight: 600; color: #7a6a88; font-size: 11px; }
+@keyframes drop { 0% { transform: translateY(-120%); opacity: 0 } 10%, 82% { transform: none; opacity: 1 } 100% { transform: translateY(-120%); opacity: 0 } }
+
+/* ---------- Widget ---------- */
+.widget {
+  position: relative; margin: 10px 12px 0; border-radius: 28px; padding: 12px; overflow: hidden;
+  background: rgba(255, 255, 255, .42); border: 1px solid rgba(255, 255, 255, .7);
+  backdrop-filter: blur(18px) saturate(1.3); -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  box-shadow: 0 14px 30px -18px rgba(90, 40, 100, .5);
+  display: grid; gap: 8px;
+}
+.w-photo { position: absolute; inset: -20px; background-size: cover; background-position: center; filter: blur(22px) saturate(1.2); opacity: 0; transition: opacity .6s; z-index: 0; }
+.widget.has-photo .w-photo { opacity: .55; }
+.widget > *:not(.w-photo) { position: relative; z-index: 1; }
+.w-head { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 12px; }
+.who { display: flex; align-items: center; gap: 6px; min-width: 0; white-space: nowrap; }
+.who b { font-family: var(--display); font-weight: 600; font-size: 15px; }
+.who .ptime { color: #6f5f7e; font-weight: 600; }
+.pdot { width: 9px; height: 9px; border-radius: 50%; background: #6fd39a; box-shadow: 0 0 0 2px rgba(255, 255, 255, .8); }
+.pdot.asleep { background: #9a8fd6; }
+.chip { background: rgba(255, 255, 255, .7); border-radius: 999px; padding: 3px 8px; font-weight: 700; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; }
+
+.scene { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 2 / 1; max-width: 100%; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .6); }
+.scene canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges; }
+.fx { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+.fxe { position: absolute; left: 0; top: 0; line-height: 1; margin: -.5em 0 0 -.5em; will-change: transform, opacity; }
+@keyframes fly {
+  0% { opacity: 0; transform: translate(var(--x0), var(--y0)) scale(.45) }
+  12% { opacity: 1 }
+  78% { opacity: 1 }
+  100% { opacity: 0; transform: translate(var(--x1), var(--y1)) scale(var(--s)) rotate(var(--r)) }
+}
+@keyframes twinkle {
+  0% { opacity: 0; transform: translate(var(--x0), var(--y0)) scale(.2) }
+  50% { opacity: 1; transform: translate(var(--x0), var(--y0)) scale(var(--s)) rotate(var(--r)) }
+  100% { opacity: 0; transform: translate(var(--x0), var(--y0)) scale(.2) }
+}
+.scene-label {
+  position: absolute; left: 50%; top: 8px; transform: translateX(-50%); background: rgba(255, 255, 255, .9); color: #b03a6a;
+  font-weight: 800; font-size: 11px; padding: 3px 9px; border-radius: 999px; white-space: nowrap; animation: pop 3s ease both;
+}
+@keyframes pop { 0% { opacity: 0; transform: translate(-50%, -6px) } 10%, 85% { opacity: 1; transform: translate(-50%, 0) } 100% { opacity: 0 } }
+
+.countdown { font-size: 12px; font-weight: 700; color: #5d4c6d; text-align: center; }
+.countdown b { color: #c43f76; }
+
+.bubble { position: relative; background: rgba(255, 255, 255, .78); border-radius: 16px; padding: 8px 10px; min-height: 58px; display: grid; gap: 3px; }
+.b-body { display: flex; gap: 8px; align-items: center; min-width: 0; transition: filter .3s; }
+.b-body.veiled { filter: blur(7px); }
+.b-img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; flex: none; }
+.b-text { margin: 0; font-weight: 700; font-size: 14px; line-height: 1.3; min-width: 0; overflow-wrap: anywhere; }
+.b-veil { position: absolute; inset: 0; border: 0; background: transparent; font-weight: 800; font-size: 12px; color: #6a4e7c; border-radius: 16px; }
+.b-meta { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 11px; color: #7b6b89; font-weight: 600; }
+.keep { border: 0; background: #f3e5ee; color: #9a3e68; border-radius: 999px; padding: 2px 9px; font-size: 11px; font-weight: 800; }
+.keep[aria-pressed="true"] { background: #c43f76; color: #fff; }
+
+.actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.actions button {
+  border: 0; border-radius: 14px; background: rgba(255, 255, 255, .72); padding: 6px 2px 5px; font-size: 11px; font-weight: 800; color: #4a3858;
+  display: grid; justify-items: center; gap: 1px; transition: transform .15s, background .2s;
+}
+.actions button span { font-size: 18px; line-height: 1.2; }
+.actions button:hover { background: #fff; }
+.actions button:active { transform: scale(.94); }
+.actions .felt { background: #ffd9e7; color: #b03a6a; }
+.actions .felt:disabled { opacity: .55; cursor: default; }
+.e2ee { text-align: center; font-size: 10px; font-weight: 700; color: #7b6b89; }
+
+.apps { margin-top: auto; padding: 0 22px 10px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; justify-items: center; }
+.app { display: grid; justify-items: center; gap: 3px; font-size: 10px; font-weight: 700; color: #4b3a59; }
+.app i { font-style: normal; width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; font-size: 21px; background: rgba(255, 255, 255, .6); }
+.navbar { height: 18px; display: grid; place-items: center; }
+.navbar::after { content: ""; width: 96px; height: 4px; border-radius: 4px; background: rgba(50, 30, 60, .35); }
+
+.toast { position: absolute; left: 50%; bottom: 96px; transform: translateX(-50%); z-index: 6; background: #3a2a48; color: #fff; font-weight: 700; font-size: 12px; padding: 7px 14px; border-radius: 999px; white-space: nowrap; animation: pop 2.2s ease both; }
+
+/* ---------- Bottom sheet inside the phone ---------- */
+.sheet {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 8; background: rgba(255, 255, 255, .95);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-radius: 26px 26px 0 0; padding: 14px 16px 18px; transform: translateY(105%); transition: transform .35s cubic-bezier(.2, .9, .3, 1.05);
+  box-shadow: 0 -10px 30px -12px rgba(70, 30, 80, .35); display: grid; gap: 10px; color: #33263f;
+}
+.sheet.open { transform: none; }
+.sheet-head { display: flex; justify-content: space-between; align-items: center; }
+.sheet-head b { font-family: var(--display); font-weight: 600; font-size: 17px; }
+.close { border: 0; background: #f1e8f4; width: 30px; height: 30px; border-radius: 50%; font-size: 13px; }
+.sheet textarea { width: 100%; height: 82px; resize: none; border: 1.5px solid #ead9ee; border-radius: 14px; padding: 10px; background: #fff; color: #33263f; font-weight: 600; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.count { font-size: 11px; color: #8a7b98; font-weight: 700; }
+.send { border: 0; background: #db4f84; color: #fff; font-weight: 800; padding: 9px 18px; border-radius: 999px; }
+.send:disabled { opacity: .45; cursor: default; }
+.presets { display: flex; flex-wrap: wrap; gap: 7px; }
+.presets button { border: 1.5px solid #f0d7e4; background: #fff7fb; border-radius: 999px; padding: 6px 11px; font-weight: 700; font-size: 13px; color: #4a3858; }
+.presets button:hover { background: #ffe8f2; }
+.pick { display: grid; place-items: center; border: 2px dashed #e7c7d8; border-radius: 16px; padding: 16px; font-weight: 800; color: #9a3e68; cursor: pointer; background: #fff7fb; }
+.pick input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.pick:focus-within { outline: 3px solid #db4f84; outline-offset: 2px; }
+.preview { width: 100%; max-height: 120px; object-fit: cover; border-radius: 14px; }
+.tog { display: flex; gap: 8px; align-items: center; font-size: 13px; font-weight: 700; }
+.hint { margin: 0; font-size: 11.5px; color: #7b6b89; line-height: 1.4; }
+
+/* ---------- Controls under each phone ---------- */
+.controls { width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 12px 14px; display: grid; gap: 8px; font-size: 14px; }
+.controls .ctl-title { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 800; }
+.controls label { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-weight: 600; }
+.controls select { border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 4px 8px; font-size: 13px; }
+.controls input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); }
+.buzz { margin: 0; min-height: 1.5em; font-size: 13px; font-weight: 700; color: var(--accent); }
+
+.notes { max-width: 760px; margin: 36px auto 0; display: grid; gap: 10px; }
+.notes h2 { font-family: var(--display); font-weight: 600; font-size: 22px; margin: 0; }
+.notes ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.notes li::marker { color: var(--accent); }
+.notes .fine { color: var(--muted); font-size: 13.5px; margin: 4px 0 0; }
+
+@media (max-width: 760px) {
+  .tabs { display: flex; }
+  .stage[data-active="leo"] .device[data-id="mia"], .stage[data-active="mia"] .device[data-id="leo"] { display: none; }
+  .logo { font-size: 38px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .phone.beat, .phone.beat .ring, .logo .hb { animation: none; }
+  .sheet { transition: none; }
+}
+</style>
+
+<header class="top">
+  <div class="logo">hearby<span class="hb" aria-hidden="true">♥</span></div>
+  <p class="tag">Miles apart, a heartbeat away.</p>
+  <p class="intro">A working preview of the home-screen widget. Leo is in London and Mia is in Toronto. Send something from one phone and watch it land on the other.</p>
+</header>
+
+<div class="tabs" role="tablist" aria-label="Choose a phone">
+  <button role="tab" id="tab-leo" data-tab="leo" aria-selected="true">Leo's phone</button>
+  <button role="tab" id="tab-mia" data-tab="mia" aria-selected="false">Mia's phone</button>
+</div>
+
+<main class="stage" id="stage" data-active="leo"></main>
+
+<section class="notes">
+  <h2>Things to try</h2>
+  <ul>
+    <li>Send <b>"mwah 😘"</b>, <b>"sending a hug"</b> or <b>"good night 🌙"</b>. The animation changes with the meaning, and it's a little different every time.</li>
+    <li>Watch the other phone do the <b>2-beat heartbeat</b>. On an Android phone, your device may actually vibrate.</li>
+    <li>Tap <b>Felt it</b> on the receiving phone so the sender knows their love landed.</li>
+    <li>Turn on <b>Asleep</b> for Mia, then send from Leo. It arrives quietly. Turn Asleep off to feel the heartbeat.</li>
+    <li>Send from both phones within 15 seconds for a rare <b>in-sync</b> moment.</li>
+    <li>Turn on <b>Discreet mode</b> to blur messages until you tap them.</li>
+  </ul>
+  <p class="fine">This is a design preview. In the real Android app the heartbeat is a true vibration, messages are end-to-end encrypted, and widget animations run as short flipbook loops.</p>
+</section>
+
+<script>
+(() => {
+  const P = {
+    leo: { id: 'leo', name: 'Leo', city: 'London', tz: 'Europe/London', hair: '#4b3326', shirt: '#86aee6', pants: '#4f5d86', skin: '#f3cfb4', long: false, status: 'free to talk', quiet: false, discreet: false },
+    mia: { id: 'mia', name: 'Mia', city: 'Toronto', tz: 'America/Toronto', hair: '#2c2236', shirt: '#f19ab8', pants: '#7a5aa0', skin: '#e6b48f', long: true, status: 'at work', quiet: false, discreet: false }
+  };
+  const IDS = ['leo', 'mia'];
+  const other = id => (id === 'leo' ? 'mia' : 'leo');
+  const STATUSES = { 'free to talk': '💬', 'at work': '💼', 'studying': '📚', 'sleepy': '😪', 'busy': '⏳', 'missing you': '🥺' };
+  const PRESETS = ['thinking of you 🤍', 'miss you 🥺', 'mwah 😘', 'sending a hug 🤗', 'drink water, cutie 💧', 'proud of you ⭐', 'good morning ☀️', 'good night 🌙'];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const narrow = matchMedia('(max-width: 760px)');
+  const rand = Math.random, rnd = n => Math.floor(rand() * n), pick = a => a[rnd(a.length)];
+  const stage = document.getElementById('stage');
+
+  // ---------- Markup ----------
+  function deviceHTML(id) {
+    const me = P[id];
+    const opts = Object.keys(STATUSES).map(s => `<option value="${s}"${s === me.status ? ' selected' : ''}>${STATUSES[s]} ${s}</option>`).join('');
+    return `
+    <section class="device" data-id="${id}" aria-label="${me.name}'s phone">
+      <div class="device-label">${me.name}'s phone <span>· ${me.city}</span></div>
+      <div class="phone"><span class="ring"></span>
+        <div class="screen">
+          <div class="statusbar"><span class="clock"></span><span class="cam"></span><span class="sb-icons">▂▄▆ ▮</span></div>
+          <div class="banner-slot"></div>
+          <div class="widget">
+            <div class="w-photo"></div>
+            <div class="w-head">
+              <div class="who"><span class="pdot"></span><b class="pname"></b><span class="ptime"></span></div>
+              <span class="chip status"></span>
+            </div>
+            <div class="scene"><canvas width="120" height="60" aria-label="Animated couple scene"></canvas><div class="fx" aria-hidden="true"></div><div class="label-slot"></div></div>
+            <div class="countdown"></div>
+            <div class="bubble">
+              <div class="b-body"><img class="b-img" alt="Photo from your partner" hidden><p class="b-text"></p></div>
+              <button class="b-veil" hidden>Tap to reveal 💗</button>
+              <div class="b-meta"><span class="b-when"></span><button class="keep" aria-pressed="false">Keep</button></div>
+            </div>
+            <div class="actions">
+              <button data-act="photo"><span>📷</span>Photo</button>
+              <button data-act="text"><span>✏️</span>Text</button>
+              <button data-act="preset"><span>💬</span>Preset</button>
+              <button data-act="felt" class="felt"><span>💗</span>Felt it</button>
+            </div>
+            <div class="e2ee">🔒 End-to-end encrypted</div>
+          </div>
+          <div class="apps">
+            <div class="app"><i>📷</i>Camera</div><div class="app"><i>📅</i>Calendar</div><div class="app"><i>🎵</i>Music</div><div class="app"><i>💬</i>Messages</div>
+          </div>
+          <div class="navbar"></div>
+          <div class="toast-slot"></div>
+          <div class="sheet" aria-hidden="true">
+            <div class="sheet-head"><b class="sheet-title"></b><button class="close" aria-label="Close">✕</button></div>
+            <div class="s-text" hidden>
+              <textarea id="text-${id}" maxlength="120" placeholder="Say something sweet…" aria-label="Message"></textarea>
+              <div class="row"><span class="count">0 / 120</span><button class="send send-text" disabled>Send 💌</button></div>
+            </div>
+            <div class="s-preset" hidden><div class="presets">${PRESETS.map(t => `<button>${t}</button>`).join('')}</div></div>
+            <div class="s-photo" hidden>
+              <label class="pick">Choose a photo<input id="photo-${id}" type="file" accept="image/*"></label>
+              <img class="preview" alt="Selected photo" hidden>
+              <label class="tog"><input id="save-${id}" type="checkbox"> Save to my gallery too</label>
+              <p class="hint">In the app this opens a quick camera. Photos stay out of your gallery unless you choose to save them.</p>
+              <div class="row"><span></span><button class="send send-photo" disabled>Send 💌</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="ctl-title">${me.name}'s settings</div>
+        <label for="status-${id}">Status <select id="status-${id}">${opts}</select></label>
+        <label for="quiet-${id}">Asleep (quiet hours) <input type="checkbox" id="quiet-${id}"></label>
+        <label for="discreet-${id}">Discreet mode <input type="checkbox" id="discreet-${id}"></label>
+        <p class="buzz" aria-live="polite"></p>
+      </div>
+    </section>`;
+  }
+  stage.innerHTML = IDS.map(deviceHTML).join('');
+
+  // ---------- State ----------
+  const W = {};
+  const now = Date.now();
+  IDS.forEach((id, i) => {
+    const root = stage.querySelector(`.device[data-id="${id}"]`);
+    const q = s => root.querySelector(s);
+    const canvas = q('canvas');
+    W[id] = {
+      root, q, ctx: canvas.getContext('2d'), phone: q('.phone'), widget: q('.widget'), fx: q('.fx'),
+      sheet: q('.sheet'), f: i * 7, sceneIdx: i * 2, sceneStart: performance.now() - i * 2500,
+      override: null, overrideStart: 0, overrideUntil: 0, msg: null, pending: null, lastSentAt: 0, photo: null
+    };
+  });
+  W.leo.msg = { from: 'mia', text: 'thinking of you 🤍', at: now - 2 * 3600e3 - 4 * 60e3, kept: false, felt: false, revealed: false };
+  W.mia.msg = { from: 'leo', text: 'good morning, cutie ☀️', at: now - 37 * 60e3, kept: false, felt: true, revealed: false };
+
+  // ---------- Pixel scene ----------
+  const PW = 120, GROUND = 50, INK = '#3b2a3f', BLUSH = '#f59bb4';
+  const lerp = (a, b, t) => a.map((v, k) => Math.round(v + (b[k] - v) * t));
+  const grad = (a, b) => Array.from({ length: GROUND }, (_, y) => `rgb(${lerp(a, b, y / (GROUND - 1)).join(',')})`);
+  const SKY_DAY = grad([190, 220, 255], [255, 222, 236]);
+  const SKY_NIGHT = grad([34, 36, 86], [96, 72, 134]);
+  const HEART = ['.XX.XX.', 'XXXXXXX', 'XXXXXXX', '.XXXXX.', '..XXX..', '...X...'];
+  const HEART_S = ['X.X', 'XXX', '.X.'];
+  const ZZ = ['XXXX', '..X.', '.X..', 'XXXX'];
+  const STARS = [[8, 6], [22, 14], [37, 4], [55, 10], [70, 5], [84, 15], [112, 18], [16, 24], [64, 22]];
+  const BLOSSOM = [[-4, -20], [2, -23], [5, -17], [-1, -16], [7, -20], [-6, -17], [0, -19]];
+  const px = (c, x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  const pat = (c, x, y, rows, col) => rows.forEach((r, j) => { for (let i = 0; i < r.length; i++) if (r[i] === 'X') px(c, x + i, y + j, 1, 1, col); });
+
+  function sky(c, night, f, scroll) {
+    const rows = night ? SKY_NIGHT : SKY_DAY;
+    rows.forEach((col, y) => px(c, 0, y, PW, 1, col));
+    if (night) {
+      STARS.forEach(([x, y], i) => { if ((f + i * 3) % 11 < 8) px(c, x, y, 1, 1, '#fff6d8'); });
+      px(c, 99, 5, 6, 7, '#fff1bf'); px(c, 98, 6, 8, 5, '#fff1bf');
+      px(c, 102, 4, 5, 6, rows[6]); px(c, 103, 9, 4, 2, rows[10]);
+    } else {
+      [[10, 9, 0.18], [70, 15, 0.12], [118, 6, 0.15]].forEach(([ox, y, sp]) => {
+        const x = ((ox + f * sp + scroll * 0.2) % 150) - 20;
+        px(c, x, y, 11, 3, '#ffffff'); px(c, x + 2, y - 2, 6, 2, '#ffffff'); px(c, x + 7, y - 1, 3, 1, '#ffffff');
+      });
+    }
+    px(c, 0, GROUND, PW, 10, night ? '#3c5c55' : '#a8dc99');
+    px(c, 0, GROUND, PW, 1, night ? '#4d7068' : '#92cd85');
+    for (let i = 0; i < 12; i++) {
+      const x = ((i * 11 - scroll) % 132 + 132) % 132 - 6;
+      px(c, x, GROUND + 3 + (i % 3) * 2, 2, 1, night ? '#33504a' : '#8fc681');
+      if (i % 4 === 1) px(c, x + 4, GROUND - 1, 1, 1, night ? '#c9a3d8' : '#f593bf');
+      if (i % 4 === 3) px(c, x + 2, GROUND - 1, 1, 1, night ? '#e6d7a1' : '#ffe07a');
+    }
+  }
+  function tree(c, x, night) {
+    const g = night ? '#4c7a69' : '#7cc48a', g2 = night ? '#3f6658' : '#69b07a';
+    px(c, x, GROUND - 11, 3, 11, night ? '#6e5146' : '#9a6a52');
+    px(c, x - 6, GROUND - 21, 15, 7, g); px(c, x - 4, GROUND - 24, 11, 3, g); px(c, x - 7, GROUND - 18, 17, 5, g);
+    px(c, x - 6, GROUND - 14, 15, 1, g2);
+    BLOSSOM.forEach(([dx, dy]) => px(c, x + dx, GROUND + dy, 1, 1, night ? '#c99ab9' : '#ffb3cf'));
+  }
+  function chibi(c, x, base, p, o) {
+    const f = o.f || 0, face = o.face || 1;
+    const bob = o.walk && f % 2 ? 1 : 0;
+    const bodyBottom = (o.sit ? base - 1 : base - 3) - bob;
+    if (o.sit) { px(c, x - 3, base - 2, 7, 2, p.pants); px(c, face > 0 ? x + 4 : x - 5, base - 2, 2, 2, '#5b4650'); }
+    else if (o.walk && f % 2) { px(c, x - 2, base - 3, 2, 3, p.pants); px(c, x, base - 3, 2, 3, p.pants); }
+    else { px(c, x - 3, base - 3, 2, 3, p.pants); px(c, x + 1, base - 3, 2, 3, p.pants); }
+    const top = bodyBottom - 6;
+    px(c, x - 3, top, 7, 6, p.shirt);
+    px(c, x - 4, top + 1, 1, 4, p.skin);
+    if (o.wave) { if (f % 2) px(c, x + 4, top - 3, 1, 4, p.skin); else { px(c, x + 4, top - 2, 1, 3, p.skin); px(c, x + 5, top - 3, 1, 1, p.skin); } }
+    else px(c, x + 4, top + 1, 1, 4, p.skin);
+    const hx = x - 5, hy = top - 9;
+    if (p.long) { px(c, hx - 1, hy + 1, 2, 11, p.hair); px(c, hx + 10, hy + 1, 2, 11, p.hair); }
+    px(c, hx + 1, hy, 9, 9, p.skin); px(c, hx, hy + 1, 11, 7, p.skin);
+    px(c, hx + 1, hy - 1, 9, 1, p.hair); px(c, hx, hy, 11, 3, p.hair);
+    px(c, face > 0 ? hx + 6 : hx + 1, hy + 3, 4, 1, p.hair);
+    px(c, hx, hy + 3, 1, 3, p.hair); px(c, hx + 10, hy + 3, 1, 3, p.hair);
+    const ex = face > 0 ? 1 : -1, ey = hy + 5;
+    if (o.sleep || o.blink) { px(c, x - 3 + ex, ey + 1, 2, 1, INK); px(c, x + 1 + ex, ey + 1, 2, 1, INK); }
+    else { px(c, x - 3 + ex, ey, 1, 2, INK); px(c, x + 2 + ex, ey, 1, 2, INK); }
+    px(c, x - 4 + ex, ey + 2, 2, 1, BLUSH); px(c, x + 2 + ex, ey + 2, 2, 1, BLUSH);
+    px(c, x + ex, ey + 3, 1, 1, '#b2556c');
+    if (o.sleep) { const zy = hy - 6 - ((f % 16) >> 1); pat(c, x + 4, zy, ZZ, '#ffffff'); }
+    return top;
+  }
+  const SCENES = ['walk', 'sit', 'peek', 'together'];
+
+  function draw(id) {
+    const s = W[id], c = s.ctx, me = P[id], pa = P[other(id)];
+    const t = performance.now();
+    s.f++;
+    const f = s.f;
+    if (t - s.sceneStart > 7000) { s.sceneIdx = (s.sceneIdx + 1) % SCENES.length; s.sceneStart = t; }
+    let scene = SCENES[s.sceneIdx], prog = (t - s.sceneStart) / 7000;
+    if (s.override && t < s.overrideUntil) { scene = s.override; prog = (t - s.overrideStart) / (s.overrideUntil - s.overrideStart); }
+    else s.override = null;
+    if ((me.quiet || pa.quiet) && scene !== 'hug') scene = 'sleep';
+    const night = me.quiet;
+    const blinkMe = f % 37 === 0 || f % 37 === 1, blinkPa = f % 43 === 0 || f % 43 === 1;
+    const scroll = scene === 'walk' ? f : 0;
+    sky(c, night, f, scroll);
+
+    if (scene === 'walk') {
+      const tx = ((150 - f * 0.9) % 190 + 190) % 190 - 30;
+      tree(c, tx, night);
+      const topA = chibi(c, 53, GROUND, me, { walk: true, f, face: 1, blink: blinkMe });
+      chibi(c, 66, GROUND, pa, { walk: true, f, face: 1, blink: blinkPa });
+      px(c, 58, topA + 4, 4, 1, me.skin);
+    } else if (scene === 'sit') {
+      tree(c, 26, night);
+      chibi(c, 50, GROUND, me, { sit: true, f, face: 1, blink: blinkMe });
+      const top = chibi(c, 63, GROUND, pa, { sit: true, f, face: -1, blink: blinkPa });
+      const hp = (f % 24);
+      if (hp < 14) pat(c, 55, top - 12 - (hp >> 1), HEART_S, '#ff7aa8');
+    } else if (scene === 'peek') {
+      tree(c, 20, night);
+      chibi(c, 46, GROUND, me, { f, face: 1, blink: blinkMe });
+      let x;
+      if (prog < 0.15) x = 132 - (prog / 0.15) * 20;
+      else if (prog < 0.78) x = 112;
+      else x = 112 + ((prog - 0.78) / 0.22) * 22;
+      const top = chibi(c, x, GROUND, pa, { f, face: -1, wave: prog > 0.15 && prog < 0.78 });
+      if (prog > 0.2 && prog < 0.75 && f % 8 < 5) pat(c, x - 12, top - 4, HEART_S, '#ff7aa8');
+    } else if (scene === 'together') {
+      tree(c, 98, night);
+      const top = chibi(c, 50, GROUND, me, { f, face: 1, blink: blinkMe });
+      chibi(c, 66, GROUND, pa, { f, face: -1, blink: blinkPa });
+      const big = f % 10 < 2 || (f % 10 > 3 && f % 10 < 5);
+      pat(c, 55, top - 12, big ? HEART : HEART_S.map(r => r), '#ff6f9f');
+    } else if (scene === 'hug') {
+      tree(c, 20, night);
+      const k = Math.min(1, prog / 0.3);
+      const top = chibi(c, 50 + 5 * k, GROUND, me, { f, face: 1 });
+      chibi(c, 66 - 5 * k, GROUND, pa, { f, face: -1 });
+      if (k === 1) pat(c, 55, top - 13 - ((f % 8) >> 2), HEART, '#ff6f9f');
+    } else if (scene === 'sleep') {
+      tree(c, 28, night);
+      chibi(c, 52, GROUND, me, { sit: true, f, face: 1, sleep: me.quiet, blink: !me.quiet && blinkMe });
+      chibi(c, 65, GROUND, pa, { sit: true, f, face: -1, sleep: pa.quiet, blink: !pa.quiet && blinkPa });
+    }
+  }
+  function setOverride(id, scene, ms) { const s = W[id]; s.override = scene; s.overrideStart = performance.now(); s.overrideUntil = s.overrideStart + ms; }
+
+  // ---------- Emoji effects inside the widget ----------
+  function spawn(fx, ch, x0, y0, x1, y1, o = {}) {
+    const e = document.createElement('span');
+    const w = fx.clientWidth, h = fx.clientHeight;
+    e.className = 'fxe'; e.textContent = ch;
+    e.style.cssText = `--x0:${x0 * w}px;--y0:${y0 * h}px;--x1:${x1 * w}px;--y1:${y1 * h}px;--s:${o.s ?? 1.6};--r:${o.r ?? 0}deg;font-size:${o.size ?? 20}px;animation:${o.anim || 'fly'} ${o.dur ?? 1400}ms ${o.ease || 'cubic-bezier(.2,.7,.3,1)'} ${o.delay ?? 0}ms both`;
+    e.addEventListener('animationend', () => e.remove());
+    fx.appendChild(e);
+  }
+  function burst(fx, set, cx, cy, n, o = {}) {
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + rand() * 0.4, r = 0.25 + rand() * 0.2;
+      spawn(fx, pick(set), cx, cy, cx + Math.cos(a) * r, cy + Math.sin(a) * r * 1.4, { s: 1.2 + rand() * 0.6, dur: 1200 + rand() * 500, delay: (o.delay || 0) + rand() * 160, size: 15, r: rand() * 60 - 30 });
+    }
+  }
+  function twinkles(fx, set, n, delay = 0) {
+    for (let i = 0; i < n; i++) spawn(fx, pick(set), 0.08 + rand() * 0.84, 0.08 + rand() * 0.6, 0, 0, { anim: 'twinkle', s: 1 + rand() * 0.6, dur: 1100 + rand() * 600, delay: delay + rand() * 900, size: 13, ease: 'ease-in-out' });
+  }
+  const EMOJI = { kiss: '😘', hug: '🤗', miss: '🥺', night: '🌙', morning: '☀️', proud: '⭐', care: '💧', love: '💗', photo: '📸' };
+  const FX = {
+    kiss(fx) {
+      const v = rnd(3);
+      if (v === 0) spawn(fx, pick(['😘', '💋']), 0.62, 0.5, 0.5, 0.45, { s: 3.4, dur: 1700 });
+      else if (v === 1) for (let i = 0; i < 3; i++) spawn(fx, '💋', 0.62, 0.5, 0.22 + i * 0.28, 0.15 + rand() * 0.35, { s: 2, dur: 1500, delay: i * 230, r: rand() * 40 - 20 });
+      else { spawn(fx, '💋', 0.64, 0.5, 0.42, 0.42, { s: 1.5, dur: 1000 }); burst(fx, ['💗', '💕'], 0.42, 0.42, 7, { delay: 850 }); }
+    },
+    hug(fx, id) { setOverride(id, 'hug', 3200); spawn(fx, '🤗', 0.5, 0.55, 0.5, 0.2, { s: 2.4, dur: 1800 }); burst(fx, ['💞', '💗', '💕'], 0.5, 0.4, 8, { delay: 700 }); },
+    miss(fx, id) { setOverride(id, 'peek', 4200); spawn(fx, '🥺', 0.92, 0.5, 0.76, 0.18, { s: 2, dur: 2000, delay: 700 }); spawn(fx, '💭', 0.4, 0.4, 0.34, 0.12, { s: 1.6, dur: 1800, delay: 300 }); },
+    night(fx) { spawn(fx, '🌙', 0.84, 1, 0.82, 0.2, { s: 2, dur: 2300 }); twinkles(fx, ['✨', '⭐'], 7); },
+    morning(fx) { spawn(fx, '☀️', 0.16, 1, 0.18, 0.2, { s: 2.2, dur: 2300 }); twinkles(fx, ['✨'], 5, 300); },
+    proud(fx) { spawn(fx, '⭐', 0.5, 0.6, 0.5, 0.3, { s: 2.6, dur: 1500 }); burst(fx, ['⭐', '🎉', '✨', '🌟'], 0.5, 0.45, 12, { delay: 300 }); },
+    care(fx) { for (let i = 0; i < 9; i++) { const x = 0.1 + rand() * 0.8; spawn(fx, pick(['💧', '💧', '🍜', '🥤']), x, -0.1, x + rand() * 0.06, 1.05, { s: 1.1, dur: 1300 + rand() * 500, delay: i * 140, ease: 'cubic-bezier(.5,0,.9,.6)', size: 16 }); } },
+    love(fx) {
+      const v = rnd(3);
+      if (v === 0) for (let i = 0; i < 9; i++) { const x = 0.1 + rand() * 0.8; spawn(fx, pick(['💗', '💕', '💖', '🤍']), x, 1.05, x + rand() * 0.1 - 0.05, 0.05 + rand() * 0.3, { s: 1.3, dur: 1500 + rand() * 600, delay: i * 120, size: 16 }); }
+      else if (v === 1) { spawn(fx, '💖', 0.5, 0.5, 0.5, 0.42, { s: 3.6, dur: 1600 }); burst(fx, ['✨'], 0.5, 0.45, 6, { delay: 500 }); }
+      else for (let i = 0; i < 6; i++) spawn(fx, '💗', 0.64, 0.5, 0.44 - i * 0.03, 0.2 + Math.sin(i) * 0.15, { s: 1.4, dur: 1300, delay: i * 150, size: 15 });
+    },
+    photo(fx) { spawn(fx, '📸', 0.5, 0.6, 0.5, 0.35, { s: 2.4, dur: 1400 }); burst(fx, ['💗', '✨'], 0.5, 0.4, 8, { delay: 600 }); }
+  };
+  function meaning(msg) {
+    if (msg.img) return 'photo';
+    const t = (msg.text || '').toLowerCase(), has = a => a.some(k => t.includes(k));
+    if (has(['kiss', 'mwah', 'smooch', '😘', '💋'])) return 'kiss';
+    if (has(['hug', 'cuddle', '🤗', 'hold you'])) return 'hug';
+    if (has(['miss', '🥺'])) return 'miss';
+    if (has(['night', 'sleep', 'dream', '🌙'])) return 'night';
+    if (has(['morning', '☀', 'sunshine'])) return 'morning';
+    if (has(['proud', 'congrat', 'you got this', '⭐', '🎉'])) return 'proud';
+    if (has(['water', 'eat', 'drink', 'food', '💧'])) return 'care';
+    return 'love';
+  }
+  function play(id, msg) {
+    const m = meaning(msg), fx = W[id].fx;
+    if (reduced.matches) { spawn(fx, EMOJI[m], 0.5, 0.5, 0.5, 0.4, { s: 1.8, dur: 1300 }); return; }
+    FX[m](fx, id);
+  }
+
+  // ---------- UI helpers ----------
+  const fmtTime = tz => new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', timeZone: tz }).format(new Date());
+  const fmtClock = tz => new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: tz }).format(new Date());
+  function ago(at) { const m = Math.floor((Date.now() - at) / 60e3); return m < 1 ? 'just now' : m < 60 ? `${m}m ago` : `${Math.floor(m / 60)}h ago`; }
+  function fades(at) { const h = Math.max(1, Math.ceil((24 * 3600e3 - (Date.now() - at)) / 3600e3)); return `fades in ${h}h`; }
+  function slot(id, sel, cls, html, ms) {
+    const host = W[id].q(sel);
+    host.innerHTML = `<div class="${cls}">${html}</div>`;
+    clearTimeout(host._t); host._t = setTimeout(() => { host.innerHTML = ''; }, ms);
+  }
+  const banner = (id, html) => slot(id, '.banner-slot', 'banner', html, 2900);
+  const toast = (id, text) => slot(id, '.toast-slot', 'toast', text, 2300);
+  const sceneLabel = (id, text) => slot(id, '.label-slot', 'scene-label', text, 3100);
+  function buzz(id, text, ms = 3200) { const b = W[id].q('.buzz'); b.textContent = text; clearTimeout(b._t); b._t = setTimeout(() => { b.textContent = ''; }, ms); }
+
+  function renderHead(id) {
+    const s = W[id], pa = P[other(id)], me = P[id];
+    s.q('.clock').textContent = fmtClock(me.tz);
+    s.q('.pname').textContent = pa.name;
+    s.q('.ptime').textContent = `· ${fmtTime(pa.tz)}`;
+    s.q('.pdot').classList.toggle('asleep', pa.quiet);
+    s.q('.chip.status').textContent = pa.quiet ? '😴 asleep' : `${STATUSES[pa.status]} ${pa.status}`;
+    const d = new Date(); d.setDate(d.getDate() + 12);
+    s.q('.countdown').innerHTML = `✈️ <b>12 days</b> until you're together · ${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+  }
+  function renderBubble(id) {
+    const s = W[id], m = s.msg, q = s.q;
+    const img = q('.b-img'), body = q('.b-body'), veil = q('.b-veil'), keep = q('.keep'), felt = q('[data-act="felt"]');
+    if (!m) return;
+    img.hidden = !m.img; if (m.img) img.src = m.img;
+    q('.b-text').textContent = m.img ? (m.text || 'sent you a photo 📷') : m.text;
+    q('.b-when').textContent = `${P[m.from].name} · ${ago(m.at)} · ${m.kept ? 'kept in Memory Jar' : fades(m.at)}`;
+    keep.textContent = m.kept ? 'Kept 🔖' : 'Keep';
+    keep.setAttribute('aria-pressed', String(m.kept));
+    const veiled = P[id].discreet && !m.revealed;
+    body.classList.toggle('veiled', veiled); veil.hidden = !veiled;
+    s.widget.classList.toggle('has-photo', !!m.img && !veiled);
+    q('.w-photo').style.backgroundImage = m.img ? `url("${m.img}")` : 'none';
+    felt.disabled = m.felt;
+    felt.innerHTML = m.felt ? '<span>💞</span>Felt ✓' : '<span>💗</span>Felt it';
+  }
+
+  function beat(id) {
+    const ph = W[id].phone;
+    if (!reduced.matches) { ph.classList.remove('beat'); void ph.offsetWidth; ph.classList.add('beat'); }
+    try { if (navigator.vibrate) navigator.vibrate([0, 120, 90, 200]); } catch (e) { /* not available */ }
+    banner(id, '💗 Hearby<small>Someone is thinking of you</small>');
+    buzz(id, '📳 ba-dum… the heartbeat vibration');
+  }
+
+  // ---------- Sending ----------
+  function send(from, payload) {
+    const to = other(from), t = Date.now();
+    const msg = { from, text: payload.text || '', img: payload.img || null, at: t, kept: false, felt: false, revealed: false };
+    closeSheet(from);
+    toast(from, `Sent to ${P[to].name} 💌`);
+    const sync = t - W[to].lastSentAt < 15000;
+    W[from].lastSentAt = t;
+    if (narrow.matches) setTimeout(() => setTab(to), 650);
+    setTimeout(() => {
+      W[to].msg = msg; renderBubble(to);
+      if (P[to].quiet) {
+        W[to].pending = msg;
+        banner(to, '🌙 Delivered quietly<small>The heartbeat waits until morning</small>');
+        buzz(to, `🌙 ${P[to].name} is asleep, so this arrived silently.`, 4200);
+      } else {
+        beat(to); play(to, msg);
+      }
+      if (sync && !P[to].quiet && !P[from].quiet) setTimeout(() => IDS.forEach(id => {
+        setOverride(id, 'hug', 3600); sceneLabel(id, 'In sync ✨ you thought of each other');
+        if (!reduced.matches) twinkles(W[id].fx, ['✨', '💫', '💗'], 10);
+      }), 1500);
+    }, narrow.matches ? 1000 : 700);
+  }
+  function feltIt(id) {
+    const s = W[id], m = s.msg;
+    if (!m || m.felt) return;
+    m.felt = true; renderBubble(id);
+    toast(id, `${P[m.from].name} will know you felt it 💗`);
+    const back = m.from;
+    setTimeout(() => {
+      sceneLabel(back, `${P[id].name} felt it 💗`);
+      if (!reduced.matches) burst(W[back].fx, ['💗', '💕'], 0.6, 0.45, 6);
+      buzz(back, `💗 ${P[id].name} felt your message`);
+    }, 600);
+  }
+
+  // ---------- Sheet ----------
+  const TITLES = { text: 'Write something', preset: 'Pick a preset', photo: 'Send a photo' };
+  function openSheet(id, kind) {
+    const s = W[id];
+    ['text', 'preset', 'photo'].forEach(k => { s.q(`.s-${k}`).hidden = k !== kind; });
+    s.q('.sheet-title').textContent = TITLES[kind];
+    s.sheet.classList.add('open'); s.sheet.setAttribute('aria-hidden', 'false');
+    setTimeout(() => { const el = kind === 'text' ? s.q('textarea') : s.q(`.s-${kind} button, .s-${kind} input`); el && el.focus(); }, 250);
+  }
+  function closeSheet(id) { const s = W[id]; s.sheet.classList.remove('open'); s.sheet.setAttribute('aria-hidden', 'true'); }
+
+  // ---------- Wire up ----------
+  IDS.forEach(id => {
+    const s = W[id], q = s.q;
+    q('.actions').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      const act = b.dataset.act;
+      if (act === 'felt') feltIt(id); else openSheet(id, act);
+    });
+    q('.close').addEventListener('click', () => closeSheet(id));
+    const ta = q('textarea'), sendText = q('.send-text');
+    ta.addEventListener('input', () => { q('.count').textContent = `${ta.value.length} / 120`; sendText.disabled = !ta.value.trim(); });
+    ta.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && ta.value.trim()) { e.preventDefault(); sendText.click(); } });
+    sendText.addEventListener('click', () => { const v = ta.value.trim(); if (!v) return; send(id, { text: v }); ta.value = ''; q('.count').textContent = '0 / 120'; sendText.disabled = true; });
+    q('.presets').addEventListener('click', e => { const b = e.target.closest('button'); if (b) send(id, { text: b.textContent }); });
+    const file = q('input[type="file"]'), prev = q('.preview'), sendPhoto = q('.send-photo');
+    file.addEventListener('change', () => {
+      const fl = file.files && file.files[0]; if (!fl) return;
+      const r = new FileReader();
+      r.onload = () => { s.photo = r.result; prev.src = r.result; prev.hidden = false; sendPhoto.disabled = false; };
+      r.readAsDataURL(fl);
+    });
+    sendPhoto.addEventListener('click', () => {
+      if (!s.photo) return;
+      send(id, { img: s.photo, text: 'sent you a photo 📷' });
+      s.photo = null; prev.hidden = true; file.value = ''; sendPhoto.disabled = true;
+    });
+    q('.keep').addEventListener('click', () => { if (s.msg) { s.msg.kept = !s.msg.kept; renderBubble(id); } });
+    q('.b-veil').addEventListener('click', () => { if (s.msg) { s.msg.revealed = true; renderBubble(id); } });
+    document.getElementById(`status-${id}`).addEventListener('change', e => { P[id].status = e.target.value; renderHead(other(id)); });
+    document.getElementById(`discreet-${id}`).addEventListener('change', e => { P[id].discreet = e.target.checked; if (s.msg) s.msg.revealed = false; renderBubble(id); });
+    document.getElementById(`quiet-${id}`).addEventListener('change', e => {
+      P[id].quiet = e.target.checked;
+      IDS.forEach(renderHead);
+      if (!P[id].quiet && s.pending) {
+        const m = s.pending; s.pending = null;
+        buzz(id, `☀️ Good morning, ${P[id].name}`);
+        setTimeout(() => { beat(id); play(id, m); }, 500);
+      }
+    });
+  });
+
+  function setTab(id) {
+    stage.dataset.active = id;
+    document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === id)));
+  }
+  document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+
+  IDS.forEach(id => { renderHead(id); renderBubble(id); draw(id); });
+  setInterval(() => IDS.forEach(draw), 125);
+  setInterval(() => IDS.forEach(id => { renderHead(id); renderBubble(id); }), 20000);
+})();
+</script>

@@ -138,9 +138,7 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 ### 4.10f Special days (v1)
 - A **shared calendar** of birthdays, anniversaries and other moments ("the day we met", "Nikah day", graduation), managed from the widget (📅). Either partner can add, edit or delete days, and the list syncs end-to-end encrypted.
 - Each day has a type, who it's for (one person or both), a date, an optional "count the years" setting (age or years together) and a celebration style.
-- **The day before:**
-  - A personal day such as a birthday privately reminds **only the partner**, to keep the surprise: "Tomorrow is Mia's 23rd birthday 🎂 Make Mia's day special: plan a surprise or send a wish at midnight."
-  - A shared day such as an anniversary reminds **both** partners.
+- **The day before:** a cheeky tease only (see "Teasing reminders" below). A personal day such as a birthday teases **only the partner**, to keep the surprise; a shared day such as an anniversary teases **both**.
 - **On the day:**
   - The widget pops a message such as "Happy 23rd Birthday, Mia!" on Mia's phone, while Leo's says "It's Mia's 23rd birthday! Send Mia a wish 💌". Anniversaries say "Happy 3rd Anniversary!" to both.
   - A ribbon stays on the widget all day, and tapping it replays the celebration.
@@ -148,7 +146,8 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - Celebrations follow the "only when they're looking" rule.
 - **Memory:** every celebrated day is logged in Memories (and the Memory Jar). Ages and year counts update automatically each year.
 - **Teasing reminders:** reminders are playful, never nagging.
-  - The day before, the app teases first ("What day is tomorrow 😉?", "Don't forget what day it is tomorrow 🤨", "Hint: 🎂 + Mia = ?") and reveals the answer a moment later.
+  - The day before, the app **only teases** ("What day is tomorrow 😉?", "Don't forget what day it is tomorrow 🤨", "Hint: 🎂 + Mia = ?") and gives no answer, so they can work it out themselves.
+  - On the day itself, a **clear notification** says what day it is ("It's Mia's 23rd birthday! Send Mia a wish 💌"), alongside the celebration.
   - On the day, if a partner hasn't sent a wish by midday, it nudges them with humor ("Have you wished Mia yet? 👀 Just checking…", "Still no wish for Mia? Bold move 😬").
   - Teases never spoil a surprise: personal days only tease the partner.
 - **Repeats:** each day can repeat every year, every month (for example a monthly "monthversary" on the 9th, the day you united), every week on a chosen weekday, every day, or just once. Monthly days can count months ("Happy 15th Monthversary").

@@ -300,6 +300,8 @@ button { cursor: pointer; }
     <li>Send from both phones within 15 seconds for a rare <b>in-sync</b> hug.</li>
     <li>Turn on <b>Discreet mode</b> to blur messages until you tap them.</li>
     <li><b>Special days:</b> open a widget and tap 📅. Birthdays, anniversaries and other moments are listed with a countdown. Add your own, and choose a celebration (confetti, balloons, fireworks, light show, drone show or everything). Mia's birthday is set for tomorrow, so Leo gets a private reminder a few seconds after the page loads. Tap ⏰ to preview a day-before reminder or 🎉 to preview the celebration on both phones.</li>
+    <li><b>Scenery:</b> every time someone looks at their screen (screen on, switching phones or coming back to the page), the widget moves to a new place and season: Santorini, the Swiss Alps, Mount Fuji, the Grand Canyon, a Banff trail, the Maldives, an Icelandic waterfall, Kyoto, Central Park, Dubai, Paris, the Taj Mahal, the Pyramids, the Golden Gate, Cappadocia and a Norwegian fjord, in spring, summer, autumn or winter. Pick a fixed place or season under each phone if you prefer.</li>
+    <li><b>Repeating days:</b> special days can repeat every year, month, week or day, or happen just once. A monthly "Our monthversary" on the 9th is already in the list.</li>
     <li><b>Customize the characters:</b> under each phone, open "Customize … name and look" to rename them or change their style: hijab styles (classic, khimar, turban wrap, niqab), hair (buzz cut, quiff, man bun, wolf cut, braids, bun and more), 13 beard and moustache styles, tops, bottoms, dresses (abaya, gown, churidar, saree, burqa and more), shoes, skin tone, eye color, hair or hijab color, outfit, facial hair and glasses.</li>
     <li><b>Slideshow:</b> open the widget, tap 📷, pick a few photos (or "Use sample photos"), choose a transition and send. The other widget starts a slideshow. Tap 🎞️ to switch between the slideshow and the couple scene.</li>
     <li><b>Pop-up text:</b> tap ✏️, choose <b>Pop-up ✨</b> and send. It types out in huge letters over a blurred background and slides across like a news ticker.</li>
@@ -328,6 +330,16 @@ button { cursor: pointer; }
   };
   const SW_LABEL = { accent: 'Second color', eyes: 'Eye color', skin: 'Skin tone', hair: 'Hair color', hijab: 'Hijab color', outfit: 'Outfit color' };
   const CEL_OPTS = [['auto', 'Surprise me'], ['confetti', 'Confetti'], ['balloons', 'Balloons'], ['fireworks', 'Fireworks'], ['lightshow', 'Light show'], ['drones', 'Drone show'], ['all', 'Everything']];
+  const PLACE_META = [
+    { key: 'santorini', name: 'Santorini cliffs', flag: '🇬🇷' }, { key: 'alps', name: 'Swiss Alps lake', flag: '🇨🇭' },
+    { key: 'fuji', name: 'Mount Fuji', flag: '🇯🇵' }, { key: 'canyon', name: 'Grand Canyon', flag: '🇺🇸' },
+    { key: 'trail', name: 'Banff hiking trail', flag: '🇨🇦' }, { key: 'beach', name: 'Maldives beach', flag: '🇲🇻' },
+    { key: 'waterfall', name: 'Skógafoss waterfall', flag: '🇮🇸' }, { key: 'kyoto', name: 'Kyoto garden', flag: '🇯🇵' },
+    { key: 'park', name: 'Central Park', flag: '🇺🇸' }, { key: 'dubai', name: 'Dubai skyline', flag: '🇦🇪' },
+    { key: 'paris', name: 'Paris, Eiffel Tower', flag: '🇫🇷' }, { key: 'taj', name: 'Taj Mahal gardens', flag: '🇮🇳' },
+    { key: 'pyramids', name: 'Pyramids of Giza', flag: '🇪🇬' }, { key: 'goldengate', name: 'Golden Gate Bridge', flag: '🇺🇸' },
+    { key: 'cappadocia', name: 'Cappadocia balloons', flag: '🇹🇷' }, { key: 'fjord', name: 'Norwegian fjord', flag: '🇳🇴' }
+  ];
   const PRESETS = ['thinking of you 🤍', 'miss you 🥺', 'mwah 😘', 'sending a hug 🤗', 'drink water, cutie 💧', 'proud of you ⭐', 'good morning ☀️', 'good night 🌙'];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const narrow = matchMedia('(max-width: 760px)');
@@ -454,7 +466,8 @@ button { cursor: pointer; }
                 <label class="d-title-row" for="d-title-${id}" hidden>Name it <input type="text" class="d-title" id="d-title-${id}" maxlength="30" placeholder="First date"></label>
                 <label for="d-who-${id}">For <select class="d-who" id="d-who-${id}"></select></label>
                 <label for="d-date-${id}">Date <input type="date" class="d-date" id="d-date-${id}"></label>
-                <label for="d-year-${id}">Count the years <input type="checkbox" class="d-year" id="d-year-${id}" checked></label>
+                <label for="d-repeat-${id}">Repeats <select class="d-repeat" id="d-repeat-${id}">${[['yearly', 'Every year'], ['monthly', 'Every month'], ['weekly', 'Every week'], ['daily', 'Every day'], ['once', 'Just once']].map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}</select></label>
+                <label for="d-year-${id}">Count years or months <input type="checkbox" class="d-year" id="d-year-${id}" checked></label>
                 <label for="d-cel-${id}">Celebration <select class="d-cel" id="d-cel-${id}">${CEL_OPTS.map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}</select></label>
                 <div class="row"><span class="count d-err"></span><button class="send d-add">Save day</button></div>
               </div></details>
@@ -470,6 +483,8 @@ button { cursor: pointer; }
         <label for="discreet-${id}">Discreet mode <input type="checkbox" id="discreet-${id}"></label>
         <label for="screen-${id}">Screen on <input type="checkbox" id="screen-${id}" checked></label>
         <label for="slides-${id}">Slideshow in widget <input type="checkbox" id="slides-${id}" disabled></label>
+        <label for="scenery-${id}">Scenery <select id="scenery-${id}"><option value="random">🎲 New place every look</option>${PLACE_META.map(m => `<option value="${m.key}">${m.flag} ${m.name}</option>`).join('')}</select></label>
+        <label for="seasonPref-${id}">Season <select id="seasonPref-${id}"><option value="random">🎲 Any season</option><option value="spring">🌸 Spring</option><option value="summer">☀️ Summer</option><option value="autumn">🍂 Autumn</option><option value="winter">❄️ Winter</option></select></label>
         ${avatarHTML(id)}
         <p class="buzz" aria-live="polite"></p>
       </div>
@@ -510,11 +525,288 @@ button { cursor: pointer; }
   function farY(s, x, off) { const h = s.h; return h * 0.47 + Math.sin((x + off) * 0.021) * h * 0.035 + Math.sin((x + off) * 0.047 + 2) * h * 0.016; }
   function nearY(s, x, off) { const h = s.h; return h * 0.62 + Math.sin((x + off) * 0.013 + 1) * h * 0.022 + Math.sin((x + off) * 0.031) * h * 0.01; }
 
+  // ---------- Scenery: famous places mixed with seasons ----------
+  const SEAS = {
+    spring: { sky: ['#86bdea', '#c4e2f5', '#fde3e6'], grass: ['#9ad37d', '#73b862', '#5a9d55'], leaf: ['#5b9e5a', '#84c06c', '#3f7f4c'] },
+    summer: { sky: ['#5aa7e8', '#a9d8f5', '#fff1d6'], grass: ['#8ccf63', '#66b04f', '#4f9446'], leaf: ['#3f8f4a', '#5fae55', '#2f7a3c'] },
+    autumn: { sky: ['#7aa9d6', '#cfe0ea', '#ffd9a8'], grass: ['#c8b45c', '#b39645', '#957a36'], leaf: ['#d9762b', '#f0a33a', '#b5481f'] },
+    winter: { sky: ['#9db8d6', '#dbe6f0', '#f3eef2'], grass: ['#f3f6fa', '#e3eaf2', '#cfd9e6'], leaf: ['#3f6b55', '#5a8a6e', '#2f5a46'] }
+  };
+  const BLADES = { spring: ['#5f9f4f', '#84c264'], summer: ['#4f9446', '#7cc35a'], autumn: ['#a8862f', '#d4a548'], winter: ['#7a9a62', '#93b079'] };
+  const FLOWERS = { spring: ['#ffd3e4', '#ffffff', '#ffe48a'], summer: ['#ffe48a', '#ffffff', '#ff9fbf'], autumn: ['#e0823a', '#c9562c', '#f2b14a'], winter: [] };
+  const SNOWCAP = { winter: 0.55, spring: 0.32, autumn: 0.25, summer: 0.14 };
+  const NIGHT_RGB = [22, 26, 62];
+  const mixRGB = (hex, rgb, k) => {
+    const n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+    return `rgb(${Math.round(r + (rgb[0] - r) * k)},${Math.round(g + (rgb[1] - g) * k)},${Math.round(b + (rgb[2] - b) * k)})`;
+  };
+  const tinter = night => col => (night ? mixRGB(col, NIGHT_RGB, 0.58) : col);
+  const sr = (s, i) => { const v = Math.sin(i * 12.9898 + s.seed * 78.233) * 43758.5453; return v - Math.floor(v); };
+  const poly = (c, pts, col) => { c.fillStyle = col; c.beginPath(); pts.forEach(([px, py], i) => (i ? c.lineTo(px, py) : c.moveTo(px, py))); c.closePath(); c.fill(); };
+  function water(c, s, K, y0, y1, top, bot, t) {
+    const g = c.createLinearGradient(0, y0, 0, y1); g.addColorStop(0, K(top)); g.addColorStop(1, K(bot));
+    c.fillStyle = g; c.fillRect(0, y0, s.w, y1 - y0);
+    c.fillStyle = 'rgba(255,255,255,.32)';
+    for (let i = 0; i < 10; i++) { const yy = y0 + (y1 - y0) * (0.06 + 0.05 * i), xx = ((sr(s, i) * s.w + t * (5 + i)) % (s.w + 40)) - 20; c.fillRect(xx, yy, 8 + sr(s, i + 9) * 16, 1); }
+  }
+  function farHills(c, s, K, off, a, b, base = 0.47) {
+    const { w, h } = s, g = c.createLinearGradient(0, h * (base - 0.07), 0, h * 0.7);
+    g.addColorStop(0, K(a)); g.addColorStop(1, K(b));
+    c.fillStyle = g; c.beginPath(); c.moveTo(0, h);
+    for (let x = 0; x <= w + 6; x += 6) c.lineTo(x, farY(s, x, off * 0.35) + h * (base - 0.47));
+    c.lineTo(w, h); c.closePath(); c.fill();
+  }
+  function range(c, s, K, o) {
+    const { w } = s, pts = [];
+    for (let i = 0; i <= o.n * 2; i++) {
+      const x = -w * 0.1 + (i / (o.n * 2)) * w * 1.2, peak = i % 2 === 1;
+      const y = peak ? o.top + sr(s, i + o.k) * o.vary : o.top + o.vary + (o.base - o.top - o.vary) * (0.4 + sr(s, i + o.k + 50) * 0.4);
+      pts.push([x, y]);
+    }
+    poly(c, [[-w * 0.1, o.base], ...pts, [w * 1.1, o.base]], K(o.col));
+    if (o.snow > 0) for (let i = 1; i < pts.length - 1; i += 2) {
+      const [px, py] = pts[i], [lx, ly] = pts[i - 1], [rx, ry] = pts[i + 1], f = o.snow;
+      const L = [px + (lx - px) * f, py + (ly - py) * f], R = [px + (rx - px) * f, py + (ry - py) * f];
+      poly(c, [[px, py], L, [L[0] + (px - L[0]) * 0.35, L[1] - (L[1] - py) * 0.2], [px, py + (L[1] - py) * 0.85], [R[0] + (px - R[0]) * 0.35, R[1] - (R[1] - py) * 0.2], R], K('#f7fbff'));
+    }
+  }
+  function pineBand(c, s, K, y, size, rows = 1) {
+    const { w, h } = s, snow = s.pal.snow;
+    for (let r = 0; r < rows; r++) for (let i = 0; i < 26; i++) {
+      const x = (i / 25) * w + (r ? w * 0.02 : 0), ph = h * size * (0.8 + sr(s, i + r * 40) * 0.5), yy = y + r * h * 0.02;
+      poly(c, [[x - ph * 0.35, yy], [x, yy - ph], [x + ph * 0.35, yy]], K(r ? '#2f5f45' : '#3b6f52'));
+      if (snow) poly(c, [[x - ph * 0.14, yy - ph * 0.6], [x, yy - ph], [x + ph * 0.14, yy - ph * 0.6]], K('#f2f6fb'));
+    }
+  }
+  function skyline(c, s, K, night, base, minH, maxH, col, k) {
+    const { w } = s; let x = -4, i = 0;
+    while (x < w) {
+      const bw = w * (0.045 + sr(s, k + i) * 0.04), bh = minH + sr(s, k + i + 20) * (maxH - minH);
+      c.fillStyle = K(col); c.fillRect(x, base - bh, bw, bh);
+      c.fillStyle = night ? 'rgba(255,214,130,.85)' : 'rgba(255,255,255,.28)';
+      for (let wy = base - bh + 3; wy < base - 3; wy += 4) for (let wx = x + 2; wx < x + bw - 2; wx += 3) if (sr(s, wx * 3 + wy) > (night ? 0.55 : 0.6)) c.fillRect(wx, wy, 1.2, 1.6);
+      x += bw + 1; i++;
+    }
+  }
+  function pagoda(c, K, x, base, H) {
+    for (let i = 0; i < 5; i++) {
+      const tw = H * (0.3 - i * 0.045), ty = base - (i + 1) * H * 0.16;
+      c.fillStyle = K('#8a3b2e'); c.fillRect(x - tw * 0.35, ty, tw * 0.7, H * 0.16);
+      poly(c, [[x - tw * 0.62, ty + 1], [x - tw * 0.4, ty - H * 0.03], [x + tw * 0.4, ty - H * 0.03], [x + tw * 0.62, ty + 1]], K('#3a2a2a'));
+    }
+    c.fillStyle = K('#3a2a2a'); c.fillRect(x - 0.6, base - H * 0.95, 1.2, H * 0.16);
+  }
+  function eiffel(c, K, x, base, H) {
+    c.fillStyle = K('#5d4a3f'); c.beginPath();
+    c.moveTo(x - 0.24 * H, base); c.lineTo(x - 0.11 * H, base - 0.28 * H); c.lineTo(x - 0.075 * H, base - 0.5 * H); c.lineTo(x - 0.03 * H, base - 0.85 * H);
+    c.lineTo(x - 0.008 * H, base - H); c.lineTo(x + 0.008 * H, base - H); c.lineTo(x + 0.03 * H, base - 0.85 * H); c.lineTo(x + 0.075 * H, base - 0.5 * H);
+    c.lineTo(x + 0.11 * H, base - 0.28 * H); c.lineTo(x + 0.24 * H, base); c.lineTo(x + 0.13 * H, base);
+    c.quadraticCurveTo(x, base - 0.25 * H, x - 0.13 * H, base); c.closePath(); c.fill();
+    c.fillRect(x - 0.14 * H, base - 0.29 * H, 0.28 * H, 0.018 * H); c.fillRect(x - 0.085 * H, base - 0.51 * H, 0.17 * H, 0.015 * H);
+  }
+  function pyramid(c, K, x, base, H) {
+    poly(c, [[x - H * 0.9, base], [x, base - H], [x + H * 0.2, base]], K('#e6bd7d'));
+    poly(c, [[x + H * 0.2, base], [x, base - H], [x + H * 0.9, base]], K('#b98a52'));
+  }
+  const PLACES = {
+    santorini: { tree: 'olive', back(c, s, K, off, t) {
+      const { w, h } = s;
+      water(c, s, K, h * 0.47, h, '#2f86c8', '#1f5f9a', t);
+      poly(c, [[w * 0.5, h * 0.66], [w * 0.58, h * 0.42], [w * 0.68, h * 0.36], [w, h * 0.33], [w, h * 0.7]], K('#b07f58'));
+      c.fillStyle = K('#8e6446'); [0.46, 0.52, 0.58].forEach(f => c.fillRect(w * 0.6, h * f, w * 0.4, 1.2));
+      for (let i = 0; i < 10; i++) {
+        const x = w * (0.6 + i * 0.041), y = h * (0.37 + sr(s, i) * 0.02) - (i % 2) * h * 0.028, bw = w * 0.04, bh = w * 0.034;
+        c.fillStyle = K('#fbfaf6'); c.fillRect(x, y - bh, bw, bh);
+        c.fillStyle = K('#3b6fae'); c.fillRect(x + bw * 0.35, y - bh * 0.6, bw * 0.25, bh * 0.35);
+        if (i % 3 === 1) { c.fillStyle = K('#2f6fc4'); c.beginPath(); c.arc(x + bw / 2, y - bh, bw * 0.42, Math.PI, 0); c.fill(); }
+      }
+    } },
+    alps: { tree: 'pine', snowy: true, back(c, s, K, off, t) {
+      const { h } = s, sn = SNOWCAP[s.season];
+      range(c, s, K, { base: h * 0.56, top: h * 0.1, vary: h * 0.1, n: 4, col: '#8aa0bf', snow: sn + 0.1, k: 1 });
+      range(c, s, K, { base: h * 0.58, top: h * 0.24, vary: h * 0.1, n: 5, col: '#6d84a6', snow: sn, k: 20 });
+      water(c, s, K, h * 0.53, h, '#6fa9d6', '#3c78ad', t);
+      pineBand(c, s, K, h * 0.545, 0.035);
+    } },
+    fuji: { tree: 'leafy', snowy: true, back(c, s, K, off, t) {
+      const { w, h } = s, sn = Math.min(0.75, SNOWCAP[s.season] + 0.2), top = h * 0.17, foot = h * 0.6;
+      poly(c, [[w * 0.18, foot], [w * 0.45, top], [w * 0.55, top], [w * 0.82, foot]], K('#7f93c2'));
+      const yb = top + (foot - top) * sn, xl = w * 0.45 - w * 0.27 * sn, xr = w * 0.55 + w * 0.27 * sn;
+      poly(c, [[w * 0.45, top], [w * 0.55, top], [xr, yb], [xr - w * 0.05, yb - h * 0.03], [w * 0.53, yb + h * 0.01], [w * 0.5, yb - h * 0.03], [w * 0.47, yb + h * 0.01], [xl + w * 0.05, yb - h * 0.03], [xl, yb]], K('#f7fbff'));
+      farHills(c, s, K, off, '#a9c3b8', '#8fb0a3', 0.53);
+      pagoda(c, K, w * 0.14, h * 0.56, h * 0.24);
+    } },
+    canyon: { tree: 'shrub', ground: 'desert', back(c, s, K) {
+      const { w, h } = s;
+      [['#e8b48a', h * 0.5, h * 0.25, h * 0.33, 3], ['#cf7f50', h * 0.56, h * 0.32, h * 0.42, 30], ['#a9572f', h * 0.62, h * 0.4, h * 0.5, 60]].forEach(([col, base, tmin, tmax, k]) => {
+        const pts = [[0, base]]; let x = 0, i = 0;
+        while (x < w) {
+          const y = tmin + sr(s, k + i) * (tmax - tmin), x2 = x + w * (0.12 + sr(s, k + i + 7) * 0.2);
+          pts.push([x + w * 0.015, y], [x2, y], [x2 + w * 0.02, y + (base - y) * (0.4 + sr(s, k + i + 3) * 0.5)]);
+          x = x2 + w * 0.02; i++;
+        }
+        pts.push([w, base]); poly(c, pts, K(col));
+        c.fillStyle = 'rgba(255,255,255,.1)'; for (let j = 1; j < 4; j++) c.fillRect(0, tmin + (base - tmin) * j * 0.22, w, 1);
+      });
+    } },
+    trail: { tree: 'pine', snowy: true, path: true, back(c, s, K, off) {
+      const { h } = s, sn = SNOWCAP[s.season];
+      range(c, s, K, { base: h * 0.52, top: h * 0.14, vary: h * 0.1, n: 4, col: '#8ea4c2', snow: sn + 0.1, k: 5 });
+      farHills(c, s, K, off, '#6f9a86', '#5a8572', 0.5);
+      pineBand(c, s, K, h * 0.5, 0.06, 2);
+    } },
+    beach: { tree: 'palm', ground: 'sand', back(c, s, K, off, t) {
+      const { w, h } = s;
+      water(c, s, K, h * 0.47, h, '#2ec4d6', '#1a8fb8', t);
+      c.fillStyle = 'rgba(160,240,235,.45)'; c.fillRect(0, h * 0.56, w, h * 0.08);
+      for (let i = 0; i < 4; i++) {
+        const x = w * (0.6 + i * 0.09), y = h * 0.48;
+        c.strokeStyle = K('#7a5a3c'); c.lineWidth = 1; [-0.02, 0.02].forEach(d => { c.beginPath(); c.moveTo(x + w * d, y); c.lineTo(x + w * d, y + h * 0.03); c.stroke(); });
+        c.fillStyle = K('#c49a6c'); c.fillRect(x - w * 0.028, y - h * 0.025, w * 0.056, h * 0.025);
+        poly(c, [[x - w * 0.036, y - h * 0.024], [x, y - h * 0.055], [x + w * 0.036, y - h * 0.024]], K('#8a6a44'));
+      }
+      c.fillStyle = K('#7a5a3c'); c.fillRect(w * 0.6, h * 0.5, w * 0.27, 1);
+    }, front(c, s, K, off, t) {
+      const { w } = s; c.strokeStyle = 'rgba(255,255,255,.85)'; c.lineWidth = 1.6; c.beginPath();
+      for (let x = 0; x <= w; x += 4) { const y = nearY(s, x, off) - 1 + Math.sin(x * 0.08 + t * 2) * 1.2; x ? c.lineTo(x, y) : c.moveTo(x, y); }
+      c.stroke();
+    } },
+    waterfall: { tree: 'leafy', snowy: true, back(c, s, K, off, t) {
+      const { w, h } = s, moss = K(s.pal.snow ? '#eef3f8' : s.pal.leaf[0]);
+      poly(c, [[0, h * 0.62], [0, h * 0.16], [w * 0.38, h * 0.19], [w * 0.44, h * 0.24], [w * 0.44, h * 0.62]], K('#5f6b63'));
+      poly(c, [[w * 0.56, h * 0.62], [w * 0.56, h * 0.22], [w * 0.65, h * 0.18], [w, h * 0.19], [w, h * 0.62]], K('#56625a'));
+      poly(c, [[0, h * 0.16], [w * 0.38, h * 0.19], [w * 0.44, h * 0.24], [w * 0.44, h * 0.27], [0, h * 0.21]], moss);
+      poly(c, [[w * 0.56, h * 0.22], [w * 0.65, h * 0.18], [w, h * 0.19], [w, h * 0.24], [w * 0.56, h * 0.26]], moss);
+      const g = c.createLinearGradient(0, h * 0.22, 0, h * 0.6); g.addColorStop(0, K('#e8f6ff')); g.addColorStop(1, K('#bfe3f5'));
+      c.fillStyle = g; c.fillRect(w * 0.44, h * 0.23, w * 0.12, h * 0.37);
+      c.fillStyle = 'rgba(255,255,255,.7)'; for (let i = 0; i < 9; i++) { const y = h * 0.23 + ((t * 70 + i * 23) % (h * 0.37)); c.fillRect(w * (0.45 + (i % 4) * 0.025), y, 1.2, h * 0.05); }
+      water(c, s, K, h * 0.58, h, '#7fc0dc', '#4f93b5', t);
+      c.fillStyle = 'rgba(255,255,255,.45)'; [0.42, 0.5, 0.58].forEach((f, i) => { c.beginPath(); c.ellipse(w * f, h * 0.6, w * 0.08, h * 0.035 + Math.sin(t * 2 + i) * 1, 0, 0, TAU); c.fill(); });
+      if (s.season === 'summer' || s.season === 'spring') ['rgba(255,80,80,.18)', 'rgba(255,200,60,.18)', 'rgba(80,200,120,.18)', 'rgba(80,140,255,.18)'].forEach((col, i) => { c.strokeStyle = col; c.lineWidth = 2; c.beginPath(); c.arc(w * 0.5, h * 0.62, w * (0.22 - i * 0.012), Math.PI * 1.1, Math.PI * 1.9); c.stroke(); });
+    } },
+    kyoto: { tree: 'leafy', snowy: true, back(c, s, K, off, t) {
+      const { w, h } = s;
+      farHills(c, s, K, off, '#9cbfae', '#7ea894', 0.48);
+      pagoda(c, K, w * 0.78, h * 0.53, h * 0.34);
+      water(c, s, K, h * 0.53, h, '#7fb6c8', '#4f8ea3', t);
+      c.strokeStyle = K('#c8402f'); c.lineWidth = 2.6; c.beginPath(); c.arc(w * 0.32, h * 0.66, w * 0.17, Math.PI * 1.15, Math.PI * 1.85); c.stroke();
+      c.lineWidth = 1.2; c.beginPath(); c.arc(w * 0.32, h * 0.66, w * 0.17, Math.PI * 1.15, Math.PI * 1.85); c.stroke();
+      for (let i = 0; i < 6; i++) { const a = Math.PI * (1.18 + i * 0.13), x = w * 0.32 + Math.cos(a) * w * 0.17, y = h * 0.66 + Math.sin(a) * w * 0.17; c.beginPath(); c.moveTo(x, y); c.lineTo(x, y - 4); c.stroke(); }
+    } },
+    park: { tree: 'leafy', snowy: true, path: true, back(c, s, K, off, t, night) {
+      const { w, h } = s;
+      skyline(c, s, K, night, h * 0.5, h * 0.12, h * 0.3, '#8d9db5', 11);
+      const leaf = s.pal.snow ? '#c9d3dc' : s.pal.leaf[0];
+      c.fillStyle = K(leaf); for (let i = 0; i < 18; i++) { c.beginPath(); c.arc((i / 17) * w, h * 0.5 + sr(s, i) * 3, w * 0.05 + sr(s, i + 4) * w * 0.02, 0, TAU); c.fill(); }
+      farHills(c, s, K, off, s.pal.grass[0], s.pal.grass[1], 0.52);
+    } },
+    dubai: { tree: 'palm', back(c, s, K, off, t, night) {
+      const { w, h } = s, base = h * 0.53;
+      skyline(c, s, K, night, base, h * 0.1, h * 0.27, '#9aaec6', 3);
+      const x = w * 0.56; c.fillStyle = K('#c3d1e0');
+      [[0.05, 0.12], [0.04, 0.22], [0.03, 0.31], [0.022, 0.38], [0.014, 0.43]].forEach(([bw, top], i) => c.fillRect(x - w * bw / 2, base - h * top, w * bw, h * (top - (i ? [0, 0.12, 0.22, 0.31, 0.38][i] : 0))));
+      c.fillRect(x - 0.6, base - h * 0.5, 1.2, h * 0.08);
+      c.fillStyle = 'rgba(255,255,255,.3)'; c.fillRect(x - w * 0.006, base - h * 0.42, 1, h * 0.4);
+    } },
+    paris: { tree: 'leafy', snowy: true, path: true, back(c, s, K, off, t, night) {
+      const { w, h } = s, base = h * 0.53;
+      for (let i = 0; i < 12; i++) {
+        const x = (i / 11) * w - w * 0.03, bw = w * 0.085, bh = h * (0.05 + sr(s, i) * 0.03);
+        c.fillStyle = K('#eadfc8'); c.fillRect(x, base - bh, bw, bh);
+        c.fillStyle = K('#7d8796'); c.fillRect(x, base - bh - h * 0.015, bw, h * 0.015);
+        c.fillStyle = night ? 'rgba(255,214,130,.8)' : K('#9aa6b6'); for (let j = 0; j < 3; j++) c.fillRect(x + bw * (0.2 + j * 0.25), base - bh * 0.7, 1.4, 2);
+      }
+      eiffel(c, K, w * 0.68, base, h * 0.42);
+      farHills(c, s, K, off, s.pal.grass[0], s.pal.grass[1], 0.535);
+    } },
+    taj: { tree: 'cypress', back(c, s, K) {
+      const { w, h } = s, base = h * 0.53, x = w * 0.5, ivory = K('#f6f1e7'), shade = K('#dcd2c2');
+      c.fillStyle = K('#e9dfcf'); c.fillRect(w * 0.26, base - h * 0.015, w * 0.48, h * 0.015);
+      c.fillStyle = ivory; c.fillRect(x - w * 0.13, base - h * 0.12, w * 0.26, h * 0.105);
+      c.fillStyle = shade; c.beginPath(); c.moveTo(x - w * 0.035, base - h * 0.015); c.lineTo(x - w * 0.035, base - h * 0.07); c.quadraticCurveTo(x, base - h * 0.11, x + w * 0.035, base - h * 0.07); c.lineTo(x + w * 0.035, base - h * 0.015); c.fill();
+      c.fillStyle = ivory; c.beginPath(); c.moveTo(x - w * 0.075, base - h * 0.12);
+      c.bezierCurveTo(x - w * 0.11, base - h * 0.22, x - w * 0.02, base - h * 0.26, x, base - h * 0.3);
+      c.bezierCurveTo(x + w * 0.02, base - h * 0.26, x + w * 0.11, base - h * 0.22, x + w * 0.075, base - h * 0.12); c.fill();
+      c.fillRect(x - 0.6, base - h * 0.34, 1.2, h * 0.05);
+      [-1, 1].forEach(sd => {
+        c.fillStyle = ivory; c.beginPath(); c.arc(x + sd * w * 0.09, base - h * 0.125, w * 0.025, Math.PI, 0); c.fill();
+        [0.2, 0.25].forEach(f => { const mx = x + sd * w * f; c.fillStyle = shade; c.fillRect(mx - w * 0.008, base - h * 0.2, w * 0.016, h * 0.2); c.fillStyle = ivory; c.beginPath(); c.arc(mx, base - h * 0.2, w * 0.013, Math.PI, 0); c.fill(); });
+      });
+    }, front(c, s, K, off) {
+      const { w, h } = s, y = nearY(s, w * 0.5, off);
+      const g = c.createLinearGradient(0, y, 0, h); g.addColorStop(0, K('#9fd0e6')); g.addColorStop(1, K('#5c9ec0'));
+      poly(c, [[w * 0.47, y], [w * 0.53, y], [w * 0.62, h], [w * 0.38, h]], g);
+    } },
+    pyramids: { tree: 'palm', ground: 'sand', back(c, s, K, off) {
+      const { w, h } = s;
+      farHills(c, s, K, off, '#ecc993', '#dcae72', 0.5);
+      pyramid(c, K, w * 0.66, h * 0.55, h * 0.3); pyramid(c, K, w * 0.42, h * 0.55, h * 0.22); pyramid(c, K, w * 0.24, h * 0.555, h * 0.13);
+    } },
+    goldengate: { tree: 'cypress', back(c, s, K, off, t) {
+      const { w, h } = s;
+      farHills(c, s, K, off, '#9db59a', '#86a283', 0.46);
+      water(c, s, K, h * 0.5, h, '#4f86b0', '#2f628a', t);
+      const red = K('#c0362c'), deck = h * 0.44;
+      c.strokeStyle = red; c.lineWidth = 1;
+      [[0, w * 0.32], [w * 0.32, w * 0.78], [w * 0.78, w * 1.1]].forEach(([a, b], i) => {
+        c.beginPath(); c.moveTo(a, i === 0 ? h * 0.3 : h * 0.2); c.quadraticCurveTo((a + b) / 2, i === 1 ? h * 0.4 : h * 0.33, b, i === 2 ? h * 0.32 : h * 0.2); c.stroke();
+      });
+      for (let x = 0; x < w; x += 6) { const y = x < w * 0.32 ? h * 0.3 - (h * 0.1) * (x / (w * 0.32)) ** 2 : h * 0.3; c.globalAlpha = 0.5; c.beginPath(); c.moveTo(x, Math.min(y + 4, deck)); c.lineTo(x, deck); c.stroke(); c.globalAlpha = 1; }
+      c.fillStyle = red; c.fillRect(0, deck, w, 2.4);
+      [w * 0.32, w * 0.78].forEach(x => { c.fillRect(x - 3, h * 0.19, 2, h * 0.33); c.fillRect(x + 1, h * 0.19, 2, h * 0.33); [0.22, 0.3, 0.38].forEach(f => c.fillRect(x - 3, h * f, 6, 1.2)); });
+      c.fillStyle = 'rgba(255,255,255,.5)'; for (let i = 0; i < 5; i++) { c.beginPath(); c.ellipse(((i * w * 0.27 + t * 6) % (w * 1.3)) - w * 0.15, h * 0.49, w * 0.12, h * 0.02, 0, 0, TAU); c.fill(); }
+    } },
+    cappadocia: { tree: 'shrub', ground: 'desert', back(c, s, K, off, t) {
+      const { w, h } = s;
+      farHills(c, s, K, off, '#e3c39a', '#d1a978', 0.49);
+      for (let i = 0; i < 7; i++) {
+        const x = w * (0.08 + i * 0.14), hh = h * (0.12 + sr(s, i) * 0.1), b = h * 0.56;
+        poly(c, [[x - w * 0.035, b], [x - w * 0.012, b - hh], [x + w * 0.012, b - hh], [x + w * 0.035, b]], K('#d9b48a'));
+        c.fillStyle = K('#9a7a5a'); c.beginPath(); c.ellipse(x, b - hh, w * 0.02, h * 0.012, 0, 0, TAU); c.fill();
+      }
+      ['#e85d75', '#ffb347', '#6fc3df', '#b388ff', '#7ee0a1', '#ff7a5c'].forEach((col, i) => {
+        const x = w * (0.1 + sr(s, i + 70) * 0.8), y = h * (0.1 + sr(s, i + 80) * 0.22) + Math.sin(t * 0.8 + i) * 2, r = w * (0.022 + sr(s, i + 90) * 0.015);
+        c.fillStyle = K(col); c.beginPath(); c.ellipse(x, y, r, r * 1.15, 0, 0, TAU); c.fill();
+        c.fillStyle = 'rgba(255,255,255,.35)'; c.fillRect(x - r * 0.15, y - r * 1.1, r * 0.3, r * 2.2);
+        c.fillStyle = K('#7a5a3c'); c.fillRect(x - r * 0.3, y + r * 1.35, r * 0.6, r * 0.4);
+      });
+    } },
+    fjord: { tree: 'pine', snowy: true, back(c, s, K, off, t) {
+      const { w, h } = s, top = s.pal.snow ? '#eef3f8' : s.pal.leaf[0];
+      water(c, s, K, h * 0.48, h, '#3f74a0', '#24507a', t);
+      poly(c, [[0, h * 0.62], [0, h * 0.12], [w * 0.18, h * 0.14], [w * 0.34, h * 0.3], [w * 0.38, h * 0.5]], K('#56625e'));
+      poly(c, [[w, h * 0.62], [w, h * 0.1], [w * 0.8, h * 0.13], [w * 0.66, h * 0.32], [w * 0.6, h * 0.5]], K('#4d5955'));
+      poly(c, [[0, h * 0.12], [w * 0.18, h * 0.14], [w * 0.24, h * 0.19], [0, h * 0.17]], K(top));
+      poly(c, [[w, h * 0.1], [w * 0.8, h * 0.13], [w * 0.75, h * 0.18], [w, h * 0.15]], K(top));
+      c.fillStyle = 'rgba(255,255,255,.6)'; c.fillRect(w * 0.72, h * 0.2, 1.2, h * 0.26);
+      c.fillStyle = K('#b8402f'); c.fillRect(w * 0.3, h * 0.47, w * 0.04, h * 0.025); poly(c, [[w * 0.295, h * 0.472], [w * 0.32, h * 0.452], [w * 0.345, h * 0.472]], K('#5a2a24'));
+    } }
+  };
+  function pal(s) {
+    const pl = PLACES[s.place], se = SEAS[s.season];
+    let grass = se.grass, sky = se.sky;
+    if (pl.ground === 'sand') grass = ['#f3dfb3', '#e8cc94', '#d9b77a'];
+    else if (pl.ground === 'desert') { grass = ['#e6ad72', '#d08e55', '#b8743f']; sky = [sky[0], sky[1], '#ffdcb0']; }
+    else if (s.season === 'winter' && !pl.snowy) grass = ['#a9c08a', '#8fae74', '#7a9a62'];
+    return { sky, grass, leaf: se.leaf, snow: s.season === 'winter' && !!pl.snowy, pl };
+  }
+  function newPlace(id, announce) {
+    const s = W[id], pref = P[id].scenery || 'random', spref = P[id].seasonPref || 'random';
+    s.place = pref === 'random' ? pick(PLACE_META.map(m => m.key).filter(k => k !== s.place)) : pref;
+    s.season = spref === 'random' ? pick(['spring', 'summer', 'autumn', 'winter']) : spref;
+    s.seed = rand() * 1000;
+    s.pal = pal(s);
+    const base = PLACES[s.place].tree;
+    s.treeKind = base === 'leafy' && s.pal.snow ? 'bare' : base;
+    s.flakes = null;
+    if (announce) { const m = PLACE_META.find(x => x.key === s.place); sceneLabel(id, `📍 ${m.name} · ${s.season[0].toUpperCase() + s.season.slice(1)}`); }
+  }
+
   function paintSky(c, s, night, t) {
     const { w, h } = s;
     const g = c.createLinearGradient(0, 0, 0, h * 0.65);
     if (night) { g.addColorStop(0, '#141b46'); g.addColorStop(0.55, '#2c3270'); g.addColorStop(1, '#5d4f88'); }
-    else { g.addColorStop(0, '#78b2e3'); g.addColorStop(0.5, '#b9dcf2'); g.addColorStop(1, '#fde5d3'); }
+    else { const k = s.pal.sky; g.addColorStop(0, k[0]); g.addColorStop(0.5, k[1]); g.addColorStop(1, k[2]); }
     c.fillStyle = g; c.fillRect(0, 0, w, h);
     if (night) {
       for (let i = 0; i < 26; i++) {
@@ -528,7 +820,7 @@ button { cursor: pointer; }
       c.fillStyle = '#fff3cf'; c.beginPath(); c.arc(mx, my, w * 0.045, 0, TAU); c.fill();
     } else {
       const sg = c.createRadialGradient(w * 0.15, h * 0.08, 4, w * 0.15, h * 0.08, w * 0.6);
-      sg.addColorStop(0, 'rgba(255,244,214,.75)'); sg.addColorStop(1, 'rgba(255,244,214,0)');
+      sg.addColorStop(0, s.season === 'winter' ? 'rgba(255,250,240,.5)' : 'rgba(255,244,214,.75)'); sg.addColorStop(1, 'rgba(255,244,214,0)');
       c.fillStyle = sg; c.fillRect(0, 0, w, h);
     }
   }
@@ -540,86 +832,127 @@ button { cursor: pointer; }
       const x = cl.x * w, y = cl.y * h, k = cl.s * u;
       const g = c.createLinearGradient(0, y - 22 * k, 0, y + 16 * k);
       if (night) { g.addColorStop(0, 'rgba(170,165,215,.55)'); g.addColorStop(1, 'rgba(90,85,150,.35)'); }
+      else if (s.season === 'winter') { g.addColorStop(0, '#f4f6fa'); g.addColorStop(1, '#c9d3e0'); }
       else { g.addColorStop(0, '#ffffff'); g.addColorStop(0.65, '#f6f8fc'); g.addColorStop(1, '#d6e2f2'); }
       c.fillStyle = g; c.beginPath();
       PUFFS.forEach(([px, py, r]) => { c.moveTo(x + px * k + r * k, y + py * k); c.arc(x + px * k, y + py * k, r * k, 0, TAU); });
       c.fill();
     });
   }
-  function paintHills(c, s, night, off) {
-    const { w, h } = s;
-    // far hills with haze
-    let g = c.createLinearGradient(0, h * 0.4, 0, h * 0.7);
-    if (night) { g.addColorStop(0, '#3e5a74'); g.addColorStop(1, '#2d4458'); } else { g.addColorStop(0, '#9fc9b2'); g.addColorStop(1, '#7fb39a'); }
-    c.fillStyle = g; c.beginPath(); c.moveTo(0, h);
-    for (let x = 0; x <= w + 6; x += 6) c.lineTo(x, farY(s, x, off * 0.35));
-    c.lineTo(w, h); c.closePath(); c.fill();
-    // distant trees on the far hill
-    c.fillStyle = night ? '#2c4357' : '#6ea488';
-    for (let i = 0; i < 7; i++) {
-      const x = ((i * 53 - off * 0.35) % (w + 60) + w + 60) % (w + 60) - 30;
-      const y = farY(s, x, off * 0.35);
-      c.beginPath(); c.ellipse(x, y - 3, 5, 7, 0, 0, TAU); c.ellipse(x + 6, y - 2, 4, 5, 0, 0, TAU); c.fill();
-    }
-    // near meadow
-    g = c.createLinearGradient(0, h * 0.58, 0, h);
-    if (night) { g.addColorStop(0, '#3f6a5a'); g.addColorStop(1, '#25443c'); } else { g.addColorStop(0, '#9ad37d'); g.addColorStop(0.5, '#73b862'); g.addColorStop(1, '#5a9d55'); }
+  function paintHills(c, s, night, off, t = 0) {
+    const { w, h } = s, K = tinter(night), place = PLACES[s.place];
+    place.back(c, s, K, off, t, night);
+    const gr = s.pal.grass, g = c.createLinearGradient(0, h * 0.58, 0, h);
+    g.addColorStop(0, K(gr[0])); g.addColorStop(0.5, K(gr[1])); g.addColorStop(1, K(gr[2]));
     c.fillStyle = g; c.beginPath(); c.moveTo(0, h);
     for (let x = 0; x <= w + 6; x += 6) c.lineTo(x, nearY(s, x, off));
     c.lineTo(w, h); c.closePath(); c.fill();
-    // sunlit rim
-    c.strokeStyle = night ? 'rgba(160,200,180,.25)' : 'rgba(225,245,170,.7)'; c.lineWidth = 1.5; c.beginPath();
+    c.strokeStyle = night ? 'rgba(160,200,180,.25)' : s.pal.snow ? 'rgba(255,255,255,.9)' : place.ground ? 'rgba(255,240,210,.7)' : 'rgba(225,245,170,.7)';
+    c.lineWidth = 1.5; c.beginPath();
     for (let x = 0; x <= w + 6; x += 6) { const y = nearY(s, x, off); x ? c.lineTo(x, y) : c.moveTo(x, y); }
     c.stroke();
+    if (place.path) {
+      const top = nearY(s, w * 0.6, off);
+      c.fillStyle = K(s.pal.snow ? '#dde5ee' : '#cdb48a'); c.beginPath();
+      c.moveTo(w * 0.585, top + 1); c.quadraticCurveTo(w * 0.5, h * 0.8, w * 0.4, h); c.lineTo(w * 0.72, h); c.quadraticCurveTo(w * 0.66, h * 0.8, w * 0.615, top + 1); c.closePath(); c.fill();
+    }
+    if (place.front) place.front(c, s, K, off, t);
   }
   function paintGrass(c, s, night, off, t) {
-    const { w } = s;
+    const { w } = s, K = tinter(night), se = s.season, sandy = !!PLACES[s.place].ground;
     c.lineCap = 'round';
-    for (let i = 0; i < 70; i++) {
-      const x = ((i * 13.7 - off) % (w + 20) + w + 20) % (w + 20) - 10;
-      const y = nearY(s, x, off) + 1 + (i % 4);
-      const hgt = 4 + (i * 7 % 5), sway = Math.sin(t * 1.6 + i * 0.7) * 1.4;
-      c.strokeStyle = night ? 'rgba(90,140,115,.8)' : (i % 3 ? '#5f9f4f' : '#84c264'); c.lineWidth = 1.1;
-      c.beginPath(); c.moveTo(x, y); c.quadraticCurveTo(x + sway * 0.4, y - hgt * 0.6, x + sway, y - hgt); c.stroke();
+    if (!sandy && !s.pal.snow) {
+      const bl = BLADES[se];
+      for (let i = 0; i < 70; i++) {
+        const x = ((i * 13.7 - off) % (w + 20) + w + 20) % (w + 20) - 10, y = nearY(s, x, off) + 1 + (i % 4);
+        const hgt = 4 + (i * 7 % 5), sway = Math.sin(t * 1.6 + i * 0.7) * 1.4;
+        c.strokeStyle = K(i % 3 ? bl[0] : bl[1]); c.lineWidth = 1.1;
+        c.beginPath(); c.moveTo(x, y); c.quadraticCurveTo(x + sway * 0.4, y - hgt * 0.6, x + sway, y - hgt); c.stroke();
+      }
     }
+    const dots = s.pal.snow ? ['#ffffff', '#e8f0fa', '#ffffff'] : sandy ? ['#fff3dc', '#c9a271', '#f6e2c0'] : FLOWERS[se];
+    if (!dots.length) return;
     for (let i = 0; i < 18; i++) {
-      const x = ((i * 31.3 - off) % (w + 20) + w + 20) % (w + 20) - 10;
-      const y = nearY(s, x, off) + 8 + (i * 5 % 22);
-      c.fillStyle = night ? 'rgba(220,210,240,.5)' : (i % 3 === 0 ? '#ffd3e4' : i % 3 === 1 ? '#ffffff' : '#ffe48a');
-      c.beginPath(); c.arc(x, y, 1.4, 0, TAU); c.fill();
+      const x = ((i * 31.3 - off) % (w + 20) + w + 20) % (w + 20) - 10, y = nearY(s, x, off) + 8 + (i * 5 % 22);
+      c.fillStyle = K(dots[i % dots.length]);
+      c.beginPath(); if (se === 'autumn' && !sandy) c.ellipse(x, y, 1.9, 1.1, i, 0, TAU); else c.arc(x, y, 1.4, 0, TAU); c.fill();
     }
   }
   function paintTree(c, s, x, night, t) {
-    const { h } = s, u = h / 260, base = nearY(s, x, 0) + 2;
-    c.fillStyle = night ? '#4a3a36' : '#7a5642';
-    c.beginPath(); c.moveTo(x - 5 * u, base); c.quadraticCurveTo(x - 2 * u, base - 30 * u, x - 4 * u, base - 52 * u);
-    c.lineTo(x + 4 * u, base - 52 * u); c.quadraticCurveTo(x + 2 * u, base - 30 * u, x + 6 * u, base); c.fill();
-    c.fillStyle = 'rgba(30,50,30,.16)'; c.beginPath(); c.ellipse(x + 4 * u, base + 2, 30 * u, 4 * u, 0, 0, TAU); c.fill();
-    const sway = Math.sin(t * 0.8) * 1.2;
-    const layers = night
-      ? [['#2f5546', [[-22, -58, 18], [20, -60, 18], [0, -74, 20], [-8, -52, 16], [12, -50, 15]]], ['#3b6a55', [[-14, -66, 15], [12, -70, 15], [0, -82, 14]]]]
-      : [['#3f7f4c', [[-22, -58, 18], [20, -60, 18], [0, -74, 20], [-8, -52, 16], [12, -50, 15]]], ['#5b9e5a', [[-14, -66, 15], [12, -70, 15], [0, -82, 14], [-24, -62, 10]]], ['#84c06c', [[-8, -76, 9], [10, -78, 8], [-18, -66, 7], [4, -88, 7]]]];
-    layers.forEach(([col, blobs], li) => {
-      c.fillStyle = col; c.beginPath();
-      blobs.forEach(([bx, by, r]) => { const xx = x + bx * u + sway * (li + 1) * 0.5, yy = base + by * u; c.moveTo(xx + r * u, yy); c.arc(xx, yy, r * u, 0, TAU); });
+    const { h } = s, u = h / 260, base = nearY(s, x, 0) + 2, K = tinter(night), L = s.pal.leaf, kind = s.treeKind, sway = Math.sin(t * 0.8) * 1.2;
+    const blobs = (layers) => layers.forEach(([col, list], li) => {
+      c.fillStyle = K(col); c.beginPath();
+      list.forEach(([bx, by, r]) => { const xx = x + bx * u + sway * (li + 1) * 0.5, yy = base + by * u; c.moveTo(xx + r * u, yy); c.arc(xx, yy, r * u, 0, TAU); });
       c.fill();
     });
-    if (!night) { c.fillStyle = '#ffd6e6'; [[-16, -60], [14, -66], [2, -80], [-4, -64], [20, -54]].forEach(([bx, by]) => { c.beginPath(); c.arc(x + bx * u + sway, base + by * u, 1.6 * u, 0, TAU); c.fill(); }); }
+    c.fillStyle = 'rgba(30,50,30,.16)'; c.beginPath(); c.ellipse(x + 4 * u, base + 2, 26 * u, 4 * u, 0, 0, TAU); c.fill();
+    const trunk = (col, top = 52, lean = 0) => {
+      c.fillStyle = K(col); c.beginPath(); c.moveTo(x - 5 * u, base); c.quadraticCurveTo(x - 2 * u + lean, base - top * 0.6 * u, x - 4 * u + lean, base - top * u);
+      c.lineTo(x + 4 * u + lean, base - top * u); c.quadraticCurveTo(x + 2 * u + lean, base - top * 0.6 * u, x + 6 * u, base); c.fill();
+    };
+    if (kind === 'pine') {
+      trunk('#6a4a38', 22);
+      [[30, 26, 0], [24, 22, 18], [17, 18, 34]].forEach(([wd, ht, up], i) => {
+        poly(c, [[x - wd * u + sway * 0.3, base - (12 + up) * u], [x + sway * (0.5 + i * 0.2), base - (12 + up + ht + 10) * u], [x + wd * u + sway * 0.3, base - (12 + up) * u]], K(i % 2 ? '#3b7a55' : '#2f6b47'));
+        if (s.pal.snow) poly(c, [[x - wd * 0.45 * u + sway * 0.3, base - (12 + up + ht * 0.55) * u], [x + sway * (0.5 + i * 0.2), base - (12 + up + ht + 10) * u], [x + wd * 0.45 * u + sway * 0.3, base - (12 + up + ht * 0.55) * u]], K('#f4f8fc'));
+      });
+    } else if (kind === 'palm') {
+      const tx = x + 12 * u + sway, ty = base - 64 * u;
+      c.strokeStyle = K('#9a7b56'); c.lineWidth = 5 * u; c.beginPath(); c.moveTo(x, base); c.quadraticCurveTo(x + 2 * u, base - 36 * u, tx, ty); c.stroke();
+      c.strokeStyle = K('#7a5f42'); c.lineWidth = 0.8 * u; for (let i = 1; i < 7; i++) { const k = i / 7, px = x + (tx - x) * k * k * 0.9, py = base - 64 * u * k; c.beginPath(); c.moveTo(px - 2.5 * u, py); c.lineTo(px + 2.5 * u, py); c.stroke(); }
+      for (let i = 0; i < 7; i++) {
+        const a = -Math.PI * (0.95 - i * 0.15) + Math.sin(t + i) * 0.05, len = 26 * u;
+        c.save(); c.translate(tx, ty); c.rotate(a); c.fillStyle = K(i % 2 ? '#4f9a4a' : '#3f8a40');
+        c.beginPath(); c.ellipse(len * 0.5, len * 0.12, len * 0.55, 4.5 * u, 0.25, 0, TAU); c.fill(); c.restore();
+      }
+      c.fillStyle = K('#7a5434'); [[-2, 3], [2, 4], [0, 6]].forEach(([dx, dy]) => { c.beginPath(); c.arc(tx + dx * u, ty + dy * u, 2.2 * u, 0, TAU); c.fill(); });
+    } else if (kind === 'cypress') {
+      trunk('#6a4a38', 10);
+      c.fillStyle = K('#2e5a3d'); c.beginPath(); c.ellipse(x + sway * 0.3, base - 44 * u, 10 * u, 38 * u, 0, 0, TAU); c.fill();
+      c.fillStyle = K('#3f7350'); c.beginPath(); c.ellipse(x - 3 * u + sway * 0.3, base - 50 * u, 4 * u, 26 * u, 0, 0, TAU); c.fill();
+    } else if (kind === 'shrub') {
+      blobs([['#6f8550', [[-10, -6, 9], [8, -7, 10], [0, -13, 9]]], ['#8aa063', [[-4, -12, 6], [6, -14, 5]]]]);
+    } else if (kind === 'bare') {
+      trunk('#6a4e40', 50);
+      c.strokeStyle = K('#6a4e40'); c.lineCap = 'round';
+      [[-1, 36, 18, 2.4], [1, 42, 16, 2.2], [-1, 50, 12, 1.8], [1, 52, 10, 1.6]].forEach(([sd, y0, len, lw]) => {
+        c.lineWidth = lw * u; c.beginPath(); c.moveTo(x, base - y0 * u); c.lineTo(x + sd * len * u + sway, base - (y0 + len * 0.7) * u); c.stroke();
+        if (s.pal.snow) { c.strokeStyle = K('#f4f8fc'); c.lineWidth = lw * 0.6 * u; c.beginPath(); c.moveTo(x + sd * len * 0.4 * u, base - (y0 + len * 0.3) * u - 1); c.lineTo(x + sd * len * u + sway, base - (y0 + len * 0.7) * u - 1); c.stroke(); c.strokeStyle = K('#6a4e40'); }
+      });
+    } else if (kind === 'olive') {
+      trunk('#7b6650', 40, 3);
+      blobs([['#738a66', [[-20, -50, 15], [18, -52, 15], [0, -62, 16], [-8, -44, 12]]], ['#8fa57f', [[-12, -58, 11], [12, -60, 11], [0, -70, 10]]], ['#a9bd96', [[-6, -64, 6], [8, -66, 5]]]]);
+    } else {
+      trunk(night ? '#4a3a36' : '#7a5642');
+      blobs([[L[2], [[-22, -58, 18], [20, -60, 18], [0, -74, 20], [-8, -52, 16], [12, -50, 15]]], [L[0], [[-14, -66, 15], [12, -70, 15], [0, -82, 14], [-24, -62, 10]]], [L[1], [[-8, -76, 9], [10, -78, 8], [-18, -66, 7], [4, -88, 7]]]]);
+      if (s.season === 'spring') { c.fillStyle = K('#ffd6e6'); [[-16, -60], [14, -66], [2, -80], [-4, -64], [20, -54], [-20, -70], [8, -86]].forEach(([bx, by]) => { c.beginPath(); c.arc(x + bx * u + sway, base + by * u, 1.8 * u, 0, TAU); c.fill(); }); }
+    }
   }
   function paintMotes(c, s, night, t, dt) {
     const { w, h } = s;
+    if (s.pal.snow) {
+      if (!s.flakes) s.flakes = Array.from({ length: 45 }, () => ({ x: rand(), y: rand(), r: 0.6 + rand() * 1.3, v: 0.04 + rand() * 0.05, p: rand() * 6 }));
+      c.fillStyle = 'rgba(255,255,255,.9)';
+      s.flakes.forEach(f => { f.y += f.v * dt; if (f.y > 1) { f.y = -0.02; f.x = rand(); } c.beginPath(); c.arc((f.x + Math.sin(t + f.p) * 0.01) * w, f.y * h, f.r, 0, TAU); c.fill(); });
+      return;
+    }
+    const kind = night ? 'fire' : s.season === 'autumn' ? 'leaf' : s.season === 'spring' ? 'petal' : PLACES[s.place].ground === 'desert' ? 'dust' : 'pollen';
     s.motes.forEach((m, i) => {
-      if (night) {
+      if (kind === 'fire') {
         m.p += dt * m.v; const x = (m.x + Math.sin(m.p) * 0.03) * w, y = (m.y + 0.2 + Math.cos(m.p * 0.7) * 0.03) * h;
         const a = 0.35 + 0.65 * Math.abs(Math.sin(t * 2 + i));
         const g = c.createRadialGradient(x, y, 0, x, y, 5); g.addColorStop(0, `rgba(255,240,150,${a})`); g.addColorStop(1, 'rgba(255,240,150,0)');
         c.fillStyle = g; c.fillRect(x - 5, y - 5, 10, 10);
-      } else {
-        m.x += dt * 0.025 * m.v; m.y += dt * 0.012 * m.v; m.p += dt * 2;
-        if (m.x > 1.05 || m.y > 0.66) { m.x = -0.05; m.y = 0.1 + rand() * 0.4; }
-        c.save(); c.translate(m.x * w, m.y * h); c.rotate(m.p); c.fillStyle = 'rgba(255,190,214,.85)';
-        c.beginPath(); c.ellipse(0, 0, 2.2, 1.2, 0, 0, TAU); c.fill(); c.restore();
+        return;
       }
+      const fall = kind === 'leaf' ? 0.03 : kind === 'petal' ? 0.012 : 0.004;
+      m.x += dt * (kind === 'dust' ? 0.05 : 0.025) * m.v; m.y += dt * fall * m.v; m.p += dt * 2;
+      if (m.x > 1.05 || m.y > 0.66) { m.x = -0.05; m.y = 0.1 + rand() * 0.4; }
+      c.save(); c.translate(m.x * w, m.y * h + (kind === 'pollen' ? Math.sin(t + i) * 3 : 0)); c.rotate(m.p);
+      if (kind === 'leaf') { c.fillStyle = ['#e0823a', '#c9562c', '#f2b14a'][i % 3]; c.beginPath(); c.ellipse(0, 0, 3, 1.6, 0, 0, TAU); c.fill(); }
+      else if (kind === 'petal') { c.fillStyle = 'rgba(255,190,214,.85)'; c.beginPath(); c.ellipse(0, 0, 2.2, 1.2, 0, 0, TAU); c.fill(); }
+      else { c.fillStyle = kind === 'dust' ? 'rgba(255,230,190,.5)' : `rgba(255,255,220,${0.4 + 0.4 * Math.sin(t * 3 + i)})`; c.beginPath(); c.arc(0, 0, 1.1, 0, TAU); c.fill(); }
+      c.restore();
     });
   }
   function heart(c, x, y, r, col, a = 1) {
@@ -1001,16 +1334,17 @@ button { cursor: pointer; }
   // Couple scenes and partner "teasing" scenes rotate through the day.
   const SCENES = ['walk', 'knock', 'sit', 'poke', 'peek', 'squish', 'together', 'hide', 'bubbles'];
   const SCENE_LEN = 7;
+  const bushCol = (s, night, i) => tinter(night)(s.pal.snow ? (i ? '#eef4fa' : '#3f6b55') : PLACES[s.place].ground ? (i ? '#8aa063' : '#6f8550') : (i ? s.pal.leaf[1] : s.pal.leaf[0]));
   function paintBush(c, s, x, night, t) {
     const u = s.h / 92, base = nearY(s, x, 0) + 4, sway = Math.sin(t * 1.1) * 0.4 * u;
-    [[night ? '#2f5546' : '#4c8f54', [[-8, -5, 7], [8, -5, 7], [0, -11, 8.5], [-13, -2, 5], [13, -2, 5]]],
-     [night ? '#3b6a55' : '#6fb265', [[-4, -12, 5.5], [5, -13, 5.5], [0, -16, 5], [-10, -7, 4], [10, -8, 4]]]]
+    [[bushCol(s, night, 0), [[-8, -5, 7], [8, -5, 7], [0, -11, 8.5], [-13, -2, 5], [13, -2, 5]]],
+     [bushCol(s, night, 1), [[-4, -12, 5.5], [5, -13, 5.5], [0, -16, 5], [-10, -7, 4], [10, -8, 4]]]]
       .forEach(([col, blobs]) => {
         c.fillStyle = col; c.beginPath();
         blobs.forEach(([bx, by, r]) => { const xx = x + bx * u + sway, yy = base + by * u; c.moveTo(xx + r * u, yy); c.arc(xx, yy, r * u, 0, TAU); });
         c.fill();
       });
-    if (!night) { c.fillStyle = '#fff0f6'; [[-6, -10], [4, -14], [10, -7], [-1, -6], [-11, -4]].forEach(([bx, by]) => { c.beginPath(); c.arc(x + bx * u + sway, base + by * u, 0.8 * u, 0, TAU); c.fill(); }); }
+    if (!night && s.season === 'spring') { c.fillStyle = '#fff0f6'; [[-6, -10], [4, -14], [10, -7], [-1, -6], [-11, -4]].forEach(([bx, by]) => { c.beginPath(); c.arc(x + bx * u + sway, base + by * u, 0.8 * u, 0, TAU); c.fill(); }); }
   }
   function label(c, text, x, y, size, a = 1) {
     c.save(); c.globalAlpha = a; c.font = `800 ${size}px Nunito, sans-serif`; c.textAlign = 'center';
@@ -1036,7 +1370,7 @@ button { cursor: pointer; }
     const B = fn => { c.filter = `blur(${soft}px)`; fn(); c.filter = 'none'; };
     const gyAt = x => nearY(s, x, off) + 3;
 
-    B(() => { paintSky(c, s, night, t); paintClouds(c, s, night, dt); paintHills(c, s, night, off); });
+    B(() => { paintSky(c, s, night, t); paintClouds(c, s, night, dt); paintHills(c, s, night, off, t); });
 
     if (scene === 'walk') {
       const span = w * 1.9, tx = w * 1.25 - (s.scroll % span);
@@ -1359,7 +1693,7 @@ button { cursor: pointer; }
     P[id].screen = on;
     W[id].q('.screen').classList.toggle('off', !on);
     document.getElementById(`screen-${id}`).checked = on;
-    if (on) setTimeout(() => flush(id), 450); else closeW(id);
+    if (on) { newPlace(id, true); setTimeout(() => flush(id), 450); } else closeW(id);
   }
 
   // ---------- Slideshow ----------
@@ -1483,17 +1817,37 @@ button { cursor: pointer; }
     ];
   }
   let DAYS = store.get('hearby-days', null) || seedDays();
+  DAYS.forEach(ev => { if (!ev.repeat) ev.repeat = 'yearly'; });
+  if (!DAYS.some(ev => ev.repeat === 'monthly')) DAYS.push({ id: 'd5', type: 'anniversary', who: 'both', title: 'Our monthversary', month: new Date().getMonth() + 1, day: 9, year: null, countYears: false, cel: 'auto', repeat: 'monthly' });
+  const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const REPEAT_OPTS = [['yearly', 'Every year'], ['monthly', 'Every month'], ['weekly', 'Every week'], ['daily', 'Every day'], ['once', 'Just once']];
+  const repeatText = ev => ({ daily: 'every day', weekly: `every ${WEEKDAYS[ev.weekday ?? 0]}`, monthly: `every month on the ${ordinal(ev.day)}`, once: 'one time' }[ev.repeat] || 'every year');
   let MEMORIES = store.get('hearby-memories', []);
   const saveDays = () => store.set('hearby-days', DAYS);
 
   function today0() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
-  function nextOcc(ev) { const t = today0(); let d = new Date(t.getFullYear(), ev.month - 1, ev.day); if (d < t) d = new Date(t.getFullYear() + 1, ev.month - 1, ev.day); return d; }
-  const daysUntil = ev => Math.round((nextOcc(ev) - today0()) / 86400000);
-  const yearsAt = ev => { if (!ev.countYears || !ev.year) return null; const n = nextOcc(ev).getFullYear() - ev.year; return n > 0 ? n : null; };
+  function nextOcc(ev) {
+    const t = today0(), rep = ev.repeat || 'yearly';
+    if (rep === 'daily') return t;
+    if (rep === 'once') { const d = new Date(ev.year || t.getFullYear(), ev.month - 1, ev.day); return d < t ? null : d; }
+    if (rep === 'weekly') { const d = new Date(t); d.setDate(t.getDate() + (((ev.weekday ?? 0) - t.getDay() + 7) % 7)); return d; }
+    if (rep === 'monthly') {
+      const mk = (y, m) => new Date(y, m, Math.min(ev.day, new Date(y, m + 1, 0).getDate()));
+      let d = mk(t.getFullYear(), t.getMonth()); if (d < t) d = mk(t.getFullYear(), t.getMonth() + 1); return d;
+    }
+    let d = new Date(t.getFullYear(), ev.month - 1, ev.day); if (d < t) d = new Date(t.getFullYear() + 1, ev.month - 1, ev.day); return d;
+  }
+  const daysUntil = ev => { const o = nextOcc(ev); return o ? Math.round((o - today0()) / 86400000) : Infinity; };
+  const yearsAt = ev => {
+    const o = nextOcc(ev); if (!o || !ev.countYears || !ev.year) return null;
+    const n = ev.repeat === 'monthly' ? (o.getFullYear() - ev.year) * 12 + (o.getMonth() - (ev.month - 1)) : (ev.repeat || 'yearly') === 'yearly' ? o.getFullYear() - ev.year : null;
+    return n > 0 ? n : null;
+  };
+  const annWord = ev => (ev.repeat === 'monthly' ? 'Monthversary' : 'Anniversary');
   const both = () => `${P.leo.name} & ${P.mia.name}`;
   function dayLabel(ev) {
     if (ev.type === 'birthday') return `${P[ev.who].name}'s birthday`;
-    if (ev.type === 'anniversary') return 'Our anniversary';
+    if (ev.type === 'anniversary') return ev.title || (ev.repeat === 'monthly' ? 'Our monthversary' : 'Our anniversary');
     return ev.who === 'both' ? ev.title : `${ev.title} (${P[ev.who].name})`;
   }
   function todayText(ev, id) {
@@ -1503,7 +1857,7 @@ button { cursor: pointer; }
       if (id === ev.who) return { big: n ? `Happy ${ordinal(n)} Birthday, ${who}!` : `Happy Birthday, ${who}!`, small: 'Wishing you the happiest day 🎂', ribbon: `🎂 Happy ${n ? ordinal(n) + ' ' : ''}Birthday, ${who}` };
       return { big: `It's ${who}'s ${n ? ordinal(n) + ' ' : ''}birthday!`, small: `Send ${who} a wish 💌`, ribbon: `🎂 ${who}'s birthday today` };
     }
-    if (ev.type === 'anniversary') return { big: n ? `Happy ${ordinal(n)} Anniversary!` : 'Happy Anniversary!', small: `${both()} 💞`, ribbon: `💞 Happy ${n ? ordinal(n) + ' ' : ''}Anniversary` };
+    if (ev.type === 'anniversary') return { big: n ? `Happy ${ordinal(n)} ${annWord(ev)}!` : `Happy ${annWord(ev)}!`, small: `${both()} 💞`, ribbon: `💞 Happy ${n ? ordinal(n) + ' ' : ''}${annWord(ev)}` };
     if (ev.who === 'both') return { big: `Happy ${ev.title}!`, small: n ? `${n} year${n > 1 ? 's' : ''} · ${both()}` : both(), ribbon: `✨ ${ev.title}` };
     const who = P[ev.who].name;
     if (id === ev.who) return { big: `Happy ${ev.title}, ${who}!`, small: n ? `${n} year${n > 1 ? 's' : ''} ✨` : '✨', ribbon: `✨ Happy ${ev.title}, ${who}` };
@@ -1512,7 +1866,7 @@ button { cursor: pointer; }
   function tomorrowText(ev) {
     const n = yearsAt(ev);
     if (ev.type === 'birthday') { const who = P[ev.who].name; return { title: `Tomorrow is ${who}'s ${n ? ordinal(n) + ' ' : ''}birthday 🎂`, tip: `Make ${who}'s day special: plan a surprise or send a wish at midnight 💝`, ribbon: `⏰ Tomorrow: ${who}'s birthday` }; }
-    if (ev.type === 'anniversary') return { title: `Tomorrow is your ${n ? ordinal(n) + ' ' : ''}anniversary 💞`, tip: 'Plan something sweet together 💝', ribbon: '⏰ Tomorrow: your anniversary' };
+    if (ev.type === 'anniversary') return { title: `Tomorrow is your ${n ? ordinal(n) + ' ' : ''}${annWord(ev).toLowerCase()} 💞`, tip: 'Plan something sweet together 💝', ribbon: `⏰ Tomorrow: your ${annWord(ev).toLowerCase()}` };
     if (ev.who === 'both') return { title: `Tomorrow: ${ev.title} ✨`, tip: 'A special day for you both is coming', ribbon: `⏰ Tomorrow: ${ev.title}` };
     const who = P[ev.who].name;
     return { title: `Tomorrow is ${who}'s ${ev.title} ✨`, tip: `Wish ${who} well and make the day special 💝`, ribbon: `⏰ Tomorrow: ${who}'s ${ev.title}` };
@@ -1532,10 +1886,10 @@ button { cursor: pointer; }
   function celebrate(ev, preview) {
     IDS.forEach(id => deliverVisual(id, { kind: 'celebrate', ev }));
     if (!preview) {
-      const yr = today0().getFullYear(), key = `${ev.id}-${yr}`;
+      const key = `${ev.id}-${today0().toISOString().slice(0, 10)}`;
       if (!MEMORIES.some(m => m.key === key)) {
         const n = yearsAt(ev);
-        const what = ev.type === 'birthday' ? `${P[ev.who].name}'s ${n ? ordinal(n) + ' ' : ''}birthday` : ev.type === 'anniversary' ? `your ${n ? ordinal(n) + ' ' : ''}anniversary` : ev.title;
+        const what = ev.type === 'birthday' ? `${P[ev.who].name}'s ${n ? ordinal(n) + ' ' : ''}birthday` : ev.type === 'anniversary' ? `your ${n ? ordinal(n) + ' ' : ''}${annWord(ev).toLowerCase()}` : ev.title;
         MEMORIES.unshift({ key, text: `Celebrated ${what}`, date: today0().toISOString().slice(0, 10) });
         MEMORIES = MEMORIES.slice(0, 30); store.set('hearby-memories', MEMORIES); renderDays();
       }
@@ -1547,7 +1901,7 @@ button { cursor: pointer; }
     DAYS.forEach(ev => {
       const d = daysUntil(ev);
       if (d === 0 && !shown.has(`c${ev.id}${k}`)) { shown.add(`c${ev.id}${k}`); celebrate(ev, false); }
-      if (d === 1 && !shown.has(`r${ev.id}${k}`)) { shown.add(`r${ev.id}${k}`); remind(ev, false); }
+      if (d === 1 && ev.repeat !== 'daily' && !shown.has(`r${ev.id}${k}`)) { shown.add(`r${ev.id}${k}`); remind(ev, false); }
     });
     setRibbons();
   }
@@ -1575,9 +1929,10 @@ button { cursor: pointer; }
       const s = W[id];
       s.q('.days-list').innerHTML = sorted.length ? sorted.map(ev => {
         const d = daysUntil(ev), n = yearsAt(ev), occ = nextOcc(ev);
-        const when = d === 0 ? 'today 🎉' : d === 1 ? 'tomorrow' : `in ${d} days`;
-        const yrs = n ? (ev.type === 'birthday' ? ` · turns ${n}` : ` · ${n} year${n > 1 ? 's' : ''}`) : '';
-        return `<div class="day-row"><span class="day-emo">${DAY_EMO[ev.type]}</span><div><b>${esc(dayLabel(ev))}</b><small>${occ.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} · ${when}${yrs}</small></div>
+        const when = d === Infinity ? 'done' : d === 0 ? 'today 🎉' : d === 1 ? 'tomorrow' : `in ${d} days`;
+        const unit = ev.repeat === 'monthly' ? 'month' : 'year';
+        const yrs = n ? (ev.type === 'birthday' && unit === 'year' ? ` · turns ${n}` : ` · ${n} ${unit}${n > 1 ? 's' : ''}`) : '';
+        return `<div class="day-row"><span class="day-emo">${DAY_EMO[ev.type]}</span><div><b>${esc(dayLabel(ev))}</b><small>${occ ? occ.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' · ' : ''}${when}${yrs} · ${repeatText(ev)}</small></div>
           <div class="day-acts"><button data-do="before" data-id="${ev.id}" title="Preview the day-before reminder" aria-label="Preview reminder for ${esc(dayLabel(ev))}">⏰</button><button data-do="day" data-id="${ev.id}" title="Preview the celebration" aria-label="Preview celebration for ${esc(dayLabel(ev))}">🎉</button><button data-do="del" data-id="${ev.id}" title="Delete" aria-label="Delete ${esc(dayLabel(ev))}">🗑️</button></div></div>`;
       }).join('') : '<p class="hint">No special days yet. Add your first one below.</p>';
       s.q('.mem').innerHTML = MEMORIES.length ? `<b>Memories</b>${MEMORIES.slice(0, 5).map(m => `<p>🎉 ${esc(m.text)} · ${new Date(m.date + 'T00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>`).join('')}` : '';
@@ -1831,6 +2186,8 @@ button { cursor: pointer; }
     q('.slides-toggle').addEventListener('click', e => { e.stopPropagation(); setSlide(id, !s.slideOn); });
     document.getElementById(`slides-${id}`).addEventListener('change', e => setSlide(id, e.target.checked));
     q('.power').addEventListener('click', () => setScreen(id, !P[id].screen));
+    document.getElementById(`scenery-${id}`).addEventListener('change', e => { P[id].scenery = e.target.value; newPlace(id, true); });
+    document.getElementById(`seasonPref-${id}`).addEventListener('change', e => { P[id].seasonPref = e.target.value; newPlace(id, true); });
     q('.days-btn').addEventListener('click', e => { e.stopPropagation(); renderDays(); openSheet(id, 'days'); });
     q('.day-ribbon').addEventListener('click', e => {
       e.stopPropagation();
@@ -1844,8 +2201,8 @@ button { cursor: pointer; }
       const err = q('.d-err'), date = q('.d-date').value, title = q('.d-title').value.trim(), ty = dType.value;
       if (!date) { err.textContent = 'Pick a date'; return; }
       if (ty === 'custom' && !title) { err.textContent = 'Give the day a name'; return; }
-      const [yy, mm, dd] = date.split('-').map(Number);
-      DAYS.push({ id: 'd' + Date.now(), type: ty, who: q('.d-who').value, title, month: mm, day: dd, year: q('.d-year').checked ? yy : null, countYears: q('.d-year').checked, cel: q('.d-cel').value });
+      const [yy, mm, dd] = date.split('-').map(Number), rpt = q('.d-repeat').value;
+      DAYS.push({ id: 'd' + Date.now(), type: ty, who: q('.d-who').value, title, month: mm, day: dd, year: q('.d-year').checked || rpt === 'once' ? yy : null, countYears: q('.d-year').checked, cel: q('.d-cel').value, repeat: rpt, weekday: new Date(yy, mm - 1, dd).getDay() });
       saveDays(); err.textContent = ''; q('.d-date').value = ''; q('.d-title').value = ''; q('.add-day').open = false;
       renderDays(); closeSheet(id); setTimeout(checkDays, 400); toast(id, 'Saved to your special days 📅');
     });
@@ -1897,11 +2254,13 @@ button { cursor: pointer; }
   function setTab(id) {
     stage.dataset.active = id;
     document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === id)));
+    newPlace(id, true);
     setTimeout(() => flush(id), 300);
   }
-  document.addEventListener('visibilitychange', () => IDS.forEach(flush));
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') IDS.forEach(id => newPlace(id, true)); IDS.forEach(flush); });
   document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
 
+  IDS.forEach(id => newPlace(id, false));
   IDS.forEach(id => { renderHead(id); notify(id); });
   renderDays(); setRibbons();
   setTimeout(checkDays, 2500);

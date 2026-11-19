@@ -145,6 +145,7 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - **Celebrations** play across the widget: confetti, balloons, fireworks, a light show, or a **drone show** (lights forming a heart, then the age or the couple's initials in the night sky). "Surprise me" picks one that fits the occasion.
 - Celebrations follow the "only when they're looking" rule.
 - **Memory:** every celebrated day is logged in Memories (and the Memory Jar). Ages and year counts update automatically each year.
+- **Repeats:** each day can repeat every year, every month (for example a monthly "monthversary" on the 9th, the day you united), every week on a chosen weekday, every day, or just once. Monthly days can count months ("Happy 15th Monthversary").
 
 
 - If both partners send love within the same minute, a special animation plays: the characters run to each other and hug, with sparkles. It's rare, so it feels magical.

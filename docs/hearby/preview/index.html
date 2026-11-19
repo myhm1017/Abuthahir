@@ -44,6 +44,7 @@ button { cursor: pointer; }
 .stage { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; align-items: flex-start; }
 .device { display: grid; gap: 14px; justify-items: center; width: 280px; max-width: 100%; }
 .device-label { font-family: var(--display); font-weight: 500; font-size: 17px; }
+.device-label b { font-weight: 500; }
 .device-label span { color: var(--muted); font-family: var(--body); font-size: 14px; }
 
 /* ---------- Phone (fixed visual world, same in both themes) ---------- */
@@ -216,6 +217,7 @@ button { cursor: pointer; }
 .controls .ctl-title { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 800; }
 .controls label { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-weight: 600; }
 .controls select { border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 4px 8px; font-size: 13px; }
+.controls input[type="text"] { border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 4px 8px; font-size: 13px; width: 150px; }
 .controls input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); }
 .avatar { border-top: 1px solid var(--line); padding-top: 8px; }
 .avatar summary { cursor: pointer; font-weight: 800; font-size: 13.5px; color: var(--accent); list-style: none; }
@@ -251,12 +253,12 @@ button { cursor: pointer; }
 <header class="top">
   <div class="logo">hearby<span class="hb" aria-hidden="true">♥</span></div>
   <p class="tag">Miles apart, a heartbeat away.</p>
-  <p class="intro">A working preview of the Hearby home-screen widget. Leo is in London and Mia is in Toronto. Send something from one phone and watch it land on the other.</p>
+  <p class="intro">A working preview of the Hearby home-screen widget, shown with example names Leo (London) and Mia (Toronto). You can rename them under each phone. Send something from one phone and watch it land on the other.</p>
 </header>
 
 <div class="tabs" role="tablist" aria-label="Choose a phone">
-  <button role="tab" id="tab-leo" data-tab="leo" aria-selected="true">Leo's phone</button>
-  <button role="tab" id="tab-mia" data-tab="mia" aria-selected="false">Mia's phone</button>
+  <button role="tab" id="tab-leo" data-tab="leo" aria-selected="true"><span class="nm-leo">Leo</span>'s phone</button>
+  <button role="tab" id="tab-mia" data-tab="mia" aria-selected="false"><span class="nm-mia">Mia</span>'s phone</button>
 </div>
 
 <main class="stage" id="stage" data-active="leo"></main>
@@ -271,7 +273,7 @@ button { cursor: pointer; }
     <li>Turn on <b>Asleep</b> for Mia, then send from Leo. It arrives quietly and the scene turns to night. Turn Asleep off to feel the heartbeat.</li>
     <li>Send from both phones within 15 seconds for a rare <b>in-sync</b> hug.</li>
     <li>Turn on <b>Discreet mode</b> to blur messages until you tap them.</li>
-    <li><b>Customize the characters:</b> under each phone, open "Customize … look" to change the style (man, hijab or long hair), skin tone, eye color, hair or hijab color, outfit, facial hair and glasses.</li>
+    <li><b>Customize the characters:</b> under each phone, open "Customize … name and look" to rename them or change the style (man, hijab or long hair), skin tone, eye color, hair or hijab color, outfit, facial hair and glasses.</li>
     <li><b>Slideshow:</b> open the widget, tap 📷, pick a few photos (or "Use sample photos"), choose a transition and send. The other widget starts a slideshow. Tap 🎞️ to switch between the slideshow and the couple scene.</li>
     <li><b>Pop-up text:</b> tap ✏️, choose <b>Pop-up ✨</b> and send. It types out in huge letters over a blurred background and slides across like a news ticker.</li>
     <li><b>Flying kiss or heart:</b> tap 💋 or ❤️. It flies at the other person, grows to fill the widget and fades.</li>
@@ -310,7 +312,8 @@ button { cursor: pointer; }
   function avatarHTML(id) {
     const p = P[id];
     const sel = (key, opts) => `<select data-key="${key}" id="${key}-${id}">${opts.map(([v, l]) => `<option value="${v}"${p[key] === v ? ' selected' : ''}>${l}</option>`).join('')}</select>`;
-    return `<details class="avatar"><summary>Customize ${p.name}'s look</summary><div class="av-grid">
+    return `<details class="avatar"><summary>Customize <span class="nm-${id}">${p.name}</span>'s name and look</summary><div class="av-grid">
+      <label for="name-${id}">Name <input type="text" id="name-${id}" data-key="name" maxlength="20" value="${p.name}" autocomplete="off"></label>
       <label for="type-${id}">Style ${sel('type', [['man', 'Man'], ['hijabi', 'Hijab'], ['woman', 'Long hair']])}</label>
       <div class="av-row">Skin tone ${swatches(id, 'skin')}</div>
       <div class="av-row">Eye color ${swatches(id, 'eyes')}</div>
@@ -326,7 +329,7 @@ button { cursor: pointer; }
     const opts = Object.keys(STATUSES).map(s => `<option value="${s}"${s === me.status ? ' selected' : ''}>${STATUSES[s]} ${s}</option>`).join('');
     return `
     <section class="device" data-id="${id}" aria-label="${me.name}'s phone">
-      <div class="device-label">${me.name}'s phone <span>· ${me.city}</span></div>
+      <div class="device-label"><b class="nm-${id}">${me.name}</b>'s phone <span>· ${me.city}</span></div>
       <div class="phone"><span class="ring"></span><button class="power" aria-label="${me.name}'s power button" title="Power button"></button>
         <div class="screen">
           <div class="statusbar"><span class="clock"></span><span class="cam"></span><span class="sb-icons">▂▄▆ ▮</span></div>
@@ -402,7 +405,7 @@ button { cursor: pointer; }
         </div>
       </div>
       <div class="controls">
-        <div class="ctl-title">${me.name}'s settings</div>
+        <div class="ctl-title"><span class="nm-${id}">${me.name}</span>'s settings</div>
         <label for="status-${id}">Status <select id="status-${id}">${opts}</select></label>
         <label for="quiet-${id}">Asleep (quiet hours) <input type="checkbox" id="quiet-${id}"></label>
         <label for="discreet-${id}">Discreet mode <input type="checkbox" id="discreet-${id}"></label>
@@ -1355,8 +1358,10 @@ button { cursor: pointer; }
     q('.power').addEventListener('click', () => setScreen(id, !P[id].screen));
     const av = q('.avatar');
     const syncRows = () => av.querySelectorAll('[data-show]').forEach(r => { r.hidden = !r.dataset.show.split(' ').includes(P[id].type); });
+    av.addEventListener('input', e => { if (e.target.dataset.key === 'name') rename(id, e.target.value); });
     av.addEventListener('change', e => {
       const el = e.target, key = el.dataset.key || el.name.replace(`-${id}`, '');
+      if (key === 'name') { rename(id, el.value); if (!el.value.trim()) el.value = P[id].name; return; }
       P[id][key] = el.type === 'checkbox' ? el.checked : el.value;
       syncRows();
     });
@@ -1379,6 +1384,15 @@ button { cursor: pointer; }
     });
   });
 
+  const DEFAULT_NAMES = { leo: 'Leo', mia: 'Mia' };
+  function rename(id, value) {
+    const name = value.trim().slice(0, 20) || DEFAULT_NAMES[id];
+    P[id].name = name;
+    document.querySelectorAll(`.nm-${id}`).forEach(el => { el.textContent = name; });
+    W[id].root.setAttribute('aria-label', `${name}'s phone`);
+    W[id].q('.power').setAttribute('aria-label', `${name}'s power button`);
+    IDS.forEach(i => { renderHead(i); renderBubble(i); });
+  }
   function setTab(id) {
     stage.dataset.active = id;
     document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === id)));

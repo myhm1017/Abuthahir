@@ -41,6 +41,7 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 
 ### 4.1 Pairing (v1)
 - One partner per account.
+- **Names are always the user's choice:** each person enters their own name (or nickname) during setup and can edit it anytime. The app never assumes or invents a name. Partners can also set a private nickname for each other ("my moon", "habibi") that only shows on their own phone.
 - Pair by **invite link**, **QR code**, **user ID** or **short invite code**.
 - Pairing is mutual: both people must accept.
 

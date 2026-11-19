@@ -268,8 +268,6 @@ button { cursor: pointer; }
 .reacts button { border: 0; background: rgba(255, 255, 255, .5); border-radius: 999px; font-size: 16px; width: 34px; height: 28px; padding: 0; }
 .floatemo { position: absolute; bottom: 12px; font-size: 20px; animation: floatUp 1.6s ease-out forwards; }
 @keyframes floatUp { to { transform: translateY(-70px); opacity: 0 } }
-.quran { display: grid; grid-template-columns: 70px 1fr; gap: 8px; align-items: center; }
-.ring { width: 70px; height: 70px; }
 .dua-row, .bk-row, .gift-row { display: flex; align-items: center; gap: 6px; font-size: 12px; flex-wrap: wrap; }
 .gift-row { justify-content: space-between; }
 .dua-row.done span, .bk-row.done span { text-decoration: line-through; opacity: .6; }
@@ -289,6 +287,85 @@ button { cursor: pointer; }
 .me-canvas { width: 100px; height: 118px; border-radius: 14px; background: linear-gradient(#c9e3f7, #fde8ef); }
 .safety { font-family: ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .08em; background: rgba(255, 255, 255, .55); border-radius: 8px; padding: 3px 6px; font-size: 12px; justify-self: start; }
 .set-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-weight: 700; }
+
+/* Games */
+.four { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; background: #3a6fc4; padding: 4px; border-radius: 10px; }
+.four .col { border: 0; background: transparent; display: grid; gap: 2px; padding: 0; cursor: pointer; border-radius: 6px; }
+.four .col:not(:disabled):hover { background: rgba(255, 255, 255, .15); }
+.four .disc { display: grid; place-items: center; aspect-ratio: 1; border-radius: 50%; background: #e8eefb; font-size: 15px; line-height: 1; }
+.snl { display: grid; grid-template-columns: repeat(10, 1fr); border-radius: 10px; overflow: hidden; border: 1px solid rgba(255, 255, 255, .7); }
+.sc { position: relative; aspect-ratio: 1; background: #fff7e8; font-size: 9px; display: grid; place-items: center; line-height: 1; }
+.sc.alt { background: #e9f6ea; }
+.sc em { position: absolute; top: 1px; left: 2px; font-size: 6.5px; font-style: normal; color: #8a7898; font-weight: 800; }
+.sc i, .start-row i, .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #fff; vertical-align: middle; }
+.sc i { position: absolute; bottom: 1px; }
+.sc i:nth-of-type(2) { right: 1px; }
+.ludo { display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr); gap: 2px; aspect-ratio: 1; max-width: 230px; justify-self: center; width: 100%; }
+.lc { background: rgba(255, 255, 255, .6); border-radius: 5px; display: grid; place-items: center; font-size: 8px; color: #b0a0bc; gap: 1px; }
+.lc.st { background: color-mix(in srgb, var(--sc) 30%, white); color: var(--sc); }
+.lcenter { grid-row: 2 / 8; grid-column: 2 / 8; display: grid; align-content: center; justify-items: center; gap: 6px; background: rgba(255, 255, 255, .35); border-radius: 10px; font-size: 11px; font-weight: 800; }
+.tok { display: inline-grid; place-items: center; width: 14px; height: 14px; border-radius: 50%; color: #fff; font-size: 8px; font-style: normal; font-weight: 800; border: 1.5px solid #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, .25); }
+.tok.ghost { opacity: .3; }
+.die { font-size: 30px; line-height: 1; }
+.c-table { display: flex; align-items: center; gap: 10px; }
+.cc { --cc: #33263f; border: 2px solid #fff; background: var(--cc); color: #fff; font-weight: 800; font-size: 12px; width: 30px; height: 42px; border-radius: 7px; display: grid; place-items: center; padding: 0; box-shadow: 0 2px 5px -2px rgba(0, 0, 0, .35); text-shadow: 0 1px 1px rgba(0, 0, 0, .3); }
+.cc.big { width: 44px; height: 62px; font-size: 18px; }
+.cc:disabled { opacity: .45; }
+.hand { display: flex; flex-wrap: wrap; gap: 4px; }
+.c-pick .cc { width: 34px; height: 34px; border-radius: 50%; font-size: 16px; }
+/* Watch party */
+.wp-screen { position: relative; background: linear-gradient(160deg, #1d1530, #3a2550); color: #fff; border-radius: 12px; height: 110px; display: grid; place-items: center; align-content: center; gap: 2px; overflow: hidden; text-align: center; padding: 0 8px; }
+.wp-title-on { font-size: 11px; font-weight: 800; opacity: .85; }
+.wp-big { font-family: var(--display); font-size: 22px; }
+.wp-time { font-size: 10.5px; opacity: .75; font-variant-numeric: tabular-nums; }
+.wp-screen .prog { position: absolute; left: 8px; right: 8px; bottom: 8px; height: 4px; background: rgba(255, 255, 255, .25); border-radius: 9px; }
+.wp-screen .prog i { display: block; height: 100%; width: 0; background: #ff7eab; border-radius: 9px; transition: width .5s linear; }
+.wp-chat p { margin: 0; font-size: 11.5px; }
+/* Date night */
+.dn-form { display: grid; gap: 6px; }
+.dn-form input[type="datetime-local"] { border: 1px solid rgba(255, 255, 255, .75); background: rgba(255, 255, 255, .5); border-radius: 10px; padding: 4px 6px; font-size: 11.5px; color: #33263f; max-width: 160px; }
+.dn-list { display: grid; gap: 6px; }
+.dn-item { display: grid; gap: 2px; background: rgba(255, 255, 255, .45); border-radius: 12px; padding: 7px 9px; font-size: 11.5px; }
+/* Albums */
+.albums { display: grid; gap: 6px; }
+.al-item { display: grid; grid-template-columns: 56px 1fr; gap: 8px; align-items: center; background: rgba(255, 255, 255, .42); border-radius: 12px; padding: 6px; }
+.al-item img { width: 56px; height: 56px; object-fit: cover; border-radius: 9px; }
+.al-item em { display: block; }
+.al-acts { flex-wrap: wrap; justify-content: flex-start; gap: 4px; margin-top: 3px; }
+.al-acts .mini2 { padding: 2px 6px; font-size: 10px; }
+.al-make { display: grid; gap: 6px; }
+.al-pick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.al-ph { border: 2px solid transparent; padding: 0; border-radius: 9px; overflow: hidden; aspect-ratio: 1; background: none; }
+.al-ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.al-ph.sel { border-color: #db4f84; box-shadow: 0 0 0 2px rgba(219, 79, 132, .35); }
+.al-upload { position: relative; cursor: pointer; }
+.al-upload input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.album-player { position: absolute; inset: 0; z-index: 9; background: #0e0a14; display: grid; }
+.ap-stage { position: absolute; inset: 0; overflow: hidden; }
+.ap-stage .slide img { object-fit: contain; background: #0e0a14; }
+.ap-cap { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; color: #fff; font-weight: 800; font-size: 12px; text-shadow: 0 1px 4px rgba(0, 0, 0, .6); }
+.ap-close { position: absolute; top: 34px; right: 14px; width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .5); background: rgba(255, 255, 255, .2); color: #fff; font-weight: 800; }
+/* Bucket list */
+.bk-item { display: grid; grid-template-columns: 64px 1fr; gap: 8px; align-items: center; background: rgba(255, 255, 255, .42); border-radius: 12px; padding: 6px; }
+.bk-item img { width: 64px; height: 40px; object-fit: cover; border-radius: 8px; }
+.bk-item em { display: block; }
+.bk-item.done b { text-decoration: line-through; opacity: .65; }
+.bk-acts { grid-column: 1 / -1; display: flex; gap: 4px; justify-content: flex-end; }
+.bk-acts .mini2 { padding: 2px 7px; font-size: 10.5px; display: inline-flex; align-items: center; gap: 3px; }
+.bk-add-grid { display: grid; grid-template-columns: 1fr auto; gap: 5px; }
+.bk-add-grid .bk-custom, .bk-add-grid .gift-in { grid-column: 1 / 2; }
+.gift-row { display: grid; grid-template-columns: 1fr auto; gap: 2px 6px; align-items: center; background: rgba(255, 255, 255, .38); border-radius: 10px; padding: 5px 7px; }
+.gift-row label { display: flex; align-items: center; gap: 4px; font-size: 12px; }
+.gift-row em { grid-column: 1; }
+.gift-row .mini2 { grid-row: 1 / 3; grid-column: 2; }
+.gift-row.done span { text-decoration: line-through; opacity: .6; }
+/* Sleep together */
+.sleep-layer { position: absolute; inset: 0; z-index: 15; border-radius: 35px; overflow: hidden; animation: fadeIn .8s ease both; }
+.sleep-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.sleep-ui { position: absolute; left: 0; right: 0; bottom: 38px; display: grid; justify-items: center; gap: 6px; text-align: center; color: #f3eaff; padding: 0 18px; }
+.sleep-ui b { font-family: var(--display); font-weight: 600; font-size: 18px; }
+.sleep-ui span { font-size: 11.5px; opacity: .85; }
+.sleep-ui .mini2 { background: rgba(255, 255, 255, .15); color: #fff; border-color: rgba(255, 255, 255, .35); }
 
 /* ---------- Bottom sheet inside the phone ---------- */
 .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 8; background: rgba(255, 255, 255, .34); backdrop-filter: blur(22px) saturate(1.6); -webkit-backdrop-filter: blur(22px) saturate(1.6); border-top: 1px solid rgba(255, 255, 255, .6); border-radius: 26px 26px 0 0; padding: 14px 16px 18px; transform: translateY(105%); transition: transform .35s cubic-bezier(.2, .9, .3, 1.05); box-shadow: 0 -10px 30px -12px rgba(70, 30, 80, .35); display: grid; gap: 10px; color: #33263f; }
@@ -387,6 +464,9 @@ button { cursor: pointer; }
     <li>Turn on <b>Discreet mode</b> to blur messages until you tap them.</li>
     <li><b>Special days:</b> open a widget and tap 📅. Birthdays, anniversaries and other moments are listed with a countdown. Add your own, and choose a celebration (confetti, balloons, fireworks, light show, drone show or everything). Mia's birthday is set for tomorrow, so Leo gets a private tease a few seconds after the page loads. Tap ⏰ to preview a day-before reminder or 🎉 to preview the celebration on both phones.</li>
     <li><b>Scenery:</b> every time someone looks at their screen (screen on, switching phones or coming back to the page), the widget moves to a new place and season: Santorini, the Swiss Alps, Mount Fuji, the Grand Canyon, a Banff trail, the Maldives, an Icelandic waterfall, Kyoto, Central Park, Dubai, Paris, the Taj Mahal, the Pyramids, the Golden Gate, Cappadocia and a Norwegian fjord, in spring, summer, autumn or winter. Pick a fixed place or season under each phone if you prefer.</li>
+    <li><b>Games in the app:</b> Color Match (match a color or number), Ludo, Snakes and Ladders, Four in a Row and tic-tac-toe all play across both phones, taking turns. Plus draw and guess, an emoji story and a shared garden.</li>
+    <li><b>Watch party, sleep together, date nights:</b> start a watch party (play, pause, reactions and chat sync on both phones), sleep together (both screens turn into the same starry sky, with optional rain, ocean or soft noise), and plan date nights with when, where, food, an activity and a movie.</li>
+    <li><b>Albums and bucket list:</b> make albums from photos and play them as a slideshow, on your widget, or send them to your partner's widget. Bucket list places show as little scenery pictures in your dream season.</li>
     <li><b>The full app:</b> tap the <b>💗 Hearby</b> icon on either home screen (or the partner's name in the open widget). <b>Us</b> has your big living scene, quick sending, the next special day and today's question. <b>Together</b> has daily couple questions (answers unlock only when you've both replied, so try both phones), tic-tac-toe across both phones, draw and guess (your drawing lands on the other widget), an emoji story, a shared garden that grows with every bit of love you send, watch and listen countdowns with live reactions, a shared Quran khatm and dua list, and date night ideas. <b>Memories</b> has the Memory Jar, your timeline, "open when" letters and a bucket list of places. <b>Me</b> shows your character, secret gift ideas, privacy and settings.</li>
     <li><b>Gentle reminders:</b> every now and then (about once a minute in this preview, a few times a day in the real app), each phone gets a soft nudge to message or check on the other, or to make dua for each other and for you both, such as "Take a moment to make dua for Mia and for you both 🤲". Choose love and dua, love and prayer, love only, or off under each phone, or tap "Show a reminder now".</li>
     <li><b>Meet-up countdown:</b> open a widget and tap the ✈️ chip to set or change the date, add a note, choose "We don't know the date yet" (shows "soon"), or hide the countdown. Both phones update.</li>
@@ -457,15 +537,17 @@ button { cursor: pointer; }
   };
   const QCATS = [['sweet', '💗 Sweet'], ['funny', '😂 Funny'], ['deep', '🌊 Deep'], ['future', '🔮 Future'], ['faith', '🤲 Faith'], ['thisorthat', '⚖️ This or that'], ['likely', "👀 Who's more likely"]];
   const LETTER_WHENS = ['you miss me', "you can't sleep", "you're having a hard day", 'you need a smile', 'our next monthversary comes', "you're proud of yourself"];
-  const DATE_IDEAS = [
-    "Cook the same recipe on a video call and rate each other's plate 🍝", 'Watch the sunset at the same time and send a photo 🌅',
-    'Have a virtual café date: same drink, same playlist ☕', 'Stargaze together and find the moon from both cities 🌙',
-    'Read the same short chapter and talk about it 📖', 'Plan your dream trip from the bucket list, day by day 🗺️',
-    'Take a walk "together" on a call and describe what you see 🚶', 'Pray together on a call, then share one dua each 🤲',
-    'Draw each other from memory and swap drawings 🎨', 'Photo challenge: something blue, something sweet, something that reminds you of me 📸'
-  ];
+  const DN = {
+    places: ['Same café, two cities ☕', 'Video call from a park 🌳', 'Rooftop café 🌆', 'Beach walk at sunset 🌅', 'Botanical garden 🌸', 'Night market 🏮', 'Cozy home dinner 🕯️', 'Lakeside picnic 🧺'],
+    foods: ['Biryani night 🍛', 'Homemade pizza 🍕', 'Sushi 🍣', 'Shawarma wraps 🌯', 'Pancakes for dinner 🥞', 'Kunafa and tea 🍮', 'Pasta from the same recipe 🍝', 'Mandi 🍗', 'Ice cream tasting 🍨'],
+    events: ['Stargazing together 🌙', 'Cook the same recipe on a call 👩‍🍳', 'Hearby game night 🎲', 'Karaoke on a call 🎤', 'Virtual museum tour 🖼️', 'Photo challenge 📸', 'Read a chapter together 📖', 'Pray together, then share a dua 🤲'],
+    movies: ['Your Name', 'Up', 'Coco', 'Paddington 2', 'Spirited Away', 'The Secret Life of Walter Mitty', 'Howl\'s Moving Castle', 'Soul', 'Ratatouille']
+  };
+  const GIFT_OCC = ['Birthday', 'Anniversary', 'Monthversary', 'Eid', 'Just because'];
+  const SOUNDS = [['rain', '🌧️ Rain'], ['ocean', '🌊 Ocean'], ['noise', '🤍 Soft noise'], ['none', '🔇 Silence']];
   function appHTML(id) {
     const o = other(id), on = P[o].name, nm = `<span class="nm-${o}">${on}</span>`;
+    const dl = (key, list) => `<datalist id="dl-${key}-${id}">${list.map(v => `<option value="${v.replace(/"/g, '&quot;')}"></option>`).join('')}</datalist>`;
     return `<div class="happ" hidden aria-label="Hearby app">
       <header class="app-top"><button class="app-back" aria-label="Close the app">‹</button><b>hearby<span>♥</span></b><span title="End-to-end encrypted">🔒</span></header>
       <main class="app-body">
@@ -473,9 +555,11 @@ button { cursor: pointer; }
           <div class="us-scene"><canvas class="us-canvas" aria-label="Your couple scene"></canvas><div class="us-chips"><span class="chip us-partner"></span><span class="chip us-cd"></span></div></div>
           <div class="card quick" aria-label="Send love"><button data-q="kiss" aria-label="Flying kiss">💋</button><button data-q="heart" aria-label="Flying heart">❤️</button><button data-q="text" aria-label="Message">✏️</button><button data-q="photo" aria-label="Photos">📷</button><button data-q="pop" aria-label="Pop-up text">✨</button></div>
           <div class="card us-day"></div>
+          <div class="card us-date"></div>
           <div class="card"><small>Today's question</small><p class="q-text us-q"></p><button class="link go-play">Answer it →</button></div>
           <div class="card"><small>A moment for you</small><p class="hint2 us-moment"></p></div>
         </section>
+
         <section class="tab" data-tab="play" hidden>
           <div class="card"><b>💬 Daily question</b>
             <div class="cats">${QCATS.map(([k, l]) => `<button data-cat="${k}" aria-pressed="${k === 'sweet'}">${l}</button>`).join('')}</div>
@@ -484,39 +568,86 @@ button { cursor: pointer; }
             <div class="ans q-partner"></div>
             <button class="send q-send">Answer</button>
           </div>
-          <div class="card"><b>🎲 Games</b>
+
+          <div class="card"><b>🎲 Games</b><p class="hint2">Play across both phones. Each move shows up on ${nm}'s phone.</p>
             <div class="games">
+              <button data-game="cards">🃏<span>Color Match</span></button><button data-game="ludo">🎯<span>Ludo</span></button><button data-game="snakes">🐍<span>Snakes and Ladders</span></button><button data-game="four">🔴<span>Four in a Row</span></button>
               <button data-game="ttt">❌<span>Tic-tac-toe</span></button><button data-game="draw">🎨<span>Draw and guess</span></button><button data-game="emoji">😄<span>Emoji story</span></button><button data-game="garden">🌱<span>Our garden</span></button>
-              <button class="soon" data-game="soon">🤔<span>Guess my answer</span></button><button class="soon" data-game="soon">🧠<span>Know me quiz</span></button><button class="soon" data-game="soon">🔴<span>Connect Four</span></button><button class="soon" data-game="soon">🎲<span>Ludo</span></button>
             </div>
             <div class="game-area"></div>
           </div>
-          <div class="card"><b>🍿 Watch and listen together</b><p class="hint2">YouTube plays in sync with live reactions. For Netflix or music, count down and press play together.</p>
-            <div class="row"><button class="mini2 watch-go">🍿 3, 2, 1 movie</button><button class="mini2 listen-go">🎵 Listen together</button></div>
-            <div class="watch-stage" hidden><span class="ws-text"></span><div class="prog"><i></i></div></div>
-            <div class="reacts" hidden>${['😂', '😍', '😮', '😭', '💗'].map(e => `<button aria-label="React ${e}">${e}</button>`).join('')}</div>
+
+          <div class="card"><b>🍿 Watch party</b><p class="hint2">Pick something to watch. Play and pause stay in sync on both phones, with live reactions and chat.</p>
+            <div class="add-row"><input type="text" list="dl-movie-${id}" class="wp-title" id="wp-title-${id}" maxlength="60" placeholder="Movie, show or YouTube link" aria-label="What to watch">${dl('movie', DN.movies)}<button class="send wp-start">Start</button></div>
+            <div class="wp-screen"><div class="wp-title-on"></div><div class="wp-big"></div><div class="wp-time"></div><div class="prog"><i></i></div></div>
+            <div class="row wp-ctrls"><button class="mini2 wp-toggle">⏯ Play / pause</button><button class="mini2 wp-end">End party</button></div>
+            <div class="reacts">${['😂', '😍', '😮', '😭', '💗', '🍿'].map(e => `<button aria-label="React ${e}">${e}</button>`).join('')}</div>
+            <div class="wp-chat"></div>
+            <div class="add-row"><input type="text" class="wp-msg" id="wp-msg-${id}" maxlength="80" placeholder="Say something…" aria-label="Chat message"><button class="mini2 wp-send">Send</button></div>
           </div>
-          <div class="card"><b>🤲 Faith together</b>
-            <div class="quran"><svg class="ring" viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,.65)" stroke-width="9"/><circle class="ring-fill" cx="40" cy="40" r="32" fill="none" stroke="#3f9a72" stroke-width="9" stroke-linecap="round" transform="rotate(-90 40 40)" stroke-dasharray="201" stroke-dashoffset="201"/><text class="ring-txt" x="40" y="45" text-anchor="middle" font-size="15" font-weight="800" fill="#2f5f4a"></text></svg>
-              <div><b>Quran khatm together</b><p class="hint2 q-stats"></p><div class="row"><button class="mini2 q-page">+1 page</button><button class="mini2 q-juz">+1 juz</button></div></div></div>
-            <b>Our dua list</b><div class="duas"></div>
+
+          <div class="card"><b>🌙 Sleep together</b><p class="hint2">Both screens dim to the same starry sky with your characters asleep side by side. Heartbeats go quiet until morning.</p>
+            <label class="set-row" for="sl-sound-${id}">Sound <select id="sl-sound-${id}" class="inline-sel sl-sound">${SOUNDS.map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}</select></label>
+            <p class="hint2 sl-status"></p>
+            <button class="send sl-go">🌙 Sleep together</button>
+          </div>
+
+          <div class="card"><b>🍽️ Plan a date night</b>
+            <div class="dn-form">
+              <label class="set-row" for="dn-when-${id}">When <input type="datetime-local" id="dn-when-${id}" class="dn-when"></label>
+              <label class="set-row" for="dn-kind-${id}">Type <select id="dn-kind-${id}" class="inline-sel dn-kind"><option value="virtual">💻 Virtual date</option><option value="person">💞 In person</option></select></label>
+              <input type="text" list="dl-place-${id}" class="dn-place" id="dn-place-${id}" maxlength="50" placeholder="Where? 📍" aria-label="Place">${dl('place', DN.places)}
+              <input type="text" list="dl-food-${id}" class="dn-food" id="dn-food-${id}" maxlength="50" placeholder="Food to try 🍽️" aria-label="Food">${dl('food', DN.foods)}
+              <input type="text" list="dl-event-${id}" class="dn-event" id="dn-event-${id}" maxlength="50" placeholder="Event or activity 🎟️" aria-label="Activity">${dl('event', DN.events)}
+              <input type="text" list="dl-movie2-${id}" class="dn-movie" id="dn-movie-${id}" maxlength="50" placeholder="Movie to watch 🎬" aria-label="Movie">${dl('movie2', DN.movies)}
+              <div class="row"><button class="mini2 dn-surprise">✨ Surprise me</button><span class="count dn-err"></span><button class="send dn-save">Save date</button></div>
+            </div>
+            <div class="dn-list"></div>
+          </div>
+
+          <div class="card"><b>🤲 Our dua list</b><div class="duas"></div>
             <div class="add-row"><input type="text" class="dua-in" id="dua-in-${id}" maxlength="60" placeholder="Add something to pray for" aria-label="New dua"><button class="mini2 dua-add">Add</button></div>
           </div>
-          <div class="card"><b>🌙 Date night idea</b><p class="hint2 date-idea"></p><button class="mini2 date-next">Another idea</button></div>
         </section>
+
         <section class="tab" data-tab="mem" hidden>
-          <div class="card"><div class="card-h"><b>🫙 Memory Jar</b><button class="mini2 jar-open">Open the jar</button></div><p class="hint2 jar-pick">Kept messages, photos and celebrated days live here.</p><div class="mem-photos"></div></div>
+          <div class="card"><div class="card-h"><b>🫙 Memory Jar</b><button class="mini2 jar-open">Open the jar</button></div><p class="hint2 jar-pick">Kept messages, photos and celebrated days live here.</p></div>
+
+          <div class="card"><div class="card-h"><b>🖼️ Albums</b><button class="mini2 al-new">＋ New album</button></div>
+            <div class="albums"></div>
+            <div class="al-make" hidden>
+              <input type="text" class="al-name" id="al-name-${id}" maxlength="40" placeholder="Album name" aria-label="Album name">
+              <p class="hint2">Tap photos to add them. You can also add your own.</p>
+              <div class="al-pick"></div>
+              <div class="row"><label class="mini2 al-upload">＋ Add photos<input type="file" accept="image/*" multiple id="al-file-${id}"></label><button class="mini2 al-cancel">Cancel</button><button class="send al-save">Save album</button></div>
+            </div>
+          </div>
+
           <div class="card"><b>🕰️ Our timeline</b><div class="timeline"></div></div>
+
           <div class="card"><b>💌 Open when…</b><div class="letters"></div><div class="letter-view"></div>
             <details class="write-letter"><summary class="link">Write a letter for ${nm}</summary>
               <div class="grid2"><select class="lt-when" id="lt-when-${id}" aria-label="Open when">${LETTER_WHENS.map(w => `<option value="${w}">Open when ${w}</option>`).join('')}</select>
               <textarea class="lt-text" id="lt-text-${id}" maxlength="300" placeholder="Write from the heart…" aria-label="Letter"></textarea><button class="send lt-seal">Seal it 💌</button></div></details>
           </div>
-          <div class="card"><b>🗺️ Our bucket list</b><div class="bucket"></div><div class="add-row"><select class="bk-sel" id="bk-sel-${id}" aria-label="Add a place">${PLACE_META.map(m => `<option value="${m.key}">${m.flag} ${m.name}</option>`).join('')}</select><button class="mini2 bk-add">Add</button></div></div>
+
+          <div class="card"><b>🗺️ Our bucket list</b><p class="hint2">Dream places, shown in the season you'd love to visit. Tap Preview to see one on your widget.</p>
+            <div class="bucket"></div>
+            <div class="bk-add-grid">
+              <select class="bk-sel" id="bk-sel-${id}" aria-label="Place">${PLACE_META.map(m => `<option value="${m.key}">${m.flag} ${m.name}</option>`).join('')}</select>
+              <select class="bk-season inline-sel" id="bk-season-${id}" aria-label="Season"><option value="spring">🌸</option><option value="summer">☀️</option><option value="autumn">🍂</option><option value="winter">❄️</option></select>
+              <input type="text" class="bk-custom" id="bk-custom-${id}" maxlength="40" placeholder="Or name your own spot (optional)" aria-label="Custom place name">
+              <button class="mini2 bk-add">Add</button>
+            </div>
+          </div>
         </section>
+
         <section class="tab" data-tab="me" hidden>
           <div class="card me-card"><canvas class="me-canvas" aria-label="Your character"></canvas><div><b class="me-name nm-${id}">${P[id].name}</b><p class="hint2">Paired with ${nm} 💞</p><button class="mini2 me-edit">Change my look</button></div></div>
-          <div class="card"><b>🎁 Secret gift ideas</b><p class="hint2">Ideas for ${nm}. ${nm} never sees this list.</p><div class="gifts"></div><div class="add-row"><input type="text" class="gift-in" id="gift-in-${id}" maxlength="50" placeholder="Add a gift idea" aria-label="New gift idea"><button class="mini2 gift-add">Add</button></div></div>
+          <div class="card"><b>🎁 Secret gift ideas</b><p class="hint2">Ideas for ${nm}, saved by occasion. ${nm} never sees this list.</p>
+            <div class="gifts"></div>
+            <div class="bk-add-grid"><input type="text" class="gift-in" id="gift-in-${id}" maxlength="50" placeholder="Gift idea" aria-label="Gift idea"><select class="gift-occ inline-sel" id="gift-occ-${id}" aria-label="Occasion">${GIFT_OCC.map(g => `<option>${g}</option>`).join('')}</select><button class="mini2 gift-add">Add</button></div>
+          </div>
           <div class="card"><b>🔒 Privacy</b><p class="hint2">Everything is end-to-end encrypted. Your safety code with ${nm}:</p><span class="safety">4821 9930 1174</span>
             <label class="set-row" for="app-discreet-${id}">Discreet mode <input type="checkbox" id="app-discreet-${id}"></label>
             <label class="set-row" for="app-shot-${id}">Screenshot protection <input type="checkbox" id="app-shot-${id}" checked></label></div>
@@ -526,8 +657,10 @@ button { cursor: pointer; }
             <p class="hint2">Scenery, status and your look are also under the phone in this preview.</p></div>
         </section>
       </main>
+      <div class="album-player" hidden><div class="ap-stage"></div><div class="ap-cap"></div><button class="ap-close" aria-label="Close slideshow">✕</button></div>
       <nav class="app-nav" aria-label="App sections"><button data-tab="us" aria-current="page">🏡<span>Us</span></button><button data-tab="play">🎲<span>Together</span></button><button data-tab="mem">📖<span>Memories</span></button><button data-tab="me">⚙️<span>Me</span></button></nav>
-    </div>`;
+    </div>
+    <div class="sleep-layer" hidden><canvas class="sleep-canvas" aria-hidden="true"></canvas><div class="sleep-ui"><b class="sl-title">Sleeping together 💤</b><span class="sl-sub"></span><button class="mini2 sl-wake">☀️ Wake up</button></div></div>`;
   }
   function swatches(id, key) {
     return `<div class="sw-row" role="radiogroup" aria-label="${SW_LABEL[key]}">${SW[key].map(col => `<label class="sw" style="--c:${col}" title="${SW_LABEL[key]}"><input type="radio" name="${key}-${id}" value="${col}"${P[id][key] === col ? ' checked' : ''}><span></span></label>`).join('')}</div>`;
@@ -2121,6 +2254,7 @@ button { cursor: pointer; }
     const md = MEET.on ? meetDays() : null;
     if (md === 1 && !shown.has(`m1${k}`)) { shown.add(`m1${k}`); IDS.forEach(id => { banner(id, `${esc(pick(["Guess who you're seeing tomorrow? 😍", 'Pack your smile, tomorrow is the day ✈️', 'Last sleep before you meet 🥹']))}<small>Tomorrow you're together 💞</small>`); buzz(id, 'Tomorrow you finally meet 💞', 6000); }); }
     if (md === 0 && !shown.has(`m0${k}`)) { shown.add(`m0${k}`); IDS.forEach(id => { banner(id, `Today's the day you meet! 💞<small>${esc(MEET.note || 'Enjoy every second together')}</small>`); }); }
+    dateNightCheck(k);
     setRibbons();
   }
   function setRibbons() {
@@ -2321,24 +2455,362 @@ button { cursor: pointer; }
   }
 
   // ---------- The full app: Us, Together, Memories, Me ----------
-  const APP = store.get('hearby-app', null) || {
-    qa: {}, ttt: Array(9).fill(''), tttTurn: 'leo', tttStarter: 'leo', story: ['🌙'], garden: 4,
-    quran: { leo: 212, mia: 187 },
+  const APP_DEFAULT = () => ({
+    qa: {}, story: ['🌙'], garden: 4, g: {},
     duas: [{ t: "That we're together soon", done: false }, { t: 'Health and barakah for both our families', done: false }, { t: 'Ease in our work and studies', done: false }],
     letters: [
       { from: 'mia', when: 'you miss me', text: "Close your eyes and imagine me holding your hand. I'm counting the days too. 🤍", opened: false },
       { from: 'leo', when: "you can't sleep", text: "Breathe slowly. Think of our walk under the cherry trees. I'm right there with you. 🌙", opened: false }
     ],
-    bucket: [{ key: 'santorini', done: false }, { key: 'kyoto', done: false }, { key: 'alps', done: true }],
-    gifts: { leo: ['Handwritten letter set', 'Favorite perfume'], mia: ['A cozy jumper', 'Matching keychains'] }
-  };
-  const saveApp = () => store.set('hearby-app', APP);
+    bucket: [{ key: 'santorini', season: 'summer', done: false }, { key: 'kyoto', season: 'spring', done: false }, { key: 'alps', season: 'winter', done: true }],
+    gifts: { leo: [{ t: 'Handwritten letter set', occ: 'Just because', bought: false }, { t: 'Favorite perfume', occ: 'Birthday', bought: false }], mia: [{ t: 'A cozy jumper', occ: 'Eid', bought: false }, { t: 'Matching keychains', occ: 'Anniversary', bought: true }] },
+    albums: [{ name: 'Places we dream of', photos: ['sample:0', 'sample:3', 'sample:2', 'sample:1'] }],
+    dates: [],
+    watch: { title: '', status: 'idle', pos: 0, startedAt: 0, countAt: 0, chat: [] },
+    sleep: { leo: false, mia: false, since: 0 }
+  });
+  const APP = Object.assign(APP_DEFAULT(), store.get('hearby-app2', {}));
+  APP.sleep = { leo: false, mia: false, since: 0 };
+  const saveApp = () => store.set('hearby-app2', APP);
   const dayIdx = () => Math.floor(today0().getTime() / 86400000);
   const qOf = cat => QBANK[cat][dayIdx() % QBANK[cat].length];
   const qKey = cat => `${cat}-${dayIdx()}`;
-  const MARK = { leo: '❌', mia: '⭕' };
   const GARDEN = [[0, '🌱', 'Seedling'], [4, '🌿', 'Sprout'], [10, '🪴', 'Little plant'], [18, '🌷', 'First flower'], [30, '🌸', 'Blooming'], [45, '🌳', 'Our love tree']];
+  const SEASON_EMO = { spring: '🌸', summer: '☀️', autumn: '🍂', winter: '❄️' };
+  const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const resolvePhoto = ref => (String(ref).startsWith('sample:') ? samplePhotos()[+String(ref).slice(7)] : ref);
 
+  // ---------- Two-player games ----------
+  const PCOL = { leo: '#e5484d', mia: '#2fa66a' };
+  const DISC = { leo: '🔴', mia: '🟡' };
+  const MARK = { leo: '❌', mia: '⭕' };
+  const CCOL = { r: '#e5484d', y: '#f5b301', g: '#2fa66a', b: '#3a7bd5', w: '#33263f' };
+  const CNAME = { r: 'red', y: 'yellow', g: 'green', b: 'blue' };
+  const LADDERS = { 4: 25, 13: 46, 33: 49, 42: 63, 50: 69, 62: 81, 74: 92 };
+  const SNAKES = { 27: 5, 40: 3, 43: 18, 54: 31, 66: 45, 76: 58, 89: 53, 99: 41 };
+  const LUDO_START = { leo: 0, mia: 14 }, LUDO_LEN = 28;
+  function makeDeck() {
+    const d = [];
+    ['r', 'y', 'g', 'b'].forEach(c => { d.push({ c, v: '0' }); for (let n = 1; n <= 9; n++) d.push({ c, v: String(n) }, { c, v: String(n) }); ['⊘', '+2'].forEach(v => d.push({ c, v }, { c, v })); });
+    for (let i = 0; i < 4; i++) d.push({ c: 'w', v: '🌈' });
+    return shuffle(d);
+  }
+  function dealCards(st) {
+    const deck = makeDeck(), hands = { leo: deck.splice(0, 7), mia: deck.splice(0, 7) };
+    let i = deck.findIndex(cd => cd.c !== 'w' && !isNaN(+cd.v)); const top = deck.splice(i, 1)[0];
+    return { deck, hands, top, color: top.c, turn: st, starter: st, drew: false, picking: false, win: null, log: 'Match the color or the number 🃏' };
+  }
+  const NEW_GAME = {
+    ttt: st => ({ board: Array(9).fill(''), turn: st, starter: st }),
+    four: st => ({ board: Array(42).fill(''), turn: st, starter: st }),
+    snakes: st => ({ pos: { leo: 0, mia: 0 }, turn: st, starter: st, win: null, log: 'Roll the dice to start 🎲' }),
+    ludo: st => ({ tok: { leo: [-1, -1], mia: [-1, -1] }, turn: st, starter: st, roll: null, win: null, log: 'Roll a 6 to bring a token out 🎲' }),
+    cards: st => dealCards(st)
+  };
+  const G = k => (APP.g[k] = APP.g[k] || NEW_GAME[k]('leo'));
+  function resetGame(k) { const old = APP.g[k], st = old && old.starter === 'leo' ? 'mia' : 'leo'; APP.g[k] = NEW_GAME[k](st); saveApp(); renderAppAll(); }
+  function lineWin(b, cols, rows, need) {
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      const v = b[r * cols + c]; if (!v) continue;
+      for (const [dr, dc] of [[0, 1], [1, 0], [1, 1], [1, -1]]) {
+        let k = 1; while (k < need) { const rr = r + dr * k, cc = c + dc * k; if (rr < 0 || rr >= rows || cc < 0 || cc >= cols || b[rr * cols + cc] !== v) break; k++; }
+        if (k === need) return v;
+      }
+    }
+    return b.every(Boolean) ? 'draw' : null;
+  }
+  const tttWin = () => lineWin(G('ttt').board, 3, 3, 3), fourWin = () => lineWin(G('four').board, 7, 6, 4);
+  function nextTurn(g, id) { g.turn = other(id); }
+  function tellPartner(id, text) { buzz(other(id), text, 5000); }
+
+  function snakesRoll(id) {
+    const g = G('snakes'); if (g.win || g.turn !== id) return;
+    const r = 1 + rnd(6); let p = g.pos[id] + r, note = '';
+    if (p > 100) { p = g.pos[id]; note = ' (needs an exact roll to reach 100)'; }
+    else if (LADDERS[p]) { note = ` → 🪜 climbed to ${LADDERS[p]}`; p = LADDERS[p]; }
+    else if (SNAKES[p]) { note = ` → 🐍 slid down to ${SNAKES[p]}`; p = SNAKES[p]; }
+    g.pos[id] = p; g.log = `${P[id].name} rolled ${r}${note}`;
+    if (p === 100) { g.win = id; g.log += ` · ${P[id].name} wins! 🎉`; }
+    else if (r === 6) g.log += ' · a 6, roll again!';
+    else nextTurn(g, id);
+    saveApp(); renderAppAll(); tellPartner(id, `🐍 ${g.log}`);
+  }
+  const ludoAbs = (id, prog) => (LUDO_START[id] + prog) % LUDO_LEN;
+  const ludoMovable = (g, id, r) => g.tok[id].map((p, i) => ((p === -1 ? r === 6 : p < LUDO_LEN && p + r <= LUDO_LEN) ? i : -1)).filter(i => i >= 0);
+  function ludoRoll(id) {
+    const g = G('ludo'); if (g.win || g.turn !== id || g.roll) return;
+    g.roll = 1 + rnd(6);
+    const mv = ludoMovable(g, id, g.roll);
+    if (!mv.length) { g.log = `${P[id].name} rolled ${g.roll}: no move`; g.roll = null; nextTurn(g, id); }
+    else if (mv.length === 1) { ludoMove(id, mv[0]); return; }
+    else g.log = `${P[id].name} rolled ${g.roll}: pick a token to move`;
+    saveApp(); renderAppAll();
+  }
+  function ludoMove(id, i) {
+    const g = G('ludo'), r = g.roll, o = other(id); if (!r || !ludoMovable(g, id, r).includes(i)) return;
+    const p = g.tok[id][i], np = p === -1 ? 0 : p + r; g.tok[id][i] = np;
+    let note = p === -1 ? 'brought a token out' : np === LUDO_LEN ? 'got a token home 🏠' : `moved ${r}`;
+    if (np < LUDO_LEN) {
+      const abs = ludoAbs(id, np);
+      if (abs !== LUDO_START.leo && abs !== LUDO_START.mia) g.tok[o].forEach((tp, j) => { if (tp >= 0 && tp < LUDO_LEN && ludoAbs(o, tp) === abs) { g.tok[o][j] = -1; note += ` and captured ${P[o].name}'s token 💥`; } });
+    }
+    g.log = `${P[id].name} rolled ${r} and ${note}`; g.roll = null;
+    if (g.tok[id].every(t => t === LUDO_LEN)) { g.win = id; g.log += ` · ${P[id].name} wins! 🎉`; }
+    else if (r === 6) g.log += ' · a 6, roll again!';
+    else nextTurn(g, id);
+    saveApp(); renderAppAll(); tellPartner(id, `🎯 ${g.log}`);
+  }
+  const canPlay = (g, cd) => cd.c === 'w' || cd.c === g.color || cd.v === g.top.v;
+  function cardsDraw(g, id, n) { for (let i = 0; i < n; i++) { if (!g.deck.length) g.deck = makeDeck(); g.hands[id].push(g.deck.shift()); } }
+  function cardsPlay(id, idx) {
+    const g = G('cards'), o = other(id); if (g.win || g.turn !== id || g.picking) return;
+    const cd = g.hands[id][idx]; if (!cd || !canPlay(g, cd)) return;
+    g.hands[id].splice(idx, 1); g.top = cd; g.drew = false;
+    if (cd.c === 'w') { g.picking = true; g.log = `${P[id].name} played a 🌈 wild card: choosing a color…`; saveApp(); renderAppAll(); return; }
+    g.color = cd.c; cardsAfter(g, id, cd);
+  }
+  function cardsAfter(g, id, cd) {
+    const o = other(id);
+    let again = false, note = `played ${cd.c === 'w' ? '🌈' : CNAME[cd.c] + ' ' + cd.v}`;
+    if (cd.v === '⊘') { again = true; note += `: ${P[o].name} is skipped`; }
+    if (cd.v === '+2') { cardsDraw(g, o, 2); again = true; note += `: ${P[o].name} draws 2`; }
+    g.log = `${P[id].name} ${note}`;
+    if (!g.hands[id].length) { g.win = id; g.log += ` · ${P[id].name} wins! 🎉`; }
+    else { if (g.hands[id].length === 1) g.log += ` · ${P[id].name} has 1 card left! 😱`; if (!again) g.turn = o; }
+    saveApp(); renderAppAll(); tellPartner(id, `🃏 ${g.log}`);
+  }
+  function cardsPick(id, c) { const g = G('cards'); if (!g.picking || g.turn !== id) return; g.picking = false; g.color = c; cardsAfter(g, id, g.top); }
+  function cardsDrawBtn(id) {
+    const g = G('cards'); if (g.win || g.turn !== id || g.picking || g.drew) return;
+    cardsDraw(g, id, 1); const cd = g.hands[id][g.hands[id].length - 1];
+    if (canPlay(g, cd)) { g.drew = true; g.log = `${P[id].name} drew a card that can be played`; }
+    else { g.log = `${P[id].name} drew a card and passed`; g.turn = other(id); }
+    saveApp(); renderAppAll();
+  }
+  function cardsPass(id) { const g = G('cards'); if (g.turn !== id || !g.drew) return; g.drew = false; g.turn = other(id); g.log = `${P[id].name} passed`; saveApp(); renderAppAll(); }
+
+  function renderGame(id) {
+    const s = W[id], k = s.appUI.game, area = s.q('.game-area'), o = other(id), on = esc(P[o].name), me = esc(P[id].name);
+    s.q('.games').querySelectorAll('button[data-game]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.game === k)));
+    if (!k) { area.innerHTML = ''; return; }
+    const turnLine = (g, win) => (win ? (win === 'draw' ? "It's a draw 🤝" : `${esc(P[win].name)} wins! 🎉`) : g.turn === id ? '<b>Your turn</b>' : `${on}'s turn. Play it on ${on}'s phone.`);
+    if (k === 'ttt') {
+      const g = G('ttt'), win = tttWin(), my = g.turn === id && !win;
+      area.innerHTML = `<p class="hint2">${turnLine(g, win)} · you are ${MARK[id]}</p><div class="ttt">${g.board.map((v, i) => `<button data-cell="${i}" aria-label="Square ${i + 1}"${v || !my ? ' disabled' : ''}>${v ? MARK[v] : ''}</button>`).join('')}</div><button class="mini2" data-reset="ttt">New game</button>`;
+    } else if (k === 'four') {
+      const g = G('four'), win = fourWin(), my = g.turn === id && !win;
+      let cols = '';
+      for (let c = 0; c < 7; c++) { let cells = ''; for (let r = 0; r < 6; r++) { const v = g.board[r * 7 + c]; cells += `<span class="disc">${v ? DISC[v] : ''}</span>`; } cols += `<button class="col" data-col4="${c}" aria-label="Drop in column ${c + 1}"${!my || g.board[c] ? ' disabled' : ''}>${cells}</button>`; }
+      area.innerHTML = `<p class="hint2">${turnLine(g, win)} · you are ${DISC[id]}. Tap a column.</p><div class="four">${cols}</div><button class="mini2" data-reset="four">New game</button>`;
+    } else if (k === 'snakes') {
+      const g = G('snakes'); let cells = '';
+      for (let r = 0; r < 10; r++) for (let c = 0; c < 10; c++) {
+        const rb = 9 - r, n = rb % 2 === 0 ? rb * 10 + c + 1 : rb * 10 + (10 - c);
+        const mark = LADDERS[n] ? '🪜' : SNAKES[n] ? '🐍' : '';
+        const toks = ['leo', 'mia'].filter(pid => g.pos[pid] === n).map(pid => `<i style="background:${PCOL[pid]}"></i>`).join('');
+        cells += `<span class="sc${(r + c) % 2 ? ' alt' : ''}" title="${n}${LADDERS[n] ? ' → ' + LADDERS[n] : SNAKES[n] ? ' → ' + SNAKES[n] : ''}"><em>${n}</em>${mark}${toks}</span>`;
+      }
+      const atStart = ['leo', 'mia'].filter(pid => g.pos[pid] === 0).map(pid => `<i style="background:${PCOL[pid]}"></i>${esc(P[pid].name)}`).join(' ');
+      area.innerHTML = `<p class="hint2">${turnLine(g, g.win)} · <i class="dot" style="background:${PCOL[id]}"></i> you</p><div class="snl">${cells}</div>${atStart ? `<p class="hint2 start-row">Start: ${atStart}</p>` : ''}<p class="hint2">${esc(g.log)}</p>
+        <div class="row"><button class="send" data-roll="snakes"${g.win || g.turn !== id ? ' disabled' : ''}>Roll 🎲</button><button class="mini2" data-reset="snakes">New game</button></div>`;
+    } else if (k === 'ludo') {
+      const g = G('ludo'), mv = g.roll && g.turn === id ? ludoMovable(g, id, g.roll) : [];
+      const pos = idx => (idx < 8 ? [0, idx] : idx < 15 ? [idx - 7, 7] : idx < 22 ? [7, 7 - (idx - 14)] : [7 - (idx - 21), 0]);
+      let cells = '';
+      for (let a = 0; a < LUDO_LEN; a++) {
+        const [r, c] = pos(a), start = a === LUDO_START.leo ? 'leo' : a === LUDO_START.mia ? 'mia' : null;
+        const here = ['leo', 'mia'].flatMap(pid => g.tok[pid].map((tp, i) => (tp >= 0 && tp < LUDO_LEN && ludoAbs(pid, tp) === a ? `<i class="tok" style="background:${PCOL[pid]}">${i + 1}</i>` : ''))).join('');
+        cells += `<span class="lc${start ? ' st' : ''}" style="grid-row:${r + 1};grid-column:${c + 1};${start ? `--sc:${PCOL[start]}` : ''}">${here || (start ? '★' : '')}</span>`;
+      }
+      const home = pid => g.tok[pid].map((tp, i) => `<i class="tok${tp === -1 ? '' : ' ghost'}" style="background:${PCOL[pid]}">${tp === LUDO_LEN ? '🏠' : i + 1}</i>`).join('');
+      area.innerHTML = `<p class="hint2">${turnLine(g, g.win)} · <i class="dot" style="background:${PCOL[id]}"></i> you</p>
+        <div class="ludo">${cells}<div class="lcenter"><span>${esc(P.leo.name)} ${home('leo')}</span><span>${esc(P.mia.name)} ${home('mia')}</span><b class="die">${g.roll ? ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'][g.roll - 1] : '🎲'}</b></div></div>
+        <p class="hint2">${esc(g.log)}</p>
+        <div class="row"><button class="send" data-roll="ludo"${g.win || g.turn !== id || g.roll ? ' disabled' : ''}>Roll 🎲</button>${mv.map(i => `<button class="mini2" data-ludo="${i}">Move token ${i + 1}</button>`).join('')}<button class="mini2" data-reset="ludo">New</button></div>`;
+    } else if (k === 'cards') {
+      const g = G('cards'), my = g.turn === id && !g.win;
+      const card = (cd, attrs = '') => `<button class="cc" style="--cc:${CCOL[cd.c]}" ${attrs}>${cd.v}</button>`;
+      area.innerHTML = `<p class="hint2">${turnLine(g, g.win)} · ${on} has ${g.hands[o].length} card${g.hands[o].length === 1 ? '' : 's'}</p>
+        <div class="c-table"><div class="cc big" style="--cc:${CCOL[g.top.c]}">${g.top.v}</div><span class="hint2">Color now: <b style="color:${CCOL[g.color]}">${CNAME[g.color] || 'any'}</b></span></div>
+        ${g.picking && g.turn === id ? `<div class="row c-pick">${['r', 'y', 'g', 'b'].map(c => `<button class="cc" style="--cc:${CCOL[c]}" data-pick="${c}" aria-label="Choose ${CNAME[c]}">●</button>`).join('')}</div>` : ''}
+        <div class="hand">${g.hands[id].map((cd, i) => card(cd, `data-play="${i}" aria-label="Play ${CNAME[cd.c] || 'wild'} ${cd.v}"${my && !g.picking && canPlay(g, cd) ? '' : ' disabled'}`)).join('')}</div>
+        <p class="hint2">${esc(g.log)}</p>
+        <div class="row"><button class="mini2" data-cdraw="1"${!my || g.picking || g.drew ? ' disabled' : ''}>Draw a card</button>${g.drew && my ? '<button class="mini2" data-cpass="1">Pass</button>' : ''}<button class="mini2" data-reset="cards">New game</button></div>`;
+    } else if (k === 'draw') {
+      if (area.querySelector('.doodle')) return;
+      area.innerHTML = `<p class="hint2">Draw something and send it. It lands on ${on}'s widget, and ${on} guesses what it is.</p><canvas class="doodle" width="440" height="280" aria-label="Drawing board"></canvas>
+        <div class="row"><div class="colors">${['#33263f', '#db4f84', '#3f8ad8', '#3f9a72', '#f0a33a'].map(col => `<button data-col="${col}" style="background:${col}" aria-label="Pen color"></button>`).join('')}</div><button class="mini2 dd-clear">Clear</button><button class="send dd-send">Send 🎨</button></div>`;
+      setupDoodle(id);
+    } else if (k === 'emoji') {
+      area.innerHTML = `<p class="hint2">Build a story together, one emoji at a time.</p><div class="story">${APP.story.join(' ')}</div><div class="emojis">${['🌙', '✈️', '🏔️', '🌊', '🍕', '🎁', '💍', '🐱', '🌧️', '🌸', '😴', '💗'].map(e => `<button data-emo="${e}">${e}</button>`).join('')}</div><button class="mini2 st-reset">Start over</button>`;
+    } else if (k === 'garden') {
+      let i = 0; while (i < GARDEN.length - 1 && APP.garden >= GARDEN[i + 1][0]) i++;
+      const cur = GARDEN[i], nxt = GARDEN[i + 1], pct = nxt ? Math.round(((APP.garden - cur[0]) / (nxt[0] - cur[0])) * 100) : 100;
+      area.innerHTML = `<div class="garden">${cur[1]}</div><p class="hint2 center">${cur[2]}. It grows every time either of you sends love, and it never wilts.</p><div class="bar"><i style="width:${pct}%"></i></div><button class="mini2 gd-water">💧 Water it</button>`;
+    }
+  }
+  function setupDoodle(id) {
+    const s = W[id], cv = s.q('.doodle'), c = cv.getContext('2d');
+    c.fillStyle = '#ffffff'; c.fillRect(0, 0, cv.width, cv.height);
+    c.lineCap = 'round'; c.lineJoin = 'round'; c.lineWidth = 7; s.ddColor = s.ddColor || '#33263f';
+    let last = null;
+    const pos = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * (cv.width / r.width), (e.clientY - r.top) * (cv.height / r.height)]; };
+    cv.addEventListener('pointerdown', e => { last = pos(e); cv.setPointerCapture(e.pointerId); });
+    cv.addEventListener('pointermove', e => { if (!last) return; const p = pos(e); c.strokeStyle = s.ddColor; c.beginPath(); c.moveTo(last[0], last[1]); c.lineTo(p[0], p[1]); c.stroke(); last = p; });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => cv.addEventListener(ev, () => { last = null; }));
+  }
+  function growGarden(n) { APP.garden += n; saveApp(); renderAppAll(); }
+
+  // ---------- Watch party ----------
+  const WP_LEN = 5400;
+  const wpPos = () => { const w = APP.watch; return w.status === 'playing' ? Math.min(WP_LEN, w.pos + (Date.now() - w.startedAt) / 1000) : w.pos; };
+  const mmss = sec => { sec = Math.floor(sec); const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), x = sec % 60; return `${h ? h + ':' + String(m).padStart(2, '0') : m}:${String(x).padStart(2, '0')}`; };
+  function wpStart(id, title) {
+    title = (title || '').trim(); if (!title) { toast(id, 'Pick something to watch first 🍿'); return; }
+    APP.watch = { title, status: 'count', pos: 0, startedAt: 0, countAt: Date.now(), chat: [] }; saveApp(); renderAppAll();
+    banner(other(id), `🍿 ${esc(P[id].name)} started a watch party<small>${esc(title)} · 3, 2, 1…</small>`);
+    setTimeout(() => { if (APP.watch.status === 'count') { APP.watch.status = 'playing'; APP.watch.startedAt = Date.now(); saveApp(); renderAppAll(); } }, 3000);
+  }
+  function wpToggle(id) {
+    const w = APP.watch; if (w.status === 'idle' || w.status === 'count') return;
+    if (w.status === 'playing') { w.pos = wpPos(); w.status = 'paused'; } else { w.status = 'playing'; w.startedAt = Date.now(); }
+    saveApp(); renderAppAll(); tellPartner(id, `${w.status === 'paused' ? '⏸' : '▶'} ${P[id].name} ${w.status === 'paused' ? 'paused' : 'resumed'} the movie`);
+  }
+  function renderWatch(id) {
+    const s = W[id], w = APP.watch, scr = s.q('.wp-screen'); if (!scr) return;
+    const n = 3 - Math.floor((Date.now() - w.countAt) / 1000);
+    s.q('.wp-title-on').textContent = w.status === 'idle' ? '' : w.title;
+    s.q('.wp-big').textContent = w.status === 'idle' ? '🍿' : w.status === 'count' ? String(Math.max(1, n)) : w.status === 'paused' ? '⏸ Paused' : '▶ Watching together';
+    s.q('.wp-time').textContent = w.status === 'idle' ? 'Pick something and press Start' : `${mmss(wpPos())} / ${mmss(WP_LEN)}`;
+    s.q('.wp-screen .prog i').style.width = `${(wpPos() / WP_LEN) * 100}%`;
+    s.q('.wp-ctrls').hidden = w.status === 'idle'; s.q('.reacts').hidden = w.status === 'idle';
+    const chat = s.q('.wp-chat'), html = w.chat.slice(-4).map(m => `<p><b>${esc(P[m.from].name)}:</b> ${esc(m.text)}</p>`).join('');
+    if (chat.innerHTML !== html) chat.innerHTML = html;
+  }
+  function floatOn(i, e) {
+    const scr = W[i].q('.wp-screen'); if (!scr) return;
+    const el = document.createElement('span'); el.className = 'floatemo'; el.textContent = e; el.style.left = `${10 + rand() * 75}%`;
+    scr.appendChild(el); setTimeout(() => el.remove(), 1700);
+  }
+
+  // ---------- Sleep together ----------
+  const audio = {};
+  function startSound(id, kind) {
+    stopSound(id); if (kind === 'none') return;
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)(), len = ctx.sampleRate * 2, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+      let last = 0;
+      for (let i = 0; i < len; i++) { const white = Math.random() * 2 - 1; last = (last + 0.02 * white) / 1.02; d[i] = kind === 'rain' ? white * 0.35 : last * 3.4; }
+      const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+      const filt = ctx.createBiquadFilter(); filt.type = kind === 'rain' ? 'highpass' : 'lowpass'; filt.frequency.value = kind === 'rain' ? 1400 : 900;
+      const gain = ctx.createGain(); gain.gain.value = kind === 'rain' ? 0.1 : 0.22;
+      src.connect(filt).connect(gain).connect(ctx.destination);
+      if (kind === 'ocean') { const lfo = ctx.createOscillator(), lg = ctx.createGain(); lfo.frequency.value = 0.1; lg.gain.value = 0.18; lfo.connect(lg).connect(gain.gain); lfo.start(); }
+      src.start(); audio[id] = ctx;
+    } catch (e) { /* audio not available */ }
+  }
+  function stopSound(id) { if (audio[id]) { try { audio[id].close(); } catch (e) { /* already closed */ } audio[id] = null; } }
+  function setQuiet(id, on) { const cb = document.getElementById(`quiet-${id}`); if (cb.checked !== on) { cb.checked = on; cb.dispatchEvent(new Event('change')); } }
+  function startSleep(id) {
+    const o = other(id);
+    APP.sleep[id] = true; if (!APP.sleep.since || !APP.sleep[o]) APP.sleep.since = APP.sleep[o] ? APP.sleep.since || Date.now() : Date.now();
+    if (APP.sleep[o]) APP.sleep.since = Date.now();
+    setQuiet(id, true); W[id].q('.sleep-layer').hidden = false;
+    startSound(id, W[id].q('.sl-sound').value);
+    if (!APP.sleep[o]) { banner(o, `🌙 ${esc(P[id].name)} is going to sleep<small>Join from Together → Sleep together</small>`); buzz(o, `🌙 ${P[id].name} wants to sleep together. Join from the app.`, 7000); }
+    else buzz(o, `🌙 ${P[id].name} joined you. Sleep well 💤`, 5000);
+    renderAppAll();
+  }
+  function wakeUp(id) {
+    const o = other(id);
+    APP.sleep[id] = false; if (!APP.sleep[o]) APP.sleep.since = 0;
+    setQuiet(id, false); W[id].q('.sleep-layer').hidden = true; stopSound(id);
+    buzz(o, `☀️ ${P[id].name} woke up. Good morning!`, 5000); renderAppAll();
+  }
+  function drawSleep(id, t) {
+    const s = W[id], cv = s.q('.sleep-canvas'), r = cv.getBoundingClientRect(); if (!r.width) return;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    if (cv.width !== Math.round(r.width * dpr)) { cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr); }
+    const c = cv.getContext('2d'), w = r.width, h = r.height, o = other(id); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const g = c.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#0b1030'); g.addColorStop(0.6, '#1d2156'); g.addColorStop(1, '#3a2f5e'); c.fillStyle = g; c.fillRect(0, 0, w, h);
+    for (let i = 0; i < 60; i++) { const x = (i * 97.31 % 1) * w, y = ((i * 0.6180339) % 1) * h * 0.6, a = 0.3 + 0.7 * Math.abs(Math.sin(t * 0.9 + i * 1.3)); c.fillStyle = `rgba(255,248,220,${a})`; c.fillRect(x, y, i % 7 ? 1.2 : 2, i % 7 ? 1.2 : 2); }
+    const mg = c.createRadialGradient(w * 0.75, h * 0.15, 4, w * 0.75, h * 0.15, w * 0.35); mg.addColorStop(0, 'rgba(255,240,200,.35)'); mg.addColorStop(1, 'rgba(255,240,200,0)'); c.fillStyle = mg; c.fillRect(0, 0, w, h);
+    c.fillStyle = '#fff3cf'; c.beginPath(); c.arc(w * 0.75, h * 0.15, w * 0.06, 0, TAU); c.fill(); c.fillStyle = '#1d2156'; c.beginPath(); c.arc(w * 0.78, h * 0.135, w * 0.055, 0, TAU); c.fill();
+    c.fillStyle = '#2a2c5a'; c.beginPath(); c.moveTo(0, h * 0.72); c.quadraticCurveTo(w * 0.5, h * 0.62, w, h * 0.72); c.lineTo(w, h); c.lineTo(0, h); c.fill();
+    const both = APP.sleep[o], st = { h: h * 1.05 };
+    kid(c, st, w * 0.34, h * 0.68, P[id], { sit: true, face: 1, sleep: true }, t);
+    c.globalAlpha = both ? 1 : 0.35; kid(c, st, w * 0.66, h * 0.68, P[o], { sit: true, face: -1, sleep: both, blink: !both && (t % 4) < 0.2 }, t); c.globalAlpha = 1;
+    if (both) heart(c, w * 0.5, h * 0.42 + Math.sin(t * 1.2) * 4, 7, '#ff8fb8', 0.55 + 0.25 * Math.sin(t * 1.6));
+    const sub = s.q('.sl-sub'), txt = both ? `Together for ${mmss((Date.now() - APP.sleep.since) / 1000)} · heartbeats are quiet until morning` : `Waiting for ${P[o].name} to join…`;
+    if (sub.textContent !== txt) sub.textContent = txt;
+  }
+
+  // ---------- Date nights ----------
+  const fmtWhen = v => new Date(v).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  const upcomingDates = () => APP.dates.filter(d => new Date(d.when).getTime() > Date.now() - 3 * 3600e3).sort((a, b) => (a.when < b.when ? -1 : 1));
+  function dateNightCheck(k) {
+    upcomingDates().forEach(d => {
+      const dd = new Date(d.when); if (isoDate(dd) !== k || shown.has(`dn${d.when}`)) return;
+      shown.add(`dn${d.when}`);
+      IDS.forEach(id => banner(id, `🌙 Date night today at ${esc(dd.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }))}<small>${esc([d.place, d.food, d.movie].filter(Boolean).join(' · '))}</small>`));
+    });
+  }
+  function renderDates(id) {
+    const s = W[id], list = upcomingDates();
+    s.q('.dn-list').innerHTML = list.length ? list.map(d => {
+      const days = Math.round((new Date(d.when).setHours(0, 0, 0, 0) - today0()) / 86400000), i = APP.dates.indexOf(d);
+      return `<div class="dn-item"><div class="card-h"><b>${d.kind === 'person' ? '💞' : '💻'} ${esc(fmtWhen(d.when))}</b><em>${days <= 0 ? 'today' : days === 1 ? 'tomorrow' : `in ${days} days`}</em></div>
+        ${d.place ? `<span>📍 ${esc(d.place)}</span>` : ''}${d.food ? `<span>🍽️ ${esc(d.food)}</span>` : ''}${d.event ? `<span>🎟️ ${esc(d.event)}</span>` : ''}${d.movie ? `<span>🎬 ${esc(d.movie)}</span>` : ''}
+        <div class="row">${d.movie ? `<button class="mini2" data-dnwatch="${i}">🍿 Watch party</button>` : '<span></span>'}<button class="mini2" data-dndel="${i}" aria-label="Delete date">🗑️</button></div></div>`;
+    }).join('') : '<p class="hint2">No dates planned yet. Plan one above or tap Surprise me.</p>';
+  }
+
+  // ---------- Albums and bucket list ----------
+  const thumbCache = {};
+  function sceneThumb(key, season) {
+    const k = key + season; if (thumbCache[k]) return thumbCache[k];
+    const cv = document.createElement('canvas'); cv.width = 160; cv.height = 100; const c = cv.getContext('2d');
+    const st = { w: 160, h: 100, place: key, season, seed: 11, clouds: [{ x: 0.15, y: 0.16, s: 0.8 }, { x: 0.65, y: 0.1, s: 1 }], motes: [] };
+    st.pal = pal(st); const base = PLACES[key].tree; st.treeKind = base === 'leafy' && st.pal.snow ? 'bare' : base;
+    paintSky(c, st, false, 0); paintClouds(c, st, false, 0); paintHills(c, st, false, 0, 0); paintTree(c, st, 28, false, 0); paintGrass(c, st, false, 0, 0);
+    return (thumbCache[k] = cv.toDataURL('image/jpeg', 0.85));
+  }
+  function playAlbum(id, ai) {
+    const s = W[id], al = APP.albums[ai]; if (!al || !al.photos.length) return;
+    const pl = s.q('.album-player'), stage = s.q('.ap-stage'), cap = s.q('.ap-cap'), photos = al.photos.map(resolvePhoto);
+    pl.hidden = false; stage.innerHTML = ''; clearInterval(s.apT); let i = -1;
+    const next = () => {
+      i = (i + 1) % photos.length;
+      const old = stage.querySelector('.slide.cur'), el = document.createElement('div'); el.className = 'slide cur';
+      const img = document.createElement('img'); img.src = photos[i]; img.alt = `${al.name} photo ${i + 1}`; el.appendChild(img);
+      const tr = reduced.matches ? 'fade' : pick(TRANS);
+      if (old) { old.classList.remove('cur'); old.style.animation = `s-out-${tr} 1.1s ease both`; el.style.animation = `s-in-${tr} 1.1s ease both`; setTimeout(() => old.remove(), 1200); if (tr === 'white' || tr === 'black') { const dp = document.createElement('div'); dp.className = `dip ${tr}`; stage.appendChild(dp); setTimeout(() => dp.remove(), 1300); } }
+      else el.style.animation = 's-first .8s ease both';
+      stage.appendChild(el); cap.textContent = `${al.name} · ${i + 1} of ${photos.length}`;
+    };
+    next(); s.apT = setInterval(next, 3400);
+  }
+  function closeAlbum(id) { const s = W[id]; clearInterval(s.apT); s.q('.album-player').hidden = true; }
+  function renderAlbums(id) {
+    const s = W[id], o = other(id), on = esc(P[o].name);
+    s.q('.albums').innerHTML = APP.albums.map((al, i) => `<div class="al-item"><img src="${resolvePhoto(al.photos[0])}" alt=""><div><b>${esc(al.name)}</b><em>${al.photos.length} photo${al.photos.length === 1 ? '' : 's'}</em>
+      <div class="row al-acts"><button class="mini2" data-alplay="${i}">▶ Play</button><button class="mini2" data-alwidget="${i}">📱 My widget</button><button class="mini2" data-alsend="${i}">💌 To ${on}</button><button class="mini2" data-aldel="${i}" aria-label="Delete album">🗑️</button></div></div></div>`).join('') || '<p class="hint2">No albums yet.</p>';
+  }
+  function renderAlPick(id) {
+    const s = W[id], pool = [...samplePhotos().map((_, i) => `sample:${i}`), ...(s.slides || []), ...(s.alUploads || [])];
+    s.alPool = pool; s.alSel = s.alSel || new Set();
+    s.q('.al-pick').innerHTML = pool.map((ref, i) => `<button class="al-ph${s.alSel.has(i) ? ' sel' : ''}" data-alpick="${i}" aria-pressed="${s.alSel.has(i)}" aria-label="Photo ${i + 1}"><img src="${resolvePhoto(ref)}" alt=""></button>`).join('');
+  }
+  function renderBucket(id) {
+    const s = W[id];
+    s.q('.bucket').innerHTML = APP.bucket.map((b, i) => {
+      const m = PLACE_META.find(x => x.key === b.key), season = b.season || 'summer';
+      return `<div class="bk-item${b.done ? ' done' : ''}"><img src="${sceneThumb(b.key, season)}" alt="${esc(m.name)} in ${season}"><div><b>${b.custom ? esc(b.custom) : `${m.flag} ${m.name}`}</b><em>${SEASON_EMO[season]} ${season}${b.custom ? ` · looks like ${m.name}` : ''}${b.done ? ' · visited ✓' : ''}</em></div>
+        <div class="bk-acts"><button class="mini2" data-bkprev="${i}" title="Preview on my widget" aria-label="Preview on my widget">👀</button><label class="mini2" for="bk-${id}-${i}"><input type="checkbox" id="bk-${id}-${i}" data-bk="${i}"${b.done ? ' checked' : ''}> Visited</label><button class="mini2" data-bkdel="${i}" aria-label="Remove">✕</button></div></div>`;
+    }).join('');
+  }
+
+  // ---------- Rendering the tabs ----------
   function makeScene(canvas, src) {
     return {
       canvas, ctx: canvas.getContext('2d'), w: 0, h: 0, sceneIdx: 0, sceneStart: performance.now() / 1000, scroll: 0,
@@ -2357,7 +2829,7 @@ button { cursor: pointer; }
     s.appScene = makeScene(s.q('.us-canvas'), s);
     syncAppSettings(id); setAppTab(id, s.appUI.tab);
   }
-  function closeApp(id) { const s = W[id]; s.appOpen = false; s.q('.happ').hidden = true; setTimeout(() => flush(id), 300); }
+  function closeApp(id) { const s = W[id]; closeAlbum(id); s.appOpen = false; s.q('.happ').hidden = true; setTimeout(() => flush(id), 300); }
   function setAppTab(id, tab) {
     const s = W[id]; s.appUI.tab = tab;
     s.q('.happ').querySelectorAll('.tab').forEach(el => { el.hidden = el.dataset.tab !== tab; });
@@ -2373,21 +2845,19 @@ button { cursor: pointer; }
     document.getElementById(`app-quiet-${id}`).checked = P[id].quiet;
     document.getElementById(`app-nudges-${id}`).value = P[id].nudges || 'dua';
   }
-
   function renderUs(id) {
     const s = W[id], pa = P[other(id)];
     s.q('.us-partner').textContent = `${pa.quiet ? '😴' : STATUSES[pa.status]} ${pa.name} · ${fmtTime(pa.tz)}`;
     const md = meetDays(), cd = s.q('.us-cd');
     cd.hidden = !MEET.on; cd.textContent = md === null ? '✈️ soon' : md === 0 ? '💞 today!' : md < 0 ? '✈️ ?' : `✈️ ${md} days`;
     const next = DAYS.slice().sort((a, b) => daysUntil(a) - daysUntil(b)).find(ev => daysUntil(ev) !== Infinity);
-    if (next) {
-      const d = daysUntil(next), when = d === 0 ? 'Today 🎉' : d === 1 ? 'Tomorrow' : `In ${d} days`;
-      s.q('.us-day').innerHTML = `<small>Next special day</small><b>${DAY_EMO[next.type]} ${esc(dayLabel(next))}</b><p class="hint2">${when} · ${esc(repeatText(next))}</p>`;
-    } else s.q('.us-day').innerHTML = '<small>Special days</small><p class="hint2">Add your first special day from the widget 📅</p>';
+    if (next) { const d = daysUntil(next), when = d === 0 ? 'Today 🎉' : d === 1 ? 'Tomorrow' : `In ${d} days`; s.q('.us-day').innerHTML = `<small>Next special day</small><b>${DAY_EMO[next.type]} ${esc(dayLabel(next))}</b><p class="hint2">${when} · ${esc(repeatText(next))}</p>`; }
+    else s.q('.us-day').innerHTML = '<small>Special days</small><p class="hint2">Add your first special day from the widget 📅</p>';
+    const dn = upcomingDates()[0];
+    s.q('.us-date').innerHTML = dn ? `<small>Next date night</small><b>${dn.kind === 'person' ? '💞' : '💻'} ${esc(fmtWhen(dn.when))}</b><p class="hint2">${esc([dn.place, dn.food, dn.movie].filter(Boolean).join(' · ') || 'Details to be decided')}</p>` : '<small>Date night</small><p class="hint2">Nothing planned yet.</p><button class="link go-date">Plan a date night →</button>';
     s.q('.us-q').textContent = qOf(QCATS[dayIdx() % QCATS.length][0]);
     s.q('.us-moment').textContent = s.appUI.moment;
   }
-
   function renderPlay(id) {
     const s = W[id], cat = s.appUI.cat, k = qKey(cat), o = other(id), qa = APP.qa[k] || {};
     s.q('.play-q').textContent = qOf(cat);
@@ -2397,100 +2867,32 @@ button { cursor: pointer; }
     s.q('.q-partner').innerHTML = mine
       ? `<b>You:</b> ${esc(mine)}<br>${theirs ? `<b>${on}:</b> ${esc(theirs)}` : `⏳ Waiting for ${on} to answer. Try answering on ${on}'s phone too.`}`
       : theirs ? `🔒 ${on} answered. Answer to unlock it.` : "🔒 Answers unlock once you've both replied.";
-    renderGame(id); renderFaith(id);
-    if (!s.appUI.idea) s.appUI.idea = pick(DATE_IDEAS);
-    s.q('.date-idea').textContent = s.appUI.idea;
-  }
-  function tttWinner() {
-    const b = APP.ttt, L = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
-    for (const [a, c, d] of L) if (b[a] && b[a] === b[c] && b[a] === b[d]) return b[a];
-    return b.every(Boolean) ? 'draw' : null;
-  }
-  function gardenStage() {
-    let i = 0; while (i < GARDEN.length - 1 && APP.garden >= GARDEN[i + 1][0]) i++;
-    const cur = GARDEN[i], nxt = GARDEN[i + 1];
-    return { emo: cur[1], name: cur[2], pct: nxt ? Math.round(((APP.garden - cur[0]) / (nxt[0] - cur[0])) * 100) : 100 };
-  }
-  function growGarden(n) { APP.garden += n; saveApp(); renderAppAll(); }
-  function renderGame(id) {
-    const s = W[id], g = s.appUI.game, area = s.q('.game-area'), o = other(id), on = esc(P[o].name);
-    s.q('.games').querySelectorAll('button[data-game]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.game === g)));
-    if (!g) { area.innerHTML = ''; return; }
-    if (g === 'ttt') {
-      const win = tttWinner(), my = APP.tttTurn === id;
-      const msg = win ? (win === 'draw' ? "It's a draw 🤝" : `${esc(P[win].name)} wins! 🎉`) : my ? `Your turn (${MARK[id]})` : `${on}'s turn. Play it on ${on}'s phone.`;
-      area.innerHTML = `<p class="hint2">${msg}</p><div class="ttt">${APP.ttt.map((v, i) => `<button data-cell="${i}" aria-label="Square ${i + 1}"${v || win || !my ? ' disabled' : ''}>${v ? MARK[v] : ''}</button>`).join('')}</div><button class="mini2 ttt-reset">New game</button>`;
-    } else if (g === 'draw') {
-      if (area.querySelector('.doodle')) return;
-      area.innerHTML = `<p class="hint2">Draw something and send it. It lands on ${on}'s widget, and ${on} guesses what it is.</p><canvas class="doodle" width="440" height="280" aria-label="Drawing board"></canvas>
-        <div class="row"><div class="colors">${['#33263f', '#db4f84', '#3f8ad8', '#3f9a72', '#f0a33a'].map(col => `<button data-col="${col}" style="background:${col}" aria-label="Pen color"></button>`).join('')}</div><button class="mini2 dd-clear">Clear</button><button class="send dd-send">Send 🎨</button></div>`;
-      setupDoodle(id);
-    } else if (g === 'emoji') {
-      area.innerHTML = `<p class="hint2">Build a story together, one emoji at a time. ${on} sees every emoji you add.</p><div class="story">${APP.story.join(' ')}</div><div class="emojis">${['🌙', '✈️', '🏔️', '🌊', '🍕', '🎁', '💍', '🐱', '🌧️', '🌸', '😴', '💗'].map(e => `<button data-emo="${e}">${e}</button>`).join('')}</div><button class="mini2 st-reset">Start over</button>`;
-    } else if (g === 'garden') {
-      const st = gardenStage();
-      area.innerHTML = `<div class="garden">${st.emo}</div><p class="hint2 center">${st.name}. It grows every time either of you sends love, and it never wilts.</p><div class="bar"><i style="width:${st.pct}%"></i></div><button class="mini2 gd-water">💧 Water it</button>`;
-    }
-  }
-  function setupDoodle(id) {
-    const s = W[id], cv = s.q('.doodle'), c = cv.getContext('2d');
-    c.fillStyle = '#ffffff'; c.fillRect(0, 0, cv.width, cv.height);
-    c.lineCap = 'round'; c.lineJoin = 'round'; c.lineWidth = 7; s.ddColor = s.ddColor || '#33263f';
-    let last = null;
-    const pos = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * (cv.width / r.width), (e.clientY - r.top) * (cv.height / r.height)]; };
-    cv.addEventListener('pointerdown', e => { last = pos(e); cv.setPointerCapture(e.pointerId); });
-    cv.addEventListener('pointermove', e => { if (!last) return; const p = pos(e); c.strokeStyle = s.ddColor; c.beginPath(); c.moveTo(last[0], last[1]); c.lineTo(p[0], p[1]); c.stroke(); last = p; });
-    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => cv.addEventListener(ev, () => { last = null; }));
-  }
-  function renderFaith(id) {
-    const s = W[id], total = APP.quran.leo + APP.quran.mia, pct = Math.min(1, total / 604);
-    s.q('.ring-fill').setAttribute('stroke-dashoffset', String(201 * (1 - pct)));
-    s.q('.ring-txt').textContent = `${Math.round(pct * 100)}%`;
-    s.q('.q-stats').textContent = total >= 604 ? 'Khatm complete, alhamdulillah! 🎉' : `Together ${total} of 604 pages · ${P.leo.name} ${APP.quran.leo}, ${P.mia.name} ${APP.quran.mia}`;
+    renderGame(id); renderWatch(id); renderDates(id);
+    s.q('.sl-status').textContent = APP.sleep[id] ? "You're sleeping together 💤" : APP.sleep[o] ? `🌙 ${P[o].name} is asleep and waiting for you` : '';
+    s.q('.sl-go').textContent = APP.sleep[o] && !APP.sleep[id] ? `🌙 Join ${P[o].name}` : '🌙 Sleep together';
     s.q('.duas').innerHTML = APP.duas.map((d, i) => `<label class="dua-row${d.done ? ' done' : ''}" for="dua-${id}-${i}"><input type="checkbox" id="dua-${id}-${i}" data-dua="${i}"${d.done ? ' checked' : ''}><span>${esc(d.t)}</span>${d.done ? '<em>answered, alhamdulillah 🤍</em>' : ''}</label>`).join('');
   }
-  function runWatch(i, kind, starter) {
-    const s = W[i], stage = s.q('.watch-stage'), txt = s.q('.ws-text'), bar = s.q('.prog i');
-    clearInterval(s.watchT); stage.hidden = false; s.q('.reacts').hidden = false;
-    bar.style.transition = 'none'; bar.style.width = '0';
-    let n = 3; txt.textContent = '3';
-    s.watchT = setInterval(() => {
-      n--;
-      if (n > 0) txt.textContent = String(n);
-      else {
-        clearInterval(s.watchT); txt.textContent = kind === 'movie' ? '▶ Playing together' : '🎵 Listening together';
-        requestAnimationFrame(() => { bar.style.transition = 'width 90s linear'; bar.style.width = '100%'; });
-      }
-    }, 1000);
-    if (i !== starter) banner(i, `${kind === 'movie' ? '🍿' : '🎵'} ${esc(P[starter].name)} started ${kind === 'movie' ? 'a movie' : 'a song'} countdown<small>3… 2… 1… press play together</small>`);
-  }
-  function floatEmo(i, e) {
-    const st = W[i].q('.watch-stage'); if (st.hidden) return;
-    const el = document.createElement('span'); el.className = 'floatemo'; el.textContent = e; el.style.left = `${15 + rand() * 70}%`;
-    st.appendChild(el); setTimeout(() => el.remove(), 1700);
-  }
-
   function renderMem(id) {
     const s = W[id], o = other(id), on = esc(P[o].name);
-    const photos = [...(s.slides || []), ...samplePhotos()].slice(0, 8);
-    s.q('.mem-photos').innerHTML = photos.map(src => `<img src="${src}" alt="Memory photo">`).join('');
+    renderAlbums(id);
+    if (!s.q('.al-make').hidden) renderAlPick(id);
     const pairDay = new Date(today0()); pairDay.setDate(pairDay.getDate() - 120);
     const items = [...MEMORIES.map(m => ({ date: m.date, text: m.text })), { date: isoDate(pairDay), text: 'Paired on Hearby 💞' }]
-      .concat(APP.bucket.filter(b => b.done).map(b => { const m = PLACE_META.find(x => x.key === b.key); return { date: b.at || isoDate(pairDay), text: `Visited ${m.flag} ${m.name} together` }; }))
+      .concat(APP.bucket.filter(b => b.done).map(b => { const m = PLACE_META.find(x => x.key === b.key); return { date: b.at || isoDate(pairDay), text: `Visited ${b.custom || `${m.flag} ${m.name}`} together` }; }))
       .sort((a, b) => (a.date < b.date ? 1 : -1));
     s.q('.timeline').innerHTML = items.map(it => `<p><b>${new Date(it.date + 'T00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</b>${esc(it.text)}</p>`).join('');
     const toMe = APP.letters.map((l, i) => ({ ...l, i })).filter(l => l.from === o), fromMe = APP.letters.filter(l => l.from === id);
     s.q('.letters').innerHTML = (toMe.map(l => `<div class="letter"><span>💌 <b>Open when ${esc(l.when)}</b><br><em>from ${on}</em></span><button class="mini2" data-letter="${l.i}">${l.opened ? 'Read again' : 'Open'}</button></div>`).join('') || `<p class="hint2">No letters from ${on} yet.</p>`)
       + fromMe.map(l => `<div class="letter sealed"><span>🔒 Sealed for ${on}<br><em>open when ${esc(l.when)}</em></span></div>`).join('');
-    s.q('.bucket').innerHTML = APP.bucket.map((b, i) => { const m = PLACE_META.find(x => x.key === b.key); return `<label class="bk-row${b.done ? ' done' : ''}" for="bk-${id}-${i}"><input type="checkbox" id="bk-${id}-${i}" data-bk="${i}"${b.done ? ' checked' : ''}><span>${m.flag} ${m.name}</span>${b.done ? '<em>visited ✓</em>' : ''}</label>`; }).join('');
+    renderBucket(id);
   }
   function renderMe(id) {
-    const s = W[id];
-    s.q('.gifts').innerHTML = (APP.gifts[id] || []).map((g, i) => `<div class="gift-row"><span>🎁 ${esc(g)}</span><button class="mini2" data-gift="${i}" aria-label="Remove ${esc(g)}">✕</button></div>`).join('') || '<p class="hint2">No ideas yet.</p>';
+    const s = W[id], list = (APP.gifts[id] || []).map(g => (typeof g === 'string' ? { t: g, occ: 'Just because', bought: false } : g));
+    APP.gifts[id] = list;
+    s.q('.gifts').innerHTML = list.map((g, i) => `<div class="gift-row${g.bought ? ' done' : ''}"><label for="gift-${id}-${i}"><input type="checkbox" id="gift-${id}-${i}" data-giftbuy="${i}"${g.bought ? ' checked' : ''}> <span>🎁 ${esc(g.t)}</span></label><em>${esc(g.occ)}${g.bought ? ' · bought ✓' : ''}</em><button class="mini2" data-gift="${i}" aria-label="Remove ${esc(g.t)}">✕</button></div>`).join('') || '<p class="hint2">No ideas yet.</p>';
   }
   function drawMe(id, t) {
-    const s = W[id], cv = s.q('.me-canvas'), r = cv.getBoundingClientRect();
-    if (!r.width) return;
+    const s = W[id], cv = s.q('.me-canvas'), r = cv.getBoundingClientRect(); if (!r.width) return;
     const d = Math.min(2, window.devicePixelRatio || 1);
     if (cv.width !== Math.round(r.width * d)) { cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d); }
     const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); c.clearRect(0, 0, r.width, r.height);
@@ -2498,82 +2900,143 @@ button { cursor: pointer; }
     kid(c, { h: (r.height * 0.82 / 18) * 92 }, r.width / 2, r.height * 0.92, P[id], { face: 0, blink: (t % 4) < 0.12, wave: (t % 6) < 2, happy: (t % 6) >= 2 && (t % 6) < 2.6 }, t);
   }
 
+  // ---------- Wiring ----------
+  function scrollApp(id, el) { const body = W[id].q('.app-body'); body.scrollTop += el.getBoundingClientRect().top - body.getBoundingClientRect().top - 8; }
   function wireApp(id) {
     const s = W[id], a = s.q('.happ'), o = other(id);
+    const on = (sel, ev, fn) => a.querySelector(sel).addEventListener(ev, fn);
     s.q('.hearby-icon').addEventListener('click', () => openApp(id));
     s.q('.who').addEventListener('click', e => { if (s.open) { e.stopPropagation(); openApp(id); } });
-    a.querySelector('.app-back').addEventListener('click', () => closeApp(id));
-    a.querySelector('.app-nav').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setAppTab(id, b.dataset.tab); });
-    a.querySelector('.quick').addEventListener('click', e => {
-      const b = e.target.closest('button'); if (!b) return;
-      const q = b.dataset.q;
+    on('.app-back', 'click', () => closeApp(id));
+    on('.app-nav', 'click', e => { const b = e.target.closest('button'); if (b) setAppTab(id, b.dataset.tab); });
+    on('.quick', 'click', e => {
+      const b = e.target.closest('button'); if (!b) return; const q = b.dataset.q;
       if (q === 'kiss' || q === 'heart') sendFly(id, q);
       else if (q === 'photo') openSheet(id, 'photo');
-      else { openSheet(id, 'text'); const r = s.q(`input[name="mode-${id}"][value="${q === 'pop' ? 'pop' : 'msg'}"]`); r.checked = true; s.q('.modes').dispatchEvent(new Event('change', { bubbles: true })); }
+      else { openSheet(id, 'text'); s.q(`input[name="mode-${id}"][value="${q === 'pop' ? 'pop' : 'msg'}"]`).checked = true; s.q('.modes').dispatchEvent(new Event('change', { bubbles: true })); }
     });
-    a.querySelector('.go-play').addEventListener('click', () => { s.appUI.cat = QCATS[dayIdx() % QCATS.length][0]; setAppTab(id, 'play'); });
-    a.querySelector('.cats').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; s.appUI.cat = b.dataset.cat; s.q('.q-ans').value = ''; renderPlay(id); });
-    a.querySelector('.q-send').addEventListener('click', () => {
+    on('.go-play', 'click', () => { s.appUI.cat = QCATS[dayIdx() % QCATS.length][0]; setAppTab(id, 'play'); });
+    on('.us-date', 'click', e => { if (e.target.closest('.go-date')) { setAppTab(id, 'play'); setTimeout(() => scrollApp(id, a.querySelector('.dn-form')), 50); } });
+    on('.cats', 'click', e => { const b = e.target.closest('button'); if (!b) return; s.appUI.cat = b.dataset.cat; s.q('.q-ans').value = ''; renderPlay(id); });
+    on('.q-send', 'click', () => {
       const v = s.q('.q-ans').value.trim(); if (!v) return;
       const k = qKey(s.appUI.cat); APP.qa[k] = { ...(APP.qa[k] || {}), [id]: v }; saveApp();
-      s.q('.q-ans').value = ''; renderAppAll(); toast(id, 'Answer sent 💬');
-      buzz(o, `💬 ${P[id].name} answered today's question. Answer yours to see it!`, 6000);
+      s.q('.q-ans').value = ''; renderAppAll(); toast(id, 'Answer sent 💬'); tellPartner(id, `💬 ${P[id].name} answered today's question. Answer yours to see it!`);
     });
-    a.querySelector('.games').addEventListener('click', e => {
-      const b = e.target.closest('button'); if (!b) return;
-      if (b.dataset.game === 'soon') { toast(id, 'Coming in a later update ✨'); return; }
-      s.appUI.game = s.appUI.game === b.dataset.game ? null : b.dataset.game;
-      s.q('.game-area').innerHTML = ''; renderGame(id);
-    });
-    a.querySelector('.game-area').addEventListener('click', e => {
-      const b = e.target.closest('button'); if (!b) return;
-      if (b.dataset.cell !== undefined) {
-        APP.ttt[+b.dataset.cell] = id; APP.tttTurn = o; saveApp(); renderAppAll();
-        const win = tttWinner();
-        buzz(o, win ? (win === 'draw' ? "Tic-tac-toe: it's a draw 🤝" : `Tic-tac-toe: ${P[win].name} wins! 🎉`) : `${P[id].name} played ${MARK[id]}. Your turn!`, 5000);
-      } else if (b.classList.contains('ttt-reset')) { APP.tttStarter = APP.tttStarter === 'leo' ? 'mia' : 'leo'; APP.ttt = Array(9).fill(''); APP.tttTurn = APP.tttStarter; saveApp(); renderAppAll(); }
-      else if (b.dataset.col) s.ddColor = b.dataset.col;
+    on('.games', 'click', e => { const b = e.target.closest('button'); if (!b) return; s.appUI.game = s.appUI.game === b.dataset.game ? null : b.dataset.game; s.q('.game-area').innerHTML = ''; renderGame(id); });
+    on('.game-area', 'click', e => {
+      const b = e.target.closest('button'); if (!b || b.disabled) return; const d = b.dataset;
+      if (d.reset) resetGame(d.reset);
+      else if (d.cell !== undefined) { const g = G('ttt'); if (g.turn !== id || g.board[+d.cell] || tttWin()) return; g.board[+d.cell] = id; nextTurn(g, id); saveApp(); renderAppAll(); const w = tttWin(); tellPartner(id, w ? (w === 'draw' ? "Tic-tac-toe: it's a draw 🤝" : `Tic-tac-toe: ${P[w].name} wins! 🎉`) : `${P[id].name} played ${MARK[id]}. Your turn!`); }
+      else if (d.col4 !== undefined) {
+        const g = G('four'), c = +d.col4; if (g.turn !== id || fourWin()) return;
+        for (let r = 5; r >= 0; r--) if (!g.board[r * 7 + c]) { g.board[r * 7 + c] = id; break; }
+        nextTurn(g, id); saveApp(); renderAppAll(); const w = fourWin(); tellPartner(id, w ? (w === 'draw' ? "Four in a Row: it's a draw 🤝" : `Four in a Row: ${P[w].name} wins! 🎉`) : `${P[id].name} dropped a disc. Your turn!`);
+      }
+      else if (d.roll === 'snakes') snakesRoll(id);
+      else if (d.roll === 'ludo') ludoRoll(id);
+      else if (d.ludo !== undefined) ludoMove(id, +d.ludo);
+      else if (d.play !== undefined) cardsPlay(id, +d.play);
+      else if (d.pick) cardsPick(id, d.pick);
+      else if (d.cdraw) cardsDrawBtn(id);
+      else if (d.cpass) cardsPass(id);
+      else if (d.col) s.ddColor = d.col;
       else if (b.classList.contains('dd-clear')) { const cv = s.q('.doodle'), c = cv.getContext('2d'); c.fillStyle = '#ffffff'; c.fillRect(0, 0, cv.width, cv.height); }
       else if (b.classList.contains('dd-send')) { send(id, { img: s.q('.doodle').toDataURL('image/png'), text: 'drew you something 🎨 Guess what it is!' }); toast(id, `Drawing sent to ${P[o].name} 🎨`); }
-      else if (b.dataset.emo) { APP.story.push(b.dataset.emo); APP.story = APP.story.slice(-30); saveApp(); renderAppAll(); buzz(o, `😄 ${P[id].name} added ${b.dataset.emo} to your emoji story`, 4000); }
+      else if (d.emo) { APP.story.push(d.emo); APP.story = APP.story.slice(-30); saveApp(); renderAppAll(); tellPartner(id, `😄 ${P[id].name} added ${d.emo} to your emoji story`); }
       else if (b.classList.contains('st-reset')) { APP.story = ['🌙']; saveApp(); renderAppAll(); }
       else if (b.classList.contains('gd-water')) { if (Date.now() - (s.lastWater || 0) < 1500) return; s.lastWater = Date.now(); growGarden(1); toast(id, 'Watered 💧'); }
     });
-    a.querySelector('.watch-go').addEventListener('click', () => IDS.forEach(i => runWatch(i, 'movie', id)));
-    a.querySelector('.listen-go').addEventListener('click', () => IDS.forEach(i => runWatch(i, 'music', id)));
-    a.querySelector('.reacts').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; floatEmo(id, b.textContent); floatEmo(o, b.textContent); buzz(o, `${P[id].name} reacted ${b.textContent}`, 2500); });
-    a.querySelector('.q-page').addEventListener('click', () => { APP.quran[id] += 1; saveApp(); renderAppAll(); });
-    a.querySelector('.q-juz').addEventListener('click', () => { APP.quran[id] += 20; saveApp(); renderAppAll(); buzz(o, `📖 ${P[id].name} read a juz. MashaAllah!`, 4000); });
-    a.querySelector('.duas').addEventListener('change', e => { const i = e.target.dataset.dua; if (i === undefined) return; APP.duas[+i].done = e.target.checked; saveApp(); renderAppAll(); });
-    a.querySelector('.dua-add').addEventListener('click', () => { const inp = s.q('.dua-in'), v = inp.value.trim(); if (!v) return; APP.duas.push({ t: v, done: false }); inp.value = ''; saveApp(); renderAppAll(); buzz(o, `🤲 ${P[id].name} added to your dua list: "${v}"`, 5000); });
-    a.querySelector('.date-next').addEventListener('click', () => { s.appUI.idea = pick(DATE_IDEAS.filter(x => x !== s.appUI.idea)); renderPlay(id); });
-    a.querySelector('.jar-open').addEventListener('click', () => {
+    on('.wp-start', 'click', () => wpStart(id, s.q('.wp-title').value));
+    on('.wp-toggle', 'click', () => wpToggle(id));
+    on('.wp-end', 'click', () => { APP.watch.status = 'idle'; saveApp(); renderAppAll(); tellPartner(id, `🍿 ${P[id].name} ended the watch party`); });
+    on('.reacts', 'click', e => { const b = e.target.closest('button'); if (!b) return; floatOn(id, b.textContent); floatOn(o, b.textContent); });
+    const sendChat = () => { const inp = s.q('.wp-msg'), v = inp.value.trim(); if (!v) return; APP.watch.chat.push({ from: id, text: v }); APP.watch.chat = APP.watch.chat.slice(-20); inp.value = ''; saveApp(); renderAppAll(); };
+    on('.wp-send', 'click', sendChat);
+    on('.wp-msg', 'keydown', e => { if (e.key === 'Enter') { e.preventDefault(); sendChat(); } });
+    on('.sl-go', 'click', () => startSleep(id));
+    s.q('.sl-wake').addEventListener('click', () => wakeUp(id));
+    on('.dn-surprise', 'click', () => {
+      const wv = s.q('.dn-when'); if (!wv.value) { const d = new Date(today0()); d.setDate(d.getDate() + ((6 - d.getDay() + 7) % 7 || 7)); d.setHours(20, 0, 0, 0); wv.value = `${isoDate(d)}T20:00`; }
+      s.q('.dn-kind').value = pick(['virtual', 'person']); s.q('.dn-place').value = pick(DN.places); s.q('.dn-food').value = pick(DN.foods); s.q('.dn-event').value = pick(DN.events); s.q('.dn-movie').value = pick(DN.movies);
+    });
+    on('.dn-save', 'click', () => {
+      const when = s.q('.dn-when').value, err = s.q('.dn-err'); if (!when) { err.textContent = 'Pick a day and time'; return; }
+      const d = { when, kind: s.q('.dn-kind').value, place: s.q('.dn-place').value.trim(), food: s.q('.dn-food').value.trim(), event: s.q('.dn-event').value.trim(), movie: s.q('.dn-movie').value.trim(), by: id };
+      APP.dates.push(d); saveApp(); err.textContent = '';
+      ['.dn-when', '.dn-place', '.dn-food', '.dn-event', '.dn-movie'].forEach(sel => { s.q(sel).value = ''; });
+      renderAppAll(); toast(id, 'Date night saved 🌙'); tellPartner(id, `🍽️ ${P[id].name} planned a date night: ${fmtWhen(when)}`);
+      setTimeout(checkDays, 300);
+    });
+    on('.dn-list', 'click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.dndel !== undefined) { APP.dates.splice(+b.dataset.dndel, 1); saveApp(); renderAppAll(); }
+      else if (b.dataset.dnwatch !== undefined) { const d = APP.dates[+b.dataset.dnwatch]; s.q('.wp-title').value = d.movie; wpStart(id, d.movie); scrollApp(id, a.querySelector('.wp-screen')); }
+    });
+    on('.duas', 'change', e => { const i = e.target.dataset.dua; if (i === undefined) return; APP.duas[+i].done = e.target.checked; saveApp(); renderAppAll(); });
+    on('.dua-add', 'click', () => { const inp = s.q('.dua-in'), v = inp.value.trim(); if (!v) return; APP.duas.push({ t: v, done: false }); inp.value = ''; saveApp(); renderAppAll(); tellPartner(id, `🤲 ${P[id].name} added to your dua list: "${v}"`); });
+    on('.jar-open', 'click', () => {
       const kept = IDS.map(i => W[i].msg).filter(m => m && m.kept).map(m => `"${m.text}" from ${P[m.from].name}`);
       const pool = [...kept, ...MEMORIES.map(m => m.text), 'Your first call that lasted four hours 📞', 'The day you both watched the same sunset 🌅', ...APP.letters.filter(l => l.opened).map(l => `A letter: "${l.text}"`)];
       const el = s.q('.jar-pick'); el.textContent = `🫙 ${pick(pool)}`; el.classList.remove('pop-in'); void el.offsetWidth; el.classList.add('pop-in');
     });
-    a.querySelector('.letters').addEventListener('click', e => {
+    on('.al-new', 'click', () => { s.alSel = new Set(); s.q('.al-make').hidden = false; s.q('.al-name').value = ''; renderAlPick(id); });
+    on('.al-cancel', 'click', () => { s.q('.al-make').hidden = true; });
+    on('.al-pick', 'click', e => { const b = e.target.closest('button[data-alpick]'); if (!b) return; const i = +b.dataset.alpick; if (s.alSel.has(i)) s.alSel.delete(i); else s.alSel.add(i); renderAlPick(id); });
+    a.querySelector(`#al-file-${id}`).addEventListener('change', async e => {
+      const files = Array.from(e.target.files || []).slice(0, 10); if (!files.length) return;
+      const shots = (await Promise.all(files.map(shrink))).filter(Boolean); s.alUploads = [...(s.alUploads || []), ...shots];
+      const base = s.alPool ? s.alPool.length : 0; shots.forEach((_, j) => s.alSel.add(base + j)); e.target.value = ''; renderAlPick(id);
+    });
+    on('.al-save', 'click', () => {
+      if (!s.alSel || !s.alSel.size) { toast(id, 'Pick at least one photo'); return; }
+      const name = s.q('.al-name').value.trim() || `Album ${APP.albums.length + 1}`;
+      APP.albums.unshift({ name, photos: [...s.alSel].sort((x, y) => x - y).map(i => s.alPool[i]) }); saveApp();
+      s.q('.al-make').hidden = true; renderAppAll(); toast(id, `Album "${name}" saved 🖼️`);
+    });
+    on('.albums', 'click', e => {
+      const b = e.target.closest('button'); if (!b) return; const d = b.dataset;
+      if (d.alplay !== undefined) playAlbum(id, +d.alplay);
+      else if (d.alwidget !== undefined) { const al = APP.albums[+d.alwidget]; s.slides = al.photos.map(resolvePhoto); s.trans = 'random'; setSlide(id, true); toast(id, 'Album is now playing on your widget 📱'); }
+      else if (d.alsend !== undefined) { const al = APP.albums[+d.alsend]; send(id, { imgs: al.photos.map(resolvePhoto), trans: 'random', text: `shared the album "${al.name}" 📷` }); toast(id, `Album sent to ${P[o].name}'s widget 💌`); }
+      else if (d.aldel !== undefined) { APP.albums.splice(+d.aldel, 1); saveApp(); renderAppAll(); }
+    });
+    s.q('.ap-close').addEventListener('click', () => closeAlbum(id));
+    on('.letters', 'click', e => {
       const b = e.target.closest('button[data-letter]'); if (!b) return;
       const l = APP.letters[+b.dataset.letter]; l.opened = true; saveApp();
-      s.q('.letter-view').innerHTML = `<div class="letter-open">${esc(l.text)}<br><em>— ${esc(P[l.from].name)}</em></div>`;
-      renderMem(id);
+      s.q('.letter-view').innerHTML = `<div class="letter-open">${esc(l.text)}<br><em>— ${esc(P[l.from].name)}</em></div>`; renderMem(id);
     });
-    a.querySelector('.lt-seal').addEventListener('click', () => {
+    on('.lt-seal', 'click', () => {
       const tx = s.q('.lt-text'), when = s.q('.lt-when').value, v = tx.value.trim(); if (!v) return;
       APP.letters.push({ from: id, when, text: v, opened: false }); saveApp(); tx.value = ''; s.q('.write-letter').open = false;
-      renderAppAll(); toast(id, 'Letter sealed 💌');
-      buzz(o, `💌 ${P[id].name} sealed a letter for you: "Open when ${when}"`, 6000);
+      renderAppAll(); toast(id, 'Letter sealed 💌'); tellPartner(id, `💌 ${P[id].name} sealed a letter for you: "Open when ${when}"`);
     });
-    a.querySelector('.bucket').addEventListener('change', e => { const i = e.target.dataset.bk; if (i === undefined) return; APP.bucket[+i].done = e.target.checked; APP.bucket[+i].at = isoDate(today0()); saveApp(); renderAppAll(); });
-    a.querySelector('.bk-add').addEventListener('click', () => { const k = s.q('.bk-sel').value; if (APP.bucket.some(b => b.key === k)) { toast(id, 'Already on your list ✓'); return; } APP.bucket.push({ key: k, done: false }); saveApp(); renderAppAll(); });
-    a.querySelector('.gift-add').addEventListener('click', () => { const inp = s.q('.gift-in'), v = inp.value.trim(); if (!v) return; (APP.gifts[id] = APP.gifts[id] || []).push(v); inp.value = ''; saveApp(); renderMe(id); });
-    a.querySelector('.gifts').addEventListener('click', e => { const b = e.target.closest('button[data-gift]'); if (!b) return; APP.gifts[id].splice(+b.dataset.gift, 1); saveApp(); renderMe(id); });
-    a.querySelector('.me-edit').addEventListener('click', () => { const d = s.root.querySelector('details.avatar'); d.open = true; d.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+    on('.bucket', 'click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.bkprev !== undefined) {
+        const it = APP.bucket[+b.dataset.bkprev]; P[id].scenery = it.key; P[id].seasonPref = it.season || 'summer';
+        document.getElementById(`scenery-${id}`).value = it.key; document.getElementById(`seasonPref-${id}`).value = P[id].seasonPref;
+        newPlace(id, true); toast(id, 'Your widget is there now 👀 (set Scenery back to 🎲 under the phone)');
+      } else if (b.dataset.bkdel !== undefined) { APP.bucket.splice(+b.dataset.bkdel, 1); saveApp(); renderAppAll(); }
+    });
+    on('.bucket', 'change', e => { const i = e.target.dataset.bk; if (i === undefined) return; APP.bucket[+i].done = e.target.checked; APP.bucket[+i].at = isoDate(today0()); saveApp(); renderAppAll(); });
+    on('.bk-add', 'click', () => {
+      const key = s.q('.bk-sel').value, season = s.q('.bk-season').value, custom = s.q('.bk-custom').value.trim();
+      if (!custom && APP.bucket.some(b => b.key === key && !b.custom)) { toast(id, 'Already on your list ✓'); return; }
+      APP.bucket.push({ key, season, custom: custom || null, done: false }); s.q('.bk-custom').value = ''; saveApp(); renderAppAll();
+      tellPartner(id, `🗺️ ${P[id].name} added ${custom || PLACE_META.find(m => m.key === key).name} to your bucket list`);
+    });
+    on('.gift-add', 'click', () => { const inp = s.q('.gift-in'), v = inp.value.trim(); if (!v) return; (APP.gifts[id] = APP.gifts[id] || []).push({ t: v, occ: s.q('.gift-occ').value, bought: false }); inp.value = ''; saveApp(); renderMe(id); });
+    on('.gifts', 'click', e => { const b = e.target.closest('button[data-gift]'); if (!b) return; APP.gifts[id].splice(+b.dataset.gift, 1); saveApp(); renderMe(id); });
+    on('.gifts', 'change', e => { const i = e.target.dataset.giftbuy; if (i === undefined) return; APP.gifts[id][+i].bought = e.target.checked; saveApp(); renderMe(id); });
+    on('.me-edit', 'click', () => { const d = s.root.querySelector('details.avatar'); d.open = true; d.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
     const mirror = (appId, ctlId, prop) => document.getElementById(appId).addEventListener('change', e => { const ctl = document.getElementById(ctlId); ctl[prop] = e.target[prop]; ctl.dispatchEvent(new Event('change')); });
     mirror(`app-discreet-${id}`, `discreet-${id}`, 'checked');
     mirror(`app-quiet-${id}`, `quiet-${id}`, 'checked');
     mirror(`app-nudges-${id}`, `nudges-${id}`, 'value');
   }
+  setInterval(() => IDS.forEach(id => { const s = W[id]; if (s.appOpen && s.appUI.tab === 'play' && APP.watch.status !== 'idle') renderWatch(id); }), 500);
 
   // ---------- Sending ----------
   function sendFly(from, kind) {
@@ -2783,7 +3246,7 @@ button { cursor: pointer; }
   let last = performance.now() / 1000;
   function frame(ms) {
     const t = ms / 1000, dt = Math.min(0.1, t - last);
-    if (dt >= 1 / 32) { last = t; IDS.forEach(id => { const s = W[id]; if (P[id].screen && !(s.slideOn && s.slides.length)) draw(id, t, reduced.matches ? dt * 0.4 : dt); if (s.appOpen && P[id].screen) { if (s.appUI.tab === 'us') draw(id, t, dt, s.appScene); else if (s.appUI.tab === 'me') drawMe(id, t); } }); }
+    if (dt >= 1 / 32) { last = t; IDS.forEach(id => { const s = W[id]; if (P[id].screen && !(s.slideOn && s.slides.length)) draw(id, t, reduced.matches ? dt * 0.4 : dt); if (s.appOpen && P[id].screen) { if (s.appUI.tab === 'us') draw(id, t, dt, s.appScene); else if (s.appUI.tab === 'me') drawMe(id, t); } if (APP.sleep[id]) drawSleep(id, t); }); }
     requestAnimationFrame(frame);
   }
   IDS.forEach(id => draw(id, last, 0));

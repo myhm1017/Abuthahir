@@ -195,23 +195,27 @@ Opening Hearby feels like the widget opened up: the same calm painted scenery, g
 
 ### 🎲 Together
 - **Daily couple questions (v1):** categories sweet, funny, deep, future, faith, this-or-that and who's-more-likely. Answers unlock only once you've both replied. Wholesome by default.
-- **Games (later):**
-  - Live: tic-tac-toe, Connect Four, Ludo.
-  - Anytime: draw and guess (drawings land on the partner's widget), emoji story, guess my answer, how-well-do-you-know-me quiz.
-  - **Our garden:** a shared plant that grows with every bit of love sent and never wilts (no streak guilt).
-- **Watch and listen together (later):** YouTube in sync with live floating reactions; a synced "3, 2, 1, press play" countdown for Netflix and music.
-- **Faith together (later):** a shared Quran khatm goal with a progress ring and page or juz logging; a shared dua list where answered duas get ticked with "alhamdulillah"; Ramadan mode with suhoor and iftar times in both time zones.
-- **Date night ideas (later):** cook the same recipe, watch the same sunset, a virtual café date, pray together on a call.
+- **Board and card games (later), played turn by turn across both phones:**
+  - **Color Match:** an original match-the-color-or-number card game with skip, +2 and rainbow wild cards (same family of mechanics as popular shedding card games, under its own name).
+  - **Ludo** (2-player), **Snakes and Ladders**, **Four in a Row**, tic-tac-toe.
+  - Draw and guess (drawings land on the partner's widget), emoji story.
+  - **Our garden:** a shared plant that grows with every bit of love sent and never wilts.
+  - Ideas for later: carrom, chess, word games, a "how well do you know me" quiz.
+- **Watch party (later):** pick a movie, show or YouTube link; play and pause stay in sync on both phones, with floating reactions and a small chat. YouTube can be embedded and synced; for Netflix and other apps, Hearby syncs a "3, 2, 1, press play" start and the shared clock.
+- **Sleep together (later):** both screens dim to the same starry sky with the two characters asleep side by side, a "together for…" timer and optional sleep sounds (rain, ocean, soft noise). Heartbeats go quiet until either wakes up.
+- **Plan a date night (later):** when, virtual or in person, where to go, food to try, an event or activity, and a movie to watch, with suggestions and a "Surprise me" button. Both see the plan, get a reminder on the day, and can start a watch party for the chosen movie.
+- **Our dua list:** things you're both praying for, ticked with "alhamdulillah" when answered.
 
 ### 📖 Memories (v1 core)
 - **Memory Jar:** kept messages, photos and celebrated days; "open the jar" pulls a random memory.
+- **Albums:** make albums from received photos and your own; play any album as a full-screen **slideshow** with transitions, show it on your own widget, or send it to your partner's widget.
 - **Timeline** of celebrated days, visits and milestones.
 - **"Open when…" letters:** sealed letters that unlock in a moment (you miss me, you can't sleep, a hard day, our next monthversary).
-- **Bucket list (later):** places to visit together, linked to the scenery places; ticked places join the timeline.
+- **Bucket list with scenery:** dream places shown as little scenery pictures in the season you'd love to visit (or your own named spot that looks like one). Preview a place on your widget; ticked places join the timeline.
 
 ### ⚙️ Me (v1)
 - Your character with the full wardrobe.
-- **Secret gift ideas** for your partner, never visible to them.
+- **Secret gift ideas** for your partner, saved by occasion (birthday, anniversary, monthversary, Eid, just because) and marked as bought, never visible to them.
 - Privacy: end-to-end encryption status, the safety code to verify with your partner, discreet mode, screenshot protection.
 - Settings: reminders, quiet hours, scenery, status, pairing.
 
@@ -290,7 +294,7 @@ Opening Hearby feels like the widget opened up: the same calm painted scenery, g
 |---|---|---|
 | Pairing (link, QR, ID, code), 1 partner | ✅ | Family circles, other relationships |
 | App tabs: Us, Together (daily questions), Memories (jar, timeline, open-when letters), Me | ✅ | |
-| Games, our garden, watch/listen together, Quran khatm and dua list, bucket list, date ideas | | ✅ |
+| Board and card games, our garden, watch party, sleep together, date night planner, albums, bucket list with scenery | | ✅ |
 | End-to-end encryption of everything personal | ✅ | Encrypted passphrase backup |
 | Discreet mode, app lock, content-free notifications | ✅ | |
 | 4x4 resizable, customizable widget | ✅ | More layouts and themes |

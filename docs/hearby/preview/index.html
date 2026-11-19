@@ -258,6 +258,7 @@ button { cursor: pointer; }
 .sw span { display: block; width: 100%; height: 100%; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .15); }
 .sw input:checked + span { box-shadow: 0 0 0 2px var(--card), 0 0 0 4px var(--accent); }
 .sw input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 3px; }
+.controls .mini { justify-self: start; border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 3px 10px; font-size: 12.5px; font-weight: 700; color: var(--fg); }
 .buzz { margin: 0; min-height: 1.5em; font-size: 13px; font-weight: 700; color: var(--accent); }
 
 .notes { max-width: 760px; margin: 36px auto 0; display: grid; gap: 10px; }
@@ -302,6 +303,7 @@ button { cursor: pointer; }
     <li>Turn on <b>Discreet mode</b> to blur messages until you tap them.</li>
     <li><b>Special days:</b> open a widget and tap 📅. Birthdays, anniversaries and other moments are listed with a countdown. Add your own, and choose a celebration (confetti, balloons, fireworks, light show, drone show or everything). Mia's birthday is set for tomorrow, so Leo gets a private tease a few seconds after the page loads. Tap ⏰ to preview a day-before reminder or 🎉 to preview the celebration on both phones.</li>
     <li><b>Scenery:</b> every time someone looks at their screen (screen on, switching phones or coming back to the page), the widget moves to a new place and season: Santorini, the Swiss Alps, Mount Fuji, the Grand Canyon, a Banff trail, the Maldives, an Icelandic waterfall, Kyoto, Central Park, Dubai, Paris, the Taj Mahal, the Pyramids, the Golden Gate, Cappadocia and a Norwegian fjord, in spring, summer, autumn or winter. Pick a fixed place or season under each phone if you prefer.</li>
+    <li><b>Gentle reminders:</b> every now and then (about once a minute in this preview, a few times a day in the real app), each phone gets a soft nudge to message or check on the other, or to make dua for each other and for you both, such as "Take a moment to make dua for Mia and for you both 🤲". Choose love and dua, love and prayer, love only, or off under each phone, or tap "Show a reminder now".</li>
     <li><b>Meet-up countdown:</b> open a widget and tap the ✈️ chip to set or change the date, add a note, choose "We don't know the date yet" (shows "soon"), or hide the countdown. Both phones update.</li>
     <li><b>Teasing reminders:</b> the day before, the app only asks something cheeky like "What day is tomorrow 😉?" and leaves them to work it out. On the day, a clear notification says what day it is, and if nobody has sent a wish about 15 seconds after the celebration (hours later in the real app), it nudges them: "Have you wished Mia yet? 👀 Just checking…".</li>
     <li><b>Repeating days:</b> special days can repeat every year, month, week or day, or happen just once. A monthly "Our monthversary" on the 9th is already in the list.</li>
@@ -496,6 +498,8 @@ button { cursor: pointer; }
         <label for="slides-${id}">Slideshow in widget <input type="checkbox" id="slides-${id}" disabled></label>
         <label for="scenery-${id}">Scenery <select id="scenery-${id}"><option value="random">🎲 New place every look</option>${PLACE_META.map(m => `<option value="${m.key}">${m.flag} ${m.name}</option>`).join('')}</select></label>
         <label for="seasonPref-${id}">Season <select id="seasonPref-${id}"><option value="random">🎲 Any season</option><option value="spring">🌸 Spring</option><option value="summer">☀️ Summer</option><option value="autumn">🍂 Autumn</option><option value="winter">❄️ Winter</option></select></label>
+        <label for="nudges-${id}">Reminders <select id="nudges-${id}"><option value="dua">💌 Love and 🤲 dua</option><option value="pray">💌 Love and 🙏 prayer</option><option value="love">💌 Love only</option><option value="off">Off</option></select></label>
+        <button class="mini try-nudge">Show a reminder now</button>
         ${avatarHTML(id)}
         <p class="buzz" aria-live="polite"></p>
       </div>
@@ -2129,6 +2133,24 @@ button { cursor: pointer; }
     });
   }
 
+  // ---------- Gentle reminders: connect with each other and pray for each other ----------
+  function gentleLine(id) {
+    const o = P[other(id)].name, mode = P[id].nudges || 'dua';
+    const love = [`${o} might love hearing from you 💌`, `Check on ${o}: how's the day going? 👀`, `Send ${o} a little kiss 😘`, 'A tiny "thinking of you" goes a long way 🤍', `Peek at ${o}'s status and say hi 👋`];
+    const dua = [`Take a moment to make dua for ${o} and for you both 🤲`, `Remember ${o} in your prayers today 🤲`, 'Make dua that Allah keeps you two together and brings you close soon 🤲', `After your next prayer, make a little dua for ${o} 🤲`, `Make dua for ${o}, then send a sweet message 🤲💌`];
+    const general = [`Say a little prayer for ${o} and for you both 🙏`, `Keep ${o} in your prayers today 🙏`, 'Pray for your journey together 🙏', `Send ${o} a prayer, then a message 🙏💌`];
+    if (mode === 'love') return { line: pick(love), sub: 'Gentle reminder' };
+    const pray = mode === 'dua' ? dua : general;
+    return rand() < 0.5 ? { line: pick(pray), sub: mode === 'dua' ? 'A moment for dua' : 'A moment to pray' } : { line: pick(love), sub: 'Gentle reminder' };
+  }
+  function gentleNudge(id, force) {
+    if ((P[id].nudges || 'dua') === 'off' || (!force && !isViewing(id))) return;
+    const g = gentleLine(id), pl = W[id].q('.pill');
+    banner(id, `${esc(g.line)}<small>${g.sub}</small>`); buzz(id, g.line, 6000);
+    pl.textContent = g.line; pl.classList.add('show');
+    clearTimeout(pl._t); pl._t = setTimeout(() => pl.classList.remove('show'), 8000);
+  }
+
   // ---------- Sending ----------
   function sendFly(from, kind) {
     const to = other(from);
@@ -2231,6 +2253,8 @@ button { cursor: pointer; }
     q('.slides-toggle').addEventListener('click', e => { e.stopPropagation(); setSlide(id, !s.slideOn); });
     document.getElementById(`slides-${id}`).addEventListener('change', e => setSlide(id, e.target.checked));
     q('.power').addEventListener('click', () => setScreen(id, !P[id].screen));
+    document.getElementById(`nudges-${id}`).addEventListener('change', e => { P[id].nudges = e.target.value; });
+    W[id].root.querySelector('.try-nudge').addEventListener('click', () => gentleNudge(id, true));
     document.getElementById(`scenery-${id}`).addEventListener('change', e => { P[id].scenery = e.target.value; newPlace(id, true); });
     document.getElementById(`seasonPref-${id}`).addEventListener('change', e => { P[id].seasonPref = e.target.value; newPlace(id, true); });
     q('.days-btn').addEventListener('click', e => { e.stopPropagation(); renderDays(); openSheet(id, 'days'); });
@@ -2328,6 +2352,7 @@ button { cursor: pointer; }
   renderDays(); setRibbons();
   setTimeout(checkDays, 2500);
   setInterval(checkDays, 60000);
+  IDS.forEach((id, i) => { const loop = () => { gentleNudge(id); setTimeout(loop, 70000 + rand() * 40000); }; setTimeout(loop, 30000 + i * 12000); });
   let last = performance.now() / 1000;
   function frame(ms) {
     const t = ms / 1000, dt = Math.min(0.1, t - last);

@@ -93,8 +93,12 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - **Lock-screen notifications never show content.** They show "💗 Hearby" at most.
 
 ### 4.7 Gentle reminders (v1)
-- If you haven't sent anything in a day, a soft nudge: *"Your person might love hearing from you today 🌙"*.
-- Users choose the reminder time, or turn reminders off.
+- A few soft nudges a day that mix two kinds of reminders:
+  - **Connect:** "Mia might love hearing from you 💌", "Check on Mia: how's the day going? 👀", "Send Mia a little kiss 😘".
+  - **Pray for each other:** "Take a moment to make dua for Mia and for you both 🤲", "Make dua that Allah keeps you two together and brings you close soon 🤲", "After your next prayer, make a little dua for Mia 🤲".
+- Each person chooses the style: **love and dua** (Islamic wording), **love and prayer** (general wording), **love only**, or **off**, and how often or at what times.
+- *Later:* optionally time the dua reminders right after the five daily prayers, using prayer times calculated for the chosen city (no GPS needed).
+- Tone stays warm, never guilt-inducing. Reminders skip quiet hours, and love nudges skip if you've just messaged each other.
 
 ### 4.8 Time zones and sleep-aware delivery (v1)
 - The widget shows the partner's **local time**.

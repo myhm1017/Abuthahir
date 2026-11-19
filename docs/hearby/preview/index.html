@@ -216,7 +216,7 @@ button { cursor: pointer; }
 .controls { width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 12px 14px; display: grid; gap: 8px; font-size: 14px; }
 .controls .ctl-title { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 800; }
 .controls label { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-weight: 600; }
-.controls select { border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 4px 8px; font-size: 13px; }
+.controls select { border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 4px 8px; font-size: 13px; max-width: 170px; }
 .controls input[type="text"] { border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 4px 8px; font-size: 13px; width: 150px; }
 .controls input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); }
 .avatar { border-top: 1px solid var(--line); padding-top: 8px; }
@@ -273,7 +273,7 @@ button { cursor: pointer; }
     <li>Turn on <b>Asleep</b> for Mia, then send from Leo. It arrives quietly and the scene turns to night. Turn Asleep off to feel the heartbeat.</li>
     <li>Send from both phones within 15 seconds for a rare <b>in-sync</b> hug.</li>
     <li>Turn on <b>Discreet mode</b> to blur messages until you tap them.</li>
-    <li><b>Customize the characters:</b> under each phone, open "Customize … name and look" to rename them or change the style (man, hijab or long hair), skin tone, eye color, hair or hijab color, outfit, facial hair and glasses.</li>
+    <li><b>Customize the characters:</b> under each phone, open "Customize … name and look" to rename them or change their style: hijab styles (classic, khimar, turban wrap, niqab), hair (buzz cut, quiff, man bun, wolf cut, braids, bun and more), 13 beard and moustache styles, tops, bottoms, dresses (abaya, gown, churidar, saree, burqa and more), shoes, skin tone, eye color, hair or hijab color, outfit, facial hair and glasses.</li>
     <li><b>Slideshow:</b> open the widget, tap 📷, pick a few photos (or "Use sample photos"), choose a transition and send. The other widget starts a slideshow. Tap 🎞️ to switch between the slideshow and the couple scene.</li>
     <li><b>Pop-up text:</b> tap ✏️, choose <b>Pop-up ✨</b> and send. It types out in huge letters over a blurred background and slides across like a news ticker.</li>
     <li><b>Flying kiss or heart:</b> tap 💋 or ❤️. It flies at the other person, grows to fill the widget and fades.</li>
@@ -285,8 +285,8 @@ button { cursor: pointer; }
 <script>
 (() => {
   const P = {
-    leo: { id: 'leo', name: 'Leo', city: 'London', tz: 'Europe/London', type: 'man', skin: '#e8b894', hair: '#2b1d17', eyes: '#5a3a24', outfit: '#7fa6d9', hijab: '#c98fb4', facial: 'full', glasses: false, status: 'free to talk', quiet: false, discreet: false, screen: true },
-    mia: { id: 'mia', name: 'Mia', city: 'Toronto', tz: 'America/Toronto', type: 'hijabi', skin: '#f3d0b5', hair: '#2b1d17', eyes: '#6b4a2b', outfit: '#8f7bb8', hijab: '#c98fb4', facial: 'none', glasses: false, status: 'at work', quiet: false, discreet: false, screen: true }
+    leo: { id: 'leo', name: 'Leo', city: 'London', tz: 'Europe/London', type: 'man', skin: '#e8b894', hair: '#2b1d17', eyes: '#5a3a24', outfit: '#7fa6d9', hijab: '#c98fb4', facial: 'full', hairStyle: 'short', top: 'shirt', bottom: 'trousers', dress: 'abaya', hijabStyle: 'classic', shoes: 'sneakers', accent: '#3f4a66', glasses: false, status: 'free to talk', quiet: false, discreet: false, screen: true },
+    mia: { id: 'mia', name: 'Mia', city: 'Toronto', tz: 'America/Toronto', type: 'hijabi', skin: '#f3d0b5', hair: '#2b1d17', eyes: '#6b4a2b', outfit: '#8f7bb8', hijab: '#c98fb4', facial: 'none', hairStyle: 'free', top: 'tshirt', bottom: 'trousers', dress: 'abaya', hijabStyle: 'classic', shoes: 'flats', accent: '#e8d5c4', glasses: false, status: 'at work', quiet: false, discreet: false, screen: true }
   };
   const IDS = ['leo', 'mia'];
   const other = id => (id === 'leo' ? 'mia' : 'leo');
@@ -296,9 +296,10 @@ button { cursor: pointer; }
     eyes: ['#5a3a24', '#6b4a2b', '#8a6a3a', '#3f6b4a', '#3d5f8a', '#2b2b2b'],
     hair: ['#2b1d17', '#4a2f22', '#7a4a2a', '#1c1c24', '#8a8a8a'],
     hijab: ['#c98fb4', '#e8d5c4', '#7d9bb8', '#4f6b5a', '#2f2a3a', '#f2b8c6', '#b45a6a'],
-    outfit: ['#7fa6d9', '#8f7bb8', '#f2a7bf', '#7fbf9a', '#e8c07a', '#4f5d86', '#d9d2c4']
+    outfit: ['#7fa6d9', '#8f7bb8', '#f2a7bf', '#7fbf9a', '#e8c07a', '#4f5d86', '#d9d2c4', '#2f2a3a', '#b4433f', '#f4f1ea'],
+    accent: ['#3f4a66', '#2f2a3a', '#e8d5c4', '#c98fb4', '#d4a24c', '#7a2f45', '#5b7fb3', '#ffffff']
   };
-  const SW_LABEL = { eyes: 'Eye color', skin: 'Skin tone', hair: 'Hair color', hijab: 'Hijab color', outfit: 'Outfit color' };
+  const SW_LABEL = { accent: 'Second color', eyes: 'Eye color', skin: 'Skin tone', hair: 'Hair color', hijab: 'Hijab color', outfit: 'Outfit color' };
   const PRESETS = ['thinking of you 🤍', 'miss you 🥺', 'mwah 😘', 'sending a hug 🤗', 'drink water, cutie 💧', 'proud of you ⭐', 'good morning ☀️', 'good night 🌙'];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const narrow = matchMedia('(max-width: 760px)');
@@ -306,6 +307,15 @@ button { cursor: pointer; }
   const stage = document.getElementById('stage');
 
   // ---------- Markup ----------
+  const OPTS = {
+    hijabStyle: [['classic', 'Classic'], ['khimar', 'Khimar (long)'], ['wrap', 'Turban wrap'], ['niqab', 'With niqab']],
+    hairStyle: [['short', 'Short'], ['buzz', 'Buzz cut'], ['sidepart', 'Side part'], ['quiff', 'Quiff'], ['curlyshort', 'Short curls'], ['manbun', 'Man bun'], ['long', 'Shoulder length'], ['wolf', 'Wolf cut'], ['free', 'Long and free'], ['bun', 'Hair bun'], ['ponytail', 'Ponytail'], ['braids', 'Two braids'], ['sidebraid', 'Side braid'], ['bob', 'Bob'], ['curls', 'Big curls'], ['bald', 'Bald']],
+    facial: [['full', 'Full natural beard'], ['boxed', 'Short boxed beard'], ['short', 'Short beard'], ['stubble', '3-day stubble'], ['goatee', 'Goatee'], ['vandyke', 'Van Dyke'], ['anchor', 'Anchor beard'], ['circle', 'Circle beard'], ['moustache', 'Classic moustache'], ['chevron', 'Chevron moustache'], ['handlebar', 'Handlebar moustache'], ['pencil', 'Pencil moustache'], ['none', 'Clean shaven']],
+    top: [['shirt', 'Shirt, rolled sleeves'], ['fullsleeve', 'Full-sleeve tee'], ['tshirt', 'T-shirt'], ['jumper', 'Jumper'], ['hoodie', 'Hoodie'], ['jacket', 'Jacket over tee'], ['kurta', 'Kurta'], ['thobe', 'Thobe']],
+    bottom: [['trousers', 'Trousers'], ['baggy', 'Baggy jeans'], ['joggers', 'Joggers'], ['shorts', 'Shorts']],
+    dress: [['abaya', 'Abaya'], ['gown', 'Gown'], ['churidar', 'Churidar with dupatta'], ['saree', 'Saree'], ['burqa', 'Burqa (parda)'], ['jeans', 'Top and jeans'], ['skirt', 'Top and long skirt'], ['jumper', 'Jumper dress']],
+    shoes: [['sneakers', 'Sneakers'], ['boots', 'Boots'], ['loafers', 'Loafers'], ['sandals', 'Sandals'], ['flats', 'Flats'], ['heels', 'Heels']]
+  };
   function swatches(id, key) {
     return `<div class="sw-row" role="radiogroup" aria-label="${SW_LABEL[key]}">${SW[key].map(col => `<label class="sw" style="--c:${col}" title="${SW_LABEL[key]}"><input type="radio" name="${key}-${id}" value="${col}"${P[id][key] === col ? ' checked' : ''}><span></span></label>`).join('')}</div>`;
   }
@@ -314,13 +324,20 @@ button { cursor: pointer; }
     const sel = (key, opts) => `<select data-key="${key}" id="${key}-${id}">${opts.map(([v, l]) => `<option value="${v}"${p[key] === v ? ' selected' : ''}>${l}</option>`).join('')}</select>`;
     return `<details class="avatar"><summary>Customize <span class="nm-${id}">${p.name}</span>'s name and look</summary><div class="av-grid">
       <label for="name-${id}">Name <input type="text" id="name-${id}" data-key="name" maxlength="20" value="${p.name}" autocomplete="off"></label>
-      <label for="type-${id}">Style ${sel('type', [['man', 'Man'], ['hijabi', 'Hijab'], ['woman', 'Long hair']])}</label>
+      <label for="type-${id}">Style ${sel('type', [['man', 'Man'], ['hijabi', 'Woman in hijab'], ['woman', 'Woman, hair showing']])}</label>
+      <label for="hijabStyle-${id}" data-show="hijabi">Hijab style ${sel('hijabStyle', OPTS.hijabStyle)}</label>
+      <label for="hairStyle-${id}" data-show="man woman">Hair ${sel('hairStyle', OPTS.hairStyle)}</label>
+      <label for="facial-${id}" data-show="man">Beard ${sel('facial', OPTS.facial)}</label>
+      <label for="top-${id}" data-show="man">Top ${sel('top', OPTS.top)}</label>
+      <label for="bottom-${id}" data-show="man">Bottom ${sel('bottom', OPTS.bottom)}</label>
+      <label for="dress-${id}" data-show="woman hijabi">Outfit ${sel('dress', OPTS.dress)}</label>
+      <label for="shoes-${id}">Shoes ${sel('shoes', OPTS.shoes)}</label>
       <div class="av-row">Skin tone ${swatches(id, 'skin')}</div>
       <div class="av-row">Eye color ${swatches(id, 'eyes')}</div>
       <div class="av-row" data-show="hijabi">Hijab color ${swatches(id, 'hijab')}</div>
       <div class="av-row" data-show="man woman">Hair color ${swatches(id, 'hair')}</div>
-      <div class="av-row">Outfit color ${swatches(id, 'outfit')}</div>
-      <label for="facial-${id}" data-show="man">Facial hair ${sel('facial', [['full', 'Full natural beard'], ['beard', 'Short beard'], ['moustache', 'Moustache only'], ['none', 'Clean shaven']])}</label>
+      <div class="av-row">Main outfit color ${swatches(id, 'outfit')}</div>
+      <div class="av-row">Second color (trousers, dupatta, blouse, laces…) ${swatches(id, 'accent')}</div>
       <label for="glasses-${id}">Glasses <input type="checkbox" data-key="glasses" id="glasses-${id}"${p.glasses ? ' checked' : ''}></label>
     </div></details>`;
   }
@@ -578,58 +595,148 @@ button { cursor: pointer; }
   };
   const lighten = (hex, k = 0.72) => mixHex(hex, true, k), darken = (hex, k = 0.28) => mixHex(hex, false, k);
 
-  // A soft chibi character drawn from an avatar (man, hijab or long hair). Returns head position and hand anchor.
+  // A soft chibi character with a full wardrobe: hair, facial hair, hijab styles, tops, bottoms, dresses and shoes.
+  // Returns head position and hand anchor.
   function kid(c, s, x, gy, p, o, t) {
     const man = p.type === 'man', hj = p.type === 'hijabi';
-    const u = s.h / 92 * (o.scale || 1) * (man ? 1.05 : 1), face = o.face ?? 1, ph = o.phase || 0;
-    const pants = man ? '#3f4a66' : darken(p.outfit, 0.3), shoe = '#4e3c45';
-    const sleeve = p.type === 'woman' ? p.skin : p.outfit;
+    const u = s.h / 92 * (o.scale || 1) * (man ? 1.05 : 1), face = o.face ?? 1, ph = o.phase || 0, fd = face || 1;
+    const c1 = p.outfit, c2 = p.accent, H = p.hair;
+    const line = (x0, y0, x1, y1) => { c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke(); };
+    const ell = (cx, cy, rx, ry, rot = 0) => { c.beginPath(); c.ellipse(cx, cy, rx, ry, rot, 0, TAU); c.fill(); };
     c.lineCap = 'round'; c.lineJoin = 'round';
-    c.fillStyle = 'rgba(30,50,30,.18)'; c.beginPath(); c.ellipse(x, gy + 1, 4.6 * u, 1.1 * u, 0, 0, TAU); c.fill();
+    c.fillStyle = 'rgba(30,50,30,.18)'; ell(x, gy + 1, 4.6 * u, 1.1 * u);
+
+    // Garment layout: where the hem falls and how long the sleeves are.
+    const garment = man ? p.top : p.dress;
+    const LAYOUT = man
+      ? { shirt: ['hip', 'rolled'], fullsleeve: ['hip', 'full'], tshirt: ['hip', 'short'], jumper: ['hip', 'full'], hoodie: ['hip', 'full'], jacket: ['hip', 'full'], kurta: ['knee', 'full'], thobe: ['floor', 'full'] }
+      : { abaya: ['floor', 'full'], gown: ['floor', 'full'], churidar: ['knee', 'full'], saree: ['floor', 'short'], burqa: ['floor', 'full'], jeans: ['hip', hj ? 'full' : 'short'], skirt: ['hip', hj ? 'full' : 'short'], jumper: ['knee', 'full'] };
+    const [hemKind, sleeveKind] = LAYOUT[garment] || ['hip', 'full'];
+    const sleeveCol = garment === 'jacket' || garment === 'saree' ? c2 : c1;
+    const longDown = hemKind === 'floor' || garment === 'skirt';
+
+    // Legs
+    let legCol, legW = 1.7, shortsTo = 0;
+    if (man) {
+      if (p.bottom === 'baggy') { legCol = '#5b7fb3'; legW = 2.3; }
+      else if (p.bottom === 'joggers') { legCol = c2; legW = 1.6; }
+      else if (p.bottom === 'shorts') { legCol = c2; legW = 2; shortsTo = 0.5; }
+      else legCol = c2;
+    } else if (garment === 'jeans') { legCol = '#5b7fb3'; legW = 1.6; }
+    else if (garment === 'churidar' || garment === 'jumper') { legCol = c2; legW = 1.3; }
+    else { legCol = darken(c1, 0.2); legW = 1.4; }
+
+    const shoe = (fx, fy) => {
+      const k = p.shoes, sx = fx + fd * 0.45 * u;
+      if (k === 'boots') { c.fillStyle = '#4a3328'; c.fillRect(fx - 0.85 * u, fy - 1.1 * u, 1.7 * u, 1.2 * u); ell(sx, fy + 0.05 * u, 1.1 * u, 0.65 * u); }
+      else if (k === 'sandals') { c.fillStyle = p.skin; ell(sx, fy, 0.95 * u, 0.5 * u); c.fillStyle = '#8a5a3c'; c.fillRect(sx - 0.95 * u, fy + 0.35 * u, 1.9 * u, 0.3 * u); c.strokeStyle = '#8a5a3c'; c.lineWidth = 0.32 * u; line(sx - 0.5 * u, fy - 0.3 * u, sx + 0.5 * u, fy + 0.2 * u); }
+      else if (k === 'sneakers') { c.fillStyle = '#f7f4f0'; ell(sx, fy, 1.15 * u, 0.68 * u); c.fillStyle = c2; c.fillRect(sx - 0.55 * u, fy - 0.2 * u, 0.9 * u, 0.22 * u); c.fillStyle = '#cfc6c0'; c.fillRect(sx - 1 * u, fy + 0.4 * u, 2 * u, 0.25 * u); }
+      else if (k === 'loafers') { c.fillStyle = '#6b4630'; ell(sx, fy, 1.1 * u, 0.6 * u); c.fillStyle = 'rgba(255,255,255,.3)'; ell(sx + fd * 0.3 * u, fy - 0.2 * u, 0.35 * u, 0.15 * u); }
+      else if (k === 'heels') { c.fillStyle = darken(c2, 0.1); ell(sx, fy - 0.1 * u, 0.95 * u, 0.5 * u); c.fillRect(fx - fd * 0.55 * u - 0.15 * u, fy, 0.3 * u, 0.6 * u); }
+      else { c.fillStyle = c2; ell(sx, fy, 1 * u, 0.55 * u); }
+    };
+
     const bob = o.walk ? -Math.abs(Math.sin(ph)) * 0.55 * u : Math.sin(t * 2.2 + x) * 0.18 * u;
-    let hipY;
-    c.lineWidth = 1.7 * u;
+    const hipY = o.sit ? gy - 1.4 * u : gy - 3.3 * u + bob;
     if (o.sit) {
-      hipY = gy - 1.4 * u;
-      c.strokeStyle = hj ? p.outfit : pants;
-      [-0.8, 0.8].forEach(dx => { c.beginPath(); c.moveTo(x + dx * u, hipY); c.lineTo(x + face * 3.8 * u + dx * 0.4 * u, gy - 0.6 * u); c.stroke(); });
-      c.fillStyle = shoe; [-0.4, 0.6].forEach(dx => { c.beginPath(); c.arc(x + face * 4.3 * u + dx * u, gy - 0.6 * u, 0.85 * u, 0, TAU); c.fill(); });
+      [-0.8, 0.8].forEach(dx => {
+        const fx = x + face * 3.8 * u + dx * 0.4 * u, fy = gy - 0.6 * u;
+        c.strokeStyle = legCol; c.lineWidth = legW * 0.85 * u; line(x + dx * u, hipY, fx, fy);
+        shoe(fx, fy + 0.1 * u);
+      });
     } else {
-      hipY = gy - 3.3 * u + bob;
       const a = o.walk ? Math.sin(ph) * 0.5 : 0;
       [[-0.9, a], [0.9, -a]].forEach(([dx, ang]) => {
-        const fx = x + dx * u + Math.sin(ang) * 3.1 * u, fy = hipY + Math.cos(ang) * 3.1 * u;
-        c.strokeStyle = pants; c.beginPath(); c.moveTo(x + dx * u, hipY); c.lineTo(fx, fy); c.stroke();
-        c.fillStyle = shoe; c.beginPath(); c.ellipse(fx + face * 0.4 * u, fy, 1 * u, 0.7 * u, 0, 0, TAU); c.fill();
+        const lx = x + dx * u, fx = lx + Math.sin(ang) * 3.1 * u, fy = hipY + Math.cos(ang) * 3.1 * u;
+        if (shortsTo) {
+          c.strokeStyle = p.skin; c.lineWidth = 1.15 * u; line(lx, hipY, fx, fy);
+          c.strokeStyle = legCol; c.lineWidth = legW * u; line(lx, hipY, lx + (fx - lx) * shortsTo, hipY + (fy - hipY) * shortsTo);
+        } else {
+          c.strokeStyle = legCol; c.lineWidth = legW * u; line(lx, hipY, fx, fy);
+          if (man && p.bottom === 'baggy') { c.strokeStyle = lighten(legCol, 0.25); c.lineWidth = legW * u; line(fx, fy - 0.7 * u, fx, fy - 0.3 * u); }
+          if (man && p.bottom === 'joggers') { c.strokeStyle = darken(legCol, 0.25); c.lineWidth = legW * u; line(fx, fy - 0.6 * u, fx, fy - 0.35 * u); }
+        }
+        shoe(fx, fy);
       });
     }
+
+    // Torso and garment
     const top = hipY - 5.2 * u;
-    // Body: a shirt for the man, a long modest dress for the hijab look, a short dress for long hair.
-    c.fillStyle = p.outfit; c.beginPath();
-    c.moveTo(x - 2.2 * u, top + 0.6 * u); c.quadraticCurveTo(x, top - 0.4 * u, x + 2.2 * u, top + 0.6 * u);
-    if (hj && o.sit) {
-      c.lineTo(x + 2.7 * u, hipY + 0.3 * u); c.lineTo(x + face * 5 * u, gy - 0.2 * u); c.lineTo(x - face * 2.9 * u, gy - 0.2 * u); c.lineTo(x - 2.7 * u, hipY + 0.3 * u);
-    } else if (hj) {
-      const hem = gy - 0.9 * u, sw = o.walk ? Math.sin(ph) * 0.45 * u : 0;
-      c.lineTo(x + 3.5 * u + sw, hem); c.quadraticCurveTo(x, hem + 0.9 * u, x - 3.5 * u + sw, hem);
-    } else {
-      const flare = p.type === 'woman' ? 0.9 * u : 0.15 * u;
-      c.lineTo(x + 2.6 * u + flare, hipY + 0.6 * u); c.quadraticCurveTo(x, hipY + 1.3 * u, x - 2.6 * u - flare, hipY + 0.6 * u);
-    }
-    c.closePath(); c.fill();
-    c.fillStyle = 'rgba(255,255,255,.2)'; c.beginPath(); c.ellipse(x - face * 0.8 * u, top + 2 * u, 0.8 * u, 1.6 * u, 0, 0, TAU); c.fill();
-    if (man) {
-      c.strokeStyle = 'rgba(255,255,255,.5)'; c.lineWidth = 0.35 * u;
+    const hem = hemKind === 'hip' ? hipY + 0.6 * u : hemKind === 'knee' ? hipY + 2.1 * u : gy - 0.8 * u;
+    const sw = o.walk && hemKind !== 'hip' ? Math.sin(ph) * 0.45 * u : 0;
+    const torso = (col, hemY, fl, waist) => {
+      c.fillStyle = col; c.beginPath();
+      c.moveTo(x - 2.2 * u, top + 0.6 * u); c.quadraticCurveTo(x, top - 0.4 * u, x + 2.2 * u, top + 0.6 * u);
+      if (waist) { c.lineTo(x + 2 * u, waist); c.quadraticCurveTo(x + fl * 0.55 * u, waist + 0.7 * u, x + fl * u + sw, hemY); }
+      else c.lineTo(x + fl * u + sw, hemY);
+      c.quadraticCurveTo(x, hemY + 0.9 * u, x - fl * u + sw, hemY);
+      if (waist) c.quadraticCurveTo(x - fl * 0.55 * u, waist + 0.7 * u, x - 2 * u, waist);
+      c.closePath(); c.fill();
+    };
+    if (o.sit && (hemKind !== 'hip' || garment === 'skirt')) {
+      const floor = longDown, col = garment === 'skirt' ? c2 : c1;
+      c.fillStyle = col; c.beginPath();
+      c.moveTo(x - 2.2 * u, top + 0.6 * u); c.quadraticCurveTo(x, top - 0.4 * u, x + 2.2 * u, top + 0.6 * u);
+      c.lineTo(x + 2.7 * u, hipY + 0.3 * u); c.lineTo(x + face * (floor ? 5 : 4.3) * u, hipY - 0.6 * u);
+      c.lineTo(x + face * (floor ? 5.3 : 4.6) * u, floor ? gy - 0.1 * u : hipY + 0.5 * u);
+      c.lineTo(x - face * 2.9 * u, floor ? gy - 0.1 * u : hipY + 0.7 * u); c.lineTo(x - 2.7 * u, hipY + 0.3 * u);
+      c.closePath(); c.fill();
+      if (garment === 'skirt') torso(c1, hipY, 2.5);
+      if (garment === 'saree') torso(c2, top + 2.3 * u, 2.35);
+    } else if (garment === 'skirt') { torso(c2, gy - 0.8 * u, 3.4); torso(c1, hipY + 0.2 * u, 2.6); }
+    else if (garment === 'gown') torso(c1, hem, 4.8, hipY - 1.4 * u);
+    else if (garment === 'saree') { torso(c1, hem, 3.3); torso(c2, top + 2.3 * u, 2.35); }
+    else torso(c1, hem, hemKind === 'floor' ? 3.5 : hemKind === 'knee' ? 3 : man ? 2.75 : 2.9);
+    c.fillStyle = 'rgba(255,255,255,.2)'; ell(x - face * 0.8 * u, top + 2 * u, 0.8 * u, 1.6 * u);
+
+    // Garment details
+    const crew = () => { c.strokeStyle = darken(c1, 0.22); c.lineWidth = 0.32 * u; c.beginPath(); c.arc(x, top + 0.1 * u, 0.9 * u, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke(); };
+    const folds = () => { c.strokeStyle = 'rgba(0,0,0,.09)'; c.lineWidth = 0.3 * u; [-1, 1].forEach(sd => { c.beginPath(); c.moveTo(x + sd * 1.1 * u, hipY - 0.8 * u); c.quadraticCurveTo(x + sd * 1.7 * u, hipY + 1.5 * u, x + sd * 2.1 * u, hem - 0.4 * u); c.stroke(); }); };
+    if (garment === 'shirt') {
+      c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 0.35 * u;
       c.beginPath(); c.moveTo(x - 0.9 * u, top + 0.3 * u); c.lineTo(x, top + 1.4 * u); c.lineTo(x + 0.9 * u, top + 0.3 * u); c.stroke();
+    } else if (['tshirt', 'fullsleeve', 'jeans', 'skirt'].includes(garment)) crew();
+    else if (garment === 'jumper') {
+      crew(); c.fillStyle = darken(c1, 0.14);
+      c.fillRect(x - (man ? 2.7 : 2.9) * u, hem - 0.55 * u, (man ? 5.4 : 5.8) * u, 0.55 * u);
+      c.strokeStyle = 'rgba(255,255,255,.18)'; c.lineWidth = 0.22 * u;
+      [-1.2, 0, 1.2].forEach(dx => line(x + dx * u, top + 1.2 * u, x + dx * u, hem - 0.8 * u));
+    } else if (garment === 'hoodie') {
+      c.fillStyle = darken(c1, 0.12); c.beginPath(); c.roundRect(x - 1.5 * u, hipY - 1.7 * u, 3 * u, 1.4 * u, 0.5 * u); c.fill();
+      c.strokeStyle = '#f5f0ea'; c.lineWidth = 0.22 * u; line(x - 0.5 * u, top + 0.5 * u, x - 0.6 * u, top + 2.3 * u); line(x + 0.5 * u, top + 0.5 * u, x + 0.6 * u, top + 2.3 * u);
+    } else if (garment === 'jacket') {
+      crew(); c.fillStyle = c2;
+      [-1, 1].forEach(sd => {
+        c.beginPath(); c.moveTo(x + sd * 2.2 * u, top + 0.6 * u); c.lineTo(x + sd * 0.55 * u, top + 0.7 * u);
+        c.lineTo(x + sd * 0.75 * u, hem + 0.3 * u); c.lineTo(x + sd * 2.75 * u, hem); c.closePath(); c.fill();
+      });
+      c.strokeStyle = lighten(c2, 0.3); c.lineWidth = 0.25 * u; [-1, 1].forEach(sd => line(x + sd * 0.6 * u, top + 0.8 * u, x + sd * 1.2 * u, top + 2 * u));
+    } else if (garment === 'kurta' || garment === 'thobe') {
+      c.strokeStyle = darken(c1, 0.25); c.lineWidth = 0.3 * u; line(x, top + 0.3 * u, x, top + 2.6 * u);
+      c.fillStyle = darken(c1, 0.3); [1.1, 1.8].forEach(dy => ell(x, top + dy * u, 0.18 * u, 0.18 * u));
+      if (garment === 'kurta' && !o.sit) { c.strokeStyle = 'rgba(0,0,0,.12)'; [-1, 1].forEach(sd => line(x + sd * 2.6 * u, hem - 1.2 * u, x + sd * 2.9 * u, hem)); }
+    } else if (garment === 'gown') {
+      c.fillStyle = c2; c.fillRect(x - 2.05 * u, hipY - 1.75 * u, 4.1 * u, 0.55 * u);
+      if (!o.sit) folds();
+    } else if ((garment === 'abaya' || garment === 'burqa') && !o.sit) folds();
+    else if (garment === 'saree') {
+      if (!o.sit) { c.strokeStyle = darken(c1, 0.2); c.lineWidth = 0.25 * u; [-0.5, 0, 0.5].forEach(dx => line(x + dx * u, hipY + 0.8 * u, x + dx * 1.3 * u, gy - 1.1 * u)); }
+      c.fillStyle = lighten(c1, 0.12); c.beginPath();
+      c.moveTo(x + 2.8 * u, hipY + 0.6 * u); c.lineTo(x + 1.3 * u, hipY + 1 * u); c.lineTo(x - 2.6 * u, top + 1.5 * u); c.lineTo(x - 1.8 * u, top + 0.05 * u);
+      c.closePath(); c.fill();
+      c.strokeStyle = c2; c.lineWidth = 0.32 * u; line(x + 1.3 * u, hipY + 1 * u, x - 2.6 * u, top + 1.5 * u);
     }
+
     // Arms
-    c.lineWidth = 1.3 * u;
     const sh = top + 1 * u;
     const arm = (side, ang, to) => {
       const sx = x + side * 2.1 * u;
       const ex = to ? to.x : sx + Math.sin(ang) * 3.3 * u, ey = to ? to.y : sh + Math.cos(ang) * 3.3 * u;
-      c.strokeStyle = sleeve; c.beginPath(); c.moveTo(sx, sh); c.lineTo(ex, ey); c.stroke();
-      c.fillStyle = p.skin; c.beginPath(); c.arc(ex, ey, 0.8 * u, 0, TAU); c.fill();
+      const k = sleeveKind === 'full' ? 1 : sleeveKind === 'rolled' ? 0.55 : 0.3;
+      if (k < 1) { c.strokeStyle = p.skin; c.lineWidth = 1.15 * u; line(sx, sh, ex, ey); }
+      c.strokeStyle = sleeveCol; c.lineWidth = 1.35 * u; line(sx, sh, sx + (ex - sx) * k, sh + (ey - sh) * k);
+      if (k === 1 && (garment === 'jumper' || garment === 'hoodie')) { c.strokeStyle = darken(sleeveCol, 0.18); c.lineWidth = 1.35 * u; line(ex - (ex - sx) * 0.12, ey - (ey - sh) * 0.12, ex - (ex - sx) * 0.05, ey - (ey - sh) * 0.05); }
+      c.fillStyle = p.skin; ell(ex, ey, 0.78 * u, 0.78 * u);
       return { x: ex, y: ey };
     };
     const swing = o.walk ? Math.sin(ph) * 0.5 : 0;
@@ -637,104 +744,210 @@ button { cursor: pointer; }
     let handR;
     if (o.wave) handR = arm(1, Math.PI - 0.5 + Math.sin(t * (o.waveSpeed || 9)) * 0.45, null);
     else handR = arm(1, o.holdSide === 1 ? 0 : 0.25 + swing, o.holdSide === 1 ? o.handTo : null);
+    if (garment === 'churidar') {
+      c.strokeStyle = c2; c.lineWidth = 0.9 * u;
+      c.beginPath(); c.moveTo(x - 2.3 * u, top + 0.7 * u); c.quadraticCurveTo(x, top + 3 * u, x + 2.3 * u, top + 0.7 * u); c.stroke();
+      c.lineWidth = 0.75 * u; [-1, 1].forEach(sd => line(x + sd * 2.5 * u, top + 0.8 * u, x + sd * 2.9 * u, hipY + 1 * u));
+    }
+
     // Head
     const hx = x + face * 0.2 * u, hy = top - 3.9 * u, r = 4.3 * u;
-    if (hj) {
-      c.fillStyle = p.hijab;
-      c.beginPath(); c.ellipse(hx, hy + 0.1 * u, r * 1.18, r * 1.2, 0, 0, TAU); c.fill();
-      c.beginPath();
-      c.moveTo(hx - r * 1.12, hy + r * 0.2);
-      c.quadraticCurveTo(hx - r * 1.4, top + 2.6 * u, hx - r * 0.75, top + 3.6 * u);
-      c.quadraticCurveTo(hx, top + 4.6 * u, hx + r * 0.75, top + 3.6 * u);
-      c.quadraticCurveTo(hx + r * 1.4, top + 2.6 * u, hx + r * 1.12, hy + r * 0.2);
-      c.closePath(); c.fill();
-      c.fillStyle = 'rgba(0,0,0,.09)'; c.beginPath(); c.ellipse(hx - face * r * 0.45, top + 2.2 * u, r * 0.55, r * 0.3, 0, 0, TAU); c.fill();
-      c.fillStyle = 'rgba(255,255,255,.2)'; c.beginPath(); c.ellipse(hx - face * r * 0.4, hy - r * 0.6, r * 0.45, r * 0.2, -0.4 * (face || 1), 0, TAU); c.fill();
-      const fx = hx + face * 0.25 * u, fy = hy + 0.55 * u, fr = r * 0.78;
-      c.fillStyle = p.skin; c.beginPath(); c.ellipse(fx, fy, fr, fr * 1.04, 0, 0, TAU); c.fill();
-      c.strokeStyle = lighten(p.hijab, 0.6); c.lineWidth = 0.75 * u; c.beginPath(); c.arc(fx, fy, fr, Math.PI * 1.1, Math.PI * 1.9); c.stroke();
-      c.fillStyle = '#fff3c4'; c.beginPath(); c.arc(hx - (face || 1) * r * 0.78, hy + r * 0.8, 0.45 * u, 0, TAU); c.fill();
-    } else {
-      if (p.type === 'woman') { c.fillStyle = p.hair; c.beginPath(); c.ellipse(hx - face * 0.3 * u, hy + 2.4 * u, r * 1.08, r * 1.45, 0, 0, TAU); c.fill(); }
-      c.fillStyle = p.skin; c.beginPath(); c.arc(hx, hy, r, 0, TAU); c.fill();
-      c.fillStyle = 'rgba(200,120,110,.12)'; c.beginPath(); c.arc(hx, hy + r * 0.25, r * 0.92, 0.1 * Math.PI, 0.9 * Math.PI); c.fill();
-      c.fillStyle = p.hair; c.beginPath();
+    const hs = p.hairStyle || (man ? 'short' : 'free');
+    const capPath = dip => {
+      c.fillStyle = H; c.beginPath();
       c.arc(hx, hy, r * 1.05, Math.PI * 1.02, Math.PI * 1.98);
       c.quadraticCurveTo(hx + r * 0.9, hy - r * 0.05, hx + r * 0.55 * face + r * 0.2, hy - r * 0.3);
-      c.quadraticCurveTo(hx + r * 0.1 * face, hy + r * (man ? -0.1 : 0.05), hx - r * 0.25 * face, hy - r * 0.35);
+      c.quadraticCurveTo(hx + r * 0.1 * face, hy + r * dip, hx - r * 0.25 * face, hy - r * 0.35);
       c.quadraticCurveTo(hx - r * 0.7 * face, hy + r * 0.15, hx - r * 1.03, hy + r * 0.08);
       c.closePath(); c.fill();
-      if (man) { c.beginPath(); c.ellipse(hx - r * 0.95, hy + r * 0.1, r * 0.2, r * 0.36, 0, 0, TAU); c.ellipse(hx + r * 0.95, hy + r * 0.1, r * 0.2, r * 0.36, 0, 0, TAU); c.fill(); }
-      c.strokeStyle = lighten(p.hair, 0.25); c.lineWidth = 0.6 * u; c.beginPath(); c.arc(hx - r * 0.15, hy - r * 0.2, r * 0.7, Math.PI * 1.25, Math.PI * 1.6); c.stroke();
-    }
-    // Face
-    const ex = hx + face * (hj ? 0.6 : 0.55) * u, ey = hy + (hj ? 1.05 : 0.7) * u, gap = (hj ? 1.4 : 1.55) * u;
-    c.fillStyle = man ? 'rgba(255,120,150,.18)' : 'rgba(255,120,150,.38)';
-    [-1, 1].forEach(sd => { c.beginPath(); c.ellipse(ex + sd * (hj ? 2.2 : 2.5) * u, ey + 1.3 * u, 0.9 * u, 0.5 * u, 0, 0, TAU); c.fill(); });
-    const closed = o.sleep || o.blink;
-    if (closed) {
-      c.strokeStyle = '#3b2a3f'; c.lineWidth = 0.5 * u;
-      [-1, 1].forEach(sd => { c.beginPath(); c.arc(ex + sd * gap, ey - 0.1 * u, 0.6 * u, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke(); });
-    } else if (o.happy) {
-      c.strokeStyle = '#3b2a3f'; c.lineWidth = 0.55 * u;
-      [-1, 1].forEach(sd => { c.beginPath(); c.arc(ex + sd * gap, ey + 0.3 * u, 0.65 * u, 1.15 * Math.PI, 1.85 * Math.PI); c.stroke(); });
+    };
+    const tufts = () => { c.fillStyle = H; ell(hx - r * 0.95, hy + r * 0.12, r * 0.2, r * 0.36); ell(hx + r * 0.95, hy + r * 0.12, r * 0.2, r * 0.36); };
+    const shine = () => { c.strokeStyle = lighten(H, 0.25); c.lineWidth = 0.6 * u; c.beginPath(); c.arc(hx - r * 0.15, hy - r * 0.2, r * 0.7, Math.PI * 1.25, Math.PI * 1.6); c.stroke(); };
+    let fx = hx, fy = hy, fr = r, niqab = false;
+
+    if (man && garment === 'hoodie') { c.fillStyle = darken(c1, 0.1); ell(hx - face * 0.3 * u, hy + r * 0.85, r * 1, r * 0.55); }
+    if (hj) {
+      const st = p.hijabStyle || 'classic';
+      if (st === 'wrap') {
+        c.fillStyle = lighten(p.hijab, 0.35); ell(hx, top - 0.2 * u, r * 0.6, r * 0.42);
+        c.fillStyle = p.skin; c.beginPath(); c.arc(hx, hy, r, 0, TAU); c.fill();
+        c.fillStyle = p.hijab; c.beginPath();
+        c.arc(hx, hy - r * 0.05, r * 1.12, Math.PI * 0.92, Math.PI * 2.08);
+        c.quadraticCurveTo(hx + r * 0.6, hy - r * 0.15, hx, hy - r * 0.45);
+        c.quadraticCurveTo(hx - r * 0.6, hy - r * 0.15, hx - r * 1.12 * Math.cos(Math.PI * 0.08), hy + r * 0.35);
+        c.closePath(); c.fill();
+        ell(hx - fd * r * 0.55, hy - r * 1.05, r * 0.55, r * 0.5);
+        c.strokeStyle = darken(p.hijab, 0.18); c.lineWidth = 0.35 * u;
+        [[-0.6, -0.9, 0.5, -0.6], [-0.2, -1.05, 0.8, -0.3]].forEach(([a1, b1, a2, b2]) => { c.beginPath(); c.moveTo(hx + a1 * r, hy + b1 * r); c.quadraticCurveTo(hx + (a1 + a2) / 2 * r, hy + (b1 - 0.15) * r, hx + a2 * r, hy + b2 * r); c.stroke(); });
+      } else {
+        const drapeY = st === 'khimar' ? hipY + 0.5 * u : top + 3.6 * u, wide = st === 'khimar' ? 1.65 : 1.4;
+        c.fillStyle = p.hijab;
+        ell(hx, hy + 0.1 * u, r * 1.18, r * 1.2);
+        c.beginPath();
+        c.moveTo(hx - r * 1.12, hy + r * 0.2);
+        c.quadraticCurveTo(hx - r * wide, top + 2.6 * u, hx - r * (st === 'khimar' ? 1.15 : 0.75), drapeY);
+        c.quadraticCurveTo(hx, drapeY + 1 * u, hx + r * (st === 'khimar' ? 1.15 : 0.75), drapeY);
+        c.quadraticCurveTo(hx + r * wide, top + 2.6 * u, hx + r * 1.12, hy + r * 0.2);
+        c.closePath(); c.fill();
+        c.fillStyle = 'rgba(0,0,0,.09)'; ell(hx - face * r * 0.45, top + 2.2 * u, r * 0.55, r * 0.3);
+        c.fillStyle = 'rgba(255,255,255,.2)'; ell(hx - face * r * 0.4, hy - r * 0.6, r * 0.45, r * 0.2, -0.4 * fd);
+        fx = hx + face * 0.25 * u; fy = hy + 0.55 * u; fr = r * 0.78;
+        c.fillStyle = p.skin; ell(fx, fy, fr, fr * 1.04);
+        c.strokeStyle = lighten(p.hijab, 0.6); c.lineWidth = 0.75 * u; c.beginPath(); c.arc(fx, fy, fr, Math.PI * 1.1, Math.PI * 1.9); c.stroke();
+        c.fillStyle = '#fff3c4'; ell(hx - fd * r * 0.78, hy + r * 0.8, 0.45 * u, 0.45 * u);
+        niqab = st === 'niqab';
+      }
     } else {
+      // Hair behind the head
+      c.fillStyle = H;
+      if (hs === 'free') ell(hx - face * 0.3 * u, hy + 2.6 * u, r * 1.12, r * 1.6);
+      else if (hs === 'long') ell(hx, hy + 1.2 * u, r * 1.1, r * 1.25);
+      else if (hs === 'bob') ell(hx, hy + 0.6 * u, r * 1.13, r * 1.12);
+      else if (hs === 'wolf') {
+        c.beginPath(); c.moveTo(hx - r * 1.1, hy - r * 0.2); c.lineTo(hx - r * 1.18, hy + r * 0.95);
+        for (let i = 0; i <= 6; i++) c.lineTo(hx - r * 1.18 + (i + 0.5) * r * 0.34, hy + r * (i % 2 ? 1.05 : 1.3));
+        c.lineTo(hx + r * 1.18, hy + r * 0.95); c.lineTo(hx + r * 1.1, hy - r * 0.2); c.closePath(); c.fill();
+      } else if (hs === 'curls') {
+        for (let k = 0; k <= 12; k++) { const th = Math.PI * (0.12 - k * (1.24 / 12)); ell(hx + Math.cos(th) * r * 1.05, hy + Math.sin(th) * r * 1.05, r * 0.4, r * 0.4); }
+        [-1, 1].forEach(sd => { ell(hx + sd * r * 1.05, hy + r * 0.6, r * 0.38, r * 0.38); ell(hx + sd * r * 0.95, hy + r * 1, r * 0.34, r * 0.34); });
+      } else if (hs === 'ponytail') {
+        c.save(); c.translate(hx - fd * r * 0.9, hy - r * 0.2); c.rotate(fd * 0.35 + Math.sin(t * 2.5) * 0.12); ell(0, r * 0.85, r * 0.36, r * 0.95); c.restore();
+      }
+      c.fillStyle = p.skin; c.beginPath(); c.arc(hx, hy, r, 0, TAU); c.fill();
+      c.fillStyle = 'rgba(200,120,110,.12)'; c.beginPath(); c.arc(hx, hy + r * 0.25, r * 0.92, 0.1 * Math.PI, 0.9 * Math.PI); c.fill();
+      // Hair on top
+      if (hs === 'bald') { c.fillStyle = 'rgba(255,255,255,.28)'; ell(hx - r * 0.3, hy - r * 0.6, r * 0.35, r * 0.18, -0.4); }
+      else if (hs === 'buzz') { c.globalAlpha = 0.6; c.fillStyle = H; c.beginPath(); c.ellipse(hx, hy - r * 0.3, r * 1.0, r * 0.74, 0, Math.PI, TAU); c.closePath(); c.fill(); tufts(); c.globalAlpha = 1; }
+      else if (hs === 'curlyshort') {
+        c.fillStyle = H; c.beginPath(); c.ellipse(hx, hy - r * 0.3, r * 1.0, r * 0.75, 0, Math.PI, TAU); c.closePath(); c.fill();
+        for (let k = 0; k <= 8; k++) { const th = Math.PI * (-0.95 + k * 0.1125); ell(hx + Math.cos(th) * r * 0.98, hy - r * 0.15 + Math.sin(th) * r * 0.95, r * 0.33, r * 0.33); }
+      } else {
+        const dip = hs === 'short' || hs === 'manbun' ? -0.1 : hs === 'sidepart' ? -0.15 : hs === 'quiff' ? -0.1 : 0.05;
+        capPath(dip);
+        if (hs === 'short' || hs === 'sidepart' || hs === 'quiff') tufts();
+        if (hs === 'sidepart') { c.fillStyle = H; ell(hx + face * r * 0.3, hy - r * 0.75, r * 0.6, r * 0.32, face * 0.2); c.strokeStyle = lighten(H, 0.35); c.lineWidth = 0.4 * u; line(hx - fd * r * 0.45, hy - r * 1.02, hx - fd * r * 0.35, hy - r * 0.55); }
+        if (hs === 'quiff') { c.fillStyle = H; ell(hx + face * r * 0.25, hy - r * 1.08, r * 0.62, r * 0.4, -face * 0.2); }
+        if (hs === 'manbun') { c.fillStyle = H; ell(hx - fd * r * 0.25, hy - r * 1.22, r * 0.45, r * 0.42); c.strokeStyle = c2; c.lineWidth = 0.4 * u; line(hx - fd * r * 0.25 - r * 0.3, hy - r * 0.95, hx - fd * r * 0.25 + r * 0.3, hy - r * 0.95); }
+        if (hs === 'bun') { c.fillStyle = H; ell(hx, hy - r * 1.28, r * 0.55, r * 0.5); c.fillStyle = c2; c.fillRect(hx - r * 0.35, hy - r * 0.98, r * 0.7, 0.45 * u); }
+        if (hs === 'wolf') {
+          c.fillStyle = H; c.beginPath(); c.moveTo(hx - r * 0.95, hy - r * 0.4);
+          for (let i = 0; i <= 7; i++) c.lineTo(hx - r * 0.95 + (i + 0.5) * r * 0.24, hy - r * (i % 2 ? 0.35 : 0.08));
+          c.lineTo(hx + r * 0.95, hy - r * 0.4); c.closePath(); c.fill();
+        }
+        if (hs === 'curls') { c.fillStyle = H; for (let k = 0; k < 5; k++) ell(hx - r * 0.6 + k * r * 0.3, hy - r * 0.45, r * 0.26, r * 0.24); }
+        if (hs === 'ponytail') { c.fillStyle = c2; ell(hx - fd * r * 0.92, hy - r * 0.15, 0.5 * u, 0.5 * u); }
+        if (hs === 'braids' || hs === 'sidebraid') {
+          const sides = hs === 'braids' ? [-1, 1] : [fd];
+          sides.forEach(sd => {
+            c.fillStyle = H;
+            for (let j = 0; j < 6; j++) ell(hx + sd * r * (0.92 + (hs === 'sidebraid' ? j * 0.03 : 0)), hy + r * (0.35 + j * 0.3), r * 0.24, r * 0.19);
+            c.fillStyle = c2; c.fillRect(hx + sd * r * 0.92 - 0.5 * u, hy + r * 2.05, 1 * u, 0.4 * u);
+          });
+          c.strokeStyle = lighten(H, 0.3); c.lineWidth = 0.3 * u; line(hx, hy - r * 1.02, hx, hy - r * 0.55);
+        }
+        shine();
+      }
+    }
+
+    // Face
+    const ex = fx + face * (hj ? 0.35 : 0.55) * u, ey = fy + (hj ? 0.5 : 0.7) * u, gap = (hj ? 1.4 : 1.55) * u;
+    if (!niqab) { c.fillStyle = man ? 'rgba(255,120,150,.18)' : 'rgba(255,120,150,.38)'; [-1, 1].forEach(sd => ell(ex + sd * (hj ? 2.2 : 2.5) * u, ey + 1.3 * u, 0.9 * u, 0.5 * u)); }
+    const closed = o.sleep || o.blink;
+    if (closed) { c.strokeStyle = '#3b2a3f'; c.lineWidth = 0.5 * u; [-1, 1].forEach(sd => { c.beginPath(); c.arc(ex + sd * gap, ey - 0.1 * u, 0.6 * u, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke(); }); }
+    else if (o.happy) { c.strokeStyle = '#3b2a3f'; c.lineWidth = 0.55 * u; [-1, 1].forEach(sd => { c.beginPath(); c.arc(ex + sd * gap, ey + 0.3 * u, 0.65 * u, 1.15 * Math.PI, 1.85 * Math.PI); c.stroke(); }); }
+    else {
       [-1, 1].forEach(sd => {
-        c.fillStyle = darken(p.eyes || '#3b2a3f', 0.35); c.beginPath(); c.ellipse(ex + sd * gap, ey, 0.5 * u, 0.72 * u, 0, 0, TAU); c.fill();
-        c.fillStyle = '#ffffff'; c.beginPath(); c.arc(ex + sd * gap + 0.18 * u, ey - 0.28 * u, 0.2 * u, 0, TAU); c.fill();
+        c.fillStyle = darken(p.eyes || '#3b2a3f', 0.35); ell(ex + sd * gap, ey, 0.5 * u, 0.72 * u);
+        c.fillStyle = '#ffffff'; ell(ex + sd * gap + 0.18 * u, ey - 0.28 * u, 0.2 * u, 0.2 * u);
       });
-      if (!man) {
-        c.strokeStyle = '#3b2a3f'; c.lineWidth = 0.3 * u;
-        [-1, 1].forEach(sd => { c.beginPath(); c.moveTo(ex + sd * (gap + 0.35 * u), ey - 0.45 * u); c.lineTo(ex + sd * (gap + 0.85 * u), ey - 0.85 * u); c.stroke(); });
-      }
+      if (!man) { c.strokeStyle = '#3b2a3f'; c.lineWidth = 0.3 * u; [-1, 1].forEach(sd => line(ex + sd * (gap + 0.35 * u), ey - 0.45 * u, ex + sd * (gap + 0.85 * u), ey - 0.85 * u)); }
     }
-    if (man) {
-      c.strokeStyle = p.hair; c.lineWidth = 0.55 * u;
-      [-1, 1].forEach(sd => { c.beginPath(); c.moveTo(ex + sd * gap - 0.6 * u, ey - 1.3 * u - (sd > 0 ? 0 : 0.1 * u)); c.lineTo(ex + sd * gap + 0.6 * u, ey - 1.3 * u - (sd > 0 ? 0.1 * u : 0)); c.stroke(); });
-    }
-    const stache = man && p.facial !== 'none';
-    if (man && p.facial === 'beard') {
-      c.strokeStyle = p.hair; c.lineWidth = 1.4 * u; c.beginPath(); c.arc(hx, hy + 0.2 * u, r * 0.88, 0.12 * Math.PI, 0.88 * Math.PI); c.stroke();
-      c.fillStyle = p.hair; c.beginPath(); c.ellipse(hx + face * 0.3 * u, hy + r * 0.92, r * 0.42, r * 0.28, 0, 0, TAU); c.fill();
-    }
-    if (man && p.facial === 'full') {
-      // Full, natural beard: covers the jaw and chin with soft, untrimmed edges.
-      const bx = hx + face * 0.25 * u;
-      c.fillStyle = p.hair; c.beginPath();
-      c.moveTo(bx - r * 1.0, hy - 0.1 * u);
-      c.quadraticCurveTo(bx - r * 1.14, hy + r * 0.95, bx - r * 0.6, hy + r * 1.32);
-      const tufts = 5;
-      for (let i = 0; i < tufts; i++) {
-        const x0 = bx - r * 0.6 + (i / tufts) * r * 1.2, x1 = bx - r * 0.6 + ((i + 1) / tufts) * r * 1.2;
-        const depth = 1.48 + Math.sin((i + 0.5) / tufts * Math.PI) * 0.22;
-        c.quadraticCurveTo((x0 + x1) / 2, hy + r * depth, x1, hy + r * (1.32 + Math.sin((i + 1) / tufts * Math.PI) * 0.12));
-      }
-      c.quadraticCurveTo(bx + r * 1.14, hy + r * 0.95, bx + r * 1.0, hy - 0.1 * u);
+    if (man) { c.strokeStyle = hs === 'bald' ? darken(p.skin, 0.45) : H; c.lineWidth = 0.55 * u; [-1, 1].forEach(sd => line(ex + sd * gap - 0.6 * u, ey - 1.3 * u - (sd > 0 ? 0 : 0.1 * u), ex + sd * gap + 0.6 * u, ey - 1.3 * u - (sd > 0 ? 0.1 * u : 0))); }
+
+    // Facial hair
+    const fac = man ? (p.facial || 'none') : 'none';
+    const bx = hx + face * 0.25 * u;
+    const STACHE = { full: 'classic', boxed: 'classic', short: 'classic', circle: 'classic', moustache: 'classic', vandyke: 'handlebar', handlebar: 'handlebar', anchor: 'pencil', pencil: 'pencil', chevron: 'chevron' };
+    const stache = STACHE[fac] || null, full = fac === 'full';
+    const innerEdge = () => {
       c.lineTo(bx + r * 0.8, hy - 0.1 * u);
       c.quadraticCurveTo(bx + r * 0.78, hy + r * 0.5, bx + r * 0.38, hy + r * 0.6);
       c.quadraticCurveTo(bx, hy + r * 0.52, bx - r * 0.38, hy + r * 0.6);
       c.quadraticCurveTo(bx - r * 0.78, hy + r * 0.5, bx - r * 0.8, hy - 0.1 * u);
+    };
+    c.fillStyle = H;
+    if (fac === 'full') {
+      c.beginPath(); c.moveTo(bx - r * 1.0, hy - 0.1 * u);
+      c.quadraticCurveTo(bx - r * 1.14, hy + r * 0.95, bx - r * 0.6, hy + r * 1.32);
+      for (let i = 0; i < 5; i++) {
+        const x0 = bx - r * 0.6 + (i / 5) * r * 1.2, x1 = bx - r * 0.6 + ((i + 1) / 5) * r * 1.2;
+        c.quadraticCurveTo((x0 + x1) / 2, hy + r * (1.48 + Math.sin((i + 0.5) / 5 * Math.PI) * 0.22), x1, hy + r * (1.32 + Math.sin((i + 1) / 5 * Math.PI) * 0.12));
+      }
+      c.quadraticCurveTo(bx + r * 1.14, hy + r * 0.95, bx + r * 1.0, hy - 0.1 * u);
+      innerEdge(); c.closePath(); c.fill();
+      c.strokeStyle = lighten(H, 0.22); c.lineWidth = 0.28 * u;
+      [[-0.55, 0.85, -0.45, 1.2], [-0.15, 0.95, -0.1, 1.35], [0.25, 0.92, 0.3, 1.3], [0.6, 0.8, 0.55, 1.12]].forEach(([a1, b1, a2, b2]) => line(bx + a1 * r, hy + b1 * r, bx + a2 * r, hy + b2 * r));
+    } else if (fac === 'boxed' || fac === 'stubble') {
+      if (fac === 'stubble') c.globalAlpha = 0.32;
+      c.beginPath(); c.moveTo(bx - r * 0.98, hy - 0.1 * u); c.lineTo(bx - r * 0.98, hy + r * 0.72);
+      c.quadraticCurveTo(bx - r * 0.82, hy + r * 1.2, bx, hy + r * (fac === 'stubble' ? 1.12 : 1.24));
+      c.quadraticCurveTo(bx + r * 0.82, hy + r * 1.2, bx + r * 0.98, hy + r * 0.72); c.lineTo(bx + r * 0.98, hy - 0.1 * u);
+      innerEdge(); c.closePath(); c.fill();
+      if (fac === 'stubble') { ell(ex, ey + 1.25 * u, 1.4 * u, 0.5 * u); c.globalAlpha = 1; }
+    } else if (fac === 'short') {
+      c.strokeStyle = H; c.lineWidth = 1.4 * u; c.beginPath(); c.arc(hx, hy + 0.2 * u, r * 0.88, 0.12 * Math.PI, 0.88 * Math.PI); c.stroke();
+      ell(bx, hy + r * 0.92, r * 0.42, r * 0.28);
+    } else if (fac === 'goatee') { ell(bx, hy + r * 0.98, r * 0.3, r * 0.27); ell(ex, ey + 2.55 * u, 0.4 * u, 0.28 * u); }
+    else if (fac === 'vandyke') {
+      c.beginPath(); c.moveTo(bx - r * 0.32, hy + r * 0.74);
+      c.quadraticCurveTo(bx - r * 0.25, hy + r * 1.1, bx + face * 0.1 * u, hy + r * 1.34);
+      c.quadraticCurveTo(bx + r * 0.25, hy + r * 1.1, bx + r * 0.32, hy + r * 0.74);
+      c.quadraticCurveTo(bx, hy + r * 0.82, bx - r * 0.32, hy + r * 0.74); c.closePath(); c.fill();
+    } else if (fac === 'anchor') {
+      c.beginPath(); c.moveTo(bx - r * 0.72, hy + r * 0.7);
+      c.quadraticCurveTo(bx - r * 0.55, hy + r * 1.15, bx, hy + r * 1.3);
+      c.quadraticCurveTo(bx + r * 0.55, hy + r * 1.15, bx + r * 0.72, hy + r * 0.7);
+      c.lineTo(bx + r * 0.56, hy + r * 0.78); c.quadraticCurveTo(bx + r * 0.3, hy + r * 1.02, bx + r * 0.12, hy + r * 0.86);
+      c.lineTo(bx - r * 0.12, hy + r * 0.86); c.quadraticCurveTo(bx - r * 0.3, hy + r * 1.02, bx - r * 0.56, hy + r * 0.78);
       c.closePath(); c.fill();
-      c.strokeStyle = lighten(p.hair, 0.22); c.lineWidth = 0.28 * u;
-      [[-0.55, 0.85, -0.45, 1.2], [-0.15, 0.95, -0.1, 1.35], [0.25, 0.92, 0.3, 1.3], [0.6, 0.8, 0.55, 1.12]].forEach(([a1, b1, a2, b2]) => {
-        c.beginPath(); c.moveTo(bx + a1 * r, hy + b1 * r); c.lineTo(bx + a2 * r, hy + b2 * r); c.stroke();
-      });
+      c.fillRect(ex - 0.25 * u, ey + 2.35 * u, 0.5 * u, r * 0.3);
+    } else if (fac === 'circle') {
+      c.strokeStyle = H; c.lineWidth = 0.65 * u; c.beginPath(); c.ellipse(ex, ey + 2 * u, 1.05 * u, 0.95 * u, 0, 0, TAU); c.stroke();
+      ell(ex, ey + 3 * u, 0.6 * u, 0.4 * u);
     }
-    const full = man && p.facial === 'full';
+
+    // Mouth (hidden under a niqab), then moustache
     const my = ey + (full ? 2.05 : stache ? 1.9 : 1.3) * u;
-    if (o.blow) { c.fillStyle = '#a34e63'; c.beginPath(); c.ellipse(ex - face * 0.3 * u, my + 0.4 * u, 0.42 * u, 0.5 * u, 0, 0, TAU); c.fill(); }
-    else { c.strokeStyle = '#a34e63'; c.lineWidth = 0.45 * u; c.beginPath(); c.arc(ex, my, 0.5 * u, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke(); }
-    if (stache) {
-      c.fillStyle = p.hair; c.beginPath();
+    if (!niqab) {
+      if (o.blow) { c.fillStyle = '#a34e63'; ell(ex - face * 0.3 * u, my + 0.4 * u, 0.42 * u, 0.5 * u); }
+      else { c.strokeStyle = '#a34e63'; c.lineWidth = 0.45 * u; c.beginPath(); c.arc(ex, my, 0.5 * u, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke(); }
+    }
+    c.fillStyle = H; c.strokeStyle = H;
+    if (stache === 'classic') {
       const mw = full ? 1.2 : 0.95, mh = full ? 0.6 : 0.42;
-      c.ellipse(ex - 0.78 * u, ey + 1.25 * u, mw * u, mh * u, -0.3, 0, TAU);
-      c.ellipse(ex + 0.78 * u, ey + 1.25 * u, mw * u, mh * u, 0.3, 0, TAU);
-      c.fill();
+      c.beginPath(); c.ellipse(ex - 0.78 * u, ey + 1.25 * u, mw * u, mh * u, -0.3, 0, TAU); c.ellipse(ex + 0.78 * u, ey + 1.25 * u, mw * u, mh * u, 0.3, 0, TAU); c.fill();
+    } else if (stache === 'chevron') {
+      c.beginPath(); c.moveTo(ex - 1.55 * u, ey + 1.6 * u); c.lineTo(ex - 1.05 * u, ey + 0.85 * u); c.lineTo(ex + 1.05 * u, ey + 0.85 * u); c.lineTo(ex + 1.55 * u, ey + 1.6 * u);
+      c.quadraticCurveTo(ex, ey + 1.8 * u, ex - 1.55 * u, ey + 1.6 * u); c.closePath(); c.fill();
+    } else if (stache === 'handlebar') {
+      c.beginPath(); c.ellipse(ex - 0.7 * u, ey + 1.2 * u, 0.8 * u, 0.28 * u, -0.15, 0, TAU); c.ellipse(ex + 0.7 * u, ey + 1.2 * u, 0.8 * u, 0.28 * u, 0.15, 0, TAU); c.fill();
+      c.lineWidth = 0.3 * u;
+      [-1, 1].forEach(sd => { c.beginPath(); c.moveTo(ex + sd * 1.35 * u, ey + 1.25 * u); c.quadraticCurveTo(ex + sd * 2.05 * u, ey + 1.35 * u, ex + sd * 1.95 * u, ey + 0.75 * u); c.stroke(); ell(ex + sd * 1.92 * u, ey + 0.72 * u, 0.2 * u, 0.2 * u); });
+    } else if (stache === 'pencil') {
+      c.lineWidth = 0.3 * u; c.beginPath(); c.moveTo(ex - 1.05 * u, ey + 1.4 * u); c.quadraticCurveTo(ex, ey + 1.05 * u, ex + 1.05 * u, ey + 1.4 * u); c.stroke();
+    }
+    if (niqab) {
+      c.fillStyle = darken(p.hijab, 0.06); c.beginPath();
+      c.moveTo(fx - fr * 1.02, ey + 0.95 * u);
+      c.quadraticCurveTo(fx, ey + 0.7 * u, fx + fr * 1.02, ey + 0.95 * u);
+      c.quadraticCurveTo(fx + fr * 1.05, fy + fr * 1.15, fx, fy + fr * 1.2);
+      c.quadraticCurveTo(fx - fr * 1.05, fy + fr * 1.15, fx - fr * 1.02, ey + 0.95 * u);
+      c.closePath(); c.fill();
     }
     if (p.glasses) {
       c.strokeStyle = 'rgba(55,40,60,.85)'; c.lineWidth = 0.35 * u;
       [-1, 1].forEach(sd => { c.beginPath(); c.arc(ex + sd * gap, ey, 1.05 * u, 0, TAU); c.stroke(); });
-      c.beginPath(); c.moveTo(ex - gap + 1.05 * u, ey); c.lineTo(ex + gap - 1.05 * u, ey); c.stroke();
+      line(ex - gap + 1.05 * u, ey, ex + gap - 1.05 * u, ey);
     }
     if (o.sleep) {
       c.fillStyle = 'rgba(255,255,255,.9)'; c.font = `800 ${2.6 * u}px Nunito, sans-serif`;

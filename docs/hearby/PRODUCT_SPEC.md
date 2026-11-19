@@ -70,7 +70,15 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 
 ### 4.5 Avatars (v1)
 - The app **creates a cute default chibi pair** automatically, so it works right away.
-- An **optional avatar builder**: style (for example a man with facial hair, a woman in a hijab with a modest long dress, or long hair), skin tone, hair or hijab color, outfit color, facial hair (full natural beard, short beard, moustache only, clean shaven), glasses and accessories.
+- An **optional avatar builder**, all mix-and-match:
+  - **Style:** man, woman in hijab, woman with hair showing.
+  - **Hijab styles:** classic, khimar (long), turban wrap, with niqab.
+  - **Hair:** short, buzz cut, side part, quiff, short curls, man bun, shoulder length, wolf cut, long and free, bun, ponytail, two braids, side braid, bob, big curls, bald.
+  - **Beards and moustaches:** full natural beard, short boxed beard, short beard, 3-day stubble, goatee, Van Dyke, anchor, circle beard, classic, chevron, handlebar and pencil moustaches, clean shaven.
+  - **Men's clothing:** shirt with rolled sleeves, full-sleeve tee, t-shirt, jumper, hoodie, jacket over tee, kurta, thobe; trousers, baggy jeans, joggers, shorts.
+  - **Women's clothing:** abaya, gown, churidar with dupatta, saree, burqa (parda), top and jeans, top and long skirt, jumper dress.
+  - **Shoes:** sneakers, boots, loafers, sandals, flats, heels.
+  - **Colors:** skin tone, eyes, hair or hijab, main outfit color and a second color; plus glasses.
 - Modest and cultural styles (hijab, modest dress, beards, and more over time) are first-class options, not afterthoughts.
 - Built from **layered sprites** so every customization works with every animation.
 - *Later:* generate an avatar from a selfie.

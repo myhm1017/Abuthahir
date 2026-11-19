@@ -173,6 +173,31 @@ button { cursor: pointer; }
   100% { opacity: 0; transform: translate(0, 0) scale(2.6) rotate(0); filter: blur(8px) }
 }
 
+/* ---------- Special days ---------- */
+.celebrate { position: absolute; inset: 0; z-index: 8; pointer-events: none; animation: fadeIn .4s both; }
+.celebrate.out { animation: fadeOut .5s both; }
+.celebrate canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cel-msg { position: absolute; left: 7%; right: 7%; top: 13%; display: grid; gap: .25em; justify-items: center; text-align: center; color: #fff; font-family: var(--display); font-weight: 600; line-height: 1.1; text-wrap: balance; text-shadow: 0 2px 10px rgba(180, 40, 120, .6), 0 1px 2px rgba(0, 0, 0, .35); animation: celPop 1s cubic-bezier(.2, 1.4, .4, 1) .3s both; }
+.cel-msg b { font-weight: 600; background: rgba(255, 255, 255, .16); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, .4); border-radius: .6em; padding: .25em .55em; }
+.cel-msg span { font-family: var(--body); font-weight: 800; font-size: .55em; }
+@keyframes celPop { from { opacity: 0; transform: scale(.6) translateY(10px) } }
+.day-ribbon { position: absolute; z-index: 3; left: 6px; right: 28px; top: 6px; border: 1px solid rgba(255, 255, 255, .55); background: linear-gradient(90deg, rgba(255, 110, 165, .62), rgba(160, 110, 255, .58)); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #fff; font-weight: 800; font-size: 9.5px; border-radius: 999px; padding: 2px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 2px rgba(120, 30, 80, .45); cursor: pointer; text-align: left; }
+.widget.open .day-ribbon { top: 38px; left: 50%; right: auto; transform: translateX(-50%); max-width: 86%; font-size: 11px; }
+.days-list { display: grid; gap: 6px; max-height: 158px; overflow: auto; }
+.day-row { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; background: rgba(255, 255, 255, .3); border: 1px solid rgba(255, 255, 255, .6); border-radius: 12px; padding: 6px 8px; font-size: 12px; min-width: 0; }
+.day-row > div { min-width: 0; }
+.day-row b { display: block; font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.day-row small { color: #4e3f5c; font-weight: 700; font-size: 10.5px; }
+.day-emo { font-size: 18px; }
+.day-acts { display: flex; gap: 3px; }
+.day-acts button { border: 1px solid rgba(255, 255, 255, .6); background: rgba(255, 255, 255, .35); border-radius: 8px; width: 25px; height: 25px; font-size: 11.5px; padding: 0; }
+.add-day summary { cursor: pointer; font-weight: 800; color: #9a2f5e; font-size: 13px; }
+.add-day .grid { display: grid; gap: 6px; margin-top: 8px; }
+.add-day label { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; }
+.add-day input[type="date"], .add-day input[type="text"], .add-day select { border: 1px solid rgba(255, 255, 255, .7); background: rgba(255, 255, 255, .45); border-radius: 10px; padding: 4px 6px; font-size: 12.5px; color: #33263f; max-width: 150px; }
+.mem { font-size: 11px; color: #4e3f5c; font-weight: 700; }
+.mem p { margin: 2px 0; }
+
 /* ---------- Screen off and power button ---------- */
 .power { position: absolute; right: -5px; top: 130px; width: 5px; height: 56px; border: 0; padding: 0; border-radius: 0 4px 4px 0; background: #3a3144; cursor: pointer; }
 .power:hover { background: #5d506b; }
@@ -183,6 +208,7 @@ button { cursor: pointer; }
 
 /* ---------- Bottom sheet inside the phone ---------- */
 .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 8; background: rgba(255, 255, 255, .34); backdrop-filter: blur(22px) saturate(1.6); -webkit-backdrop-filter: blur(22px) saturate(1.6); border-top: 1px solid rgba(255, 255, 255, .6); border-radius: 26px 26px 0 0; padding: 14px 16px 18px; transform: translateY(105%); transition: transform .35s cubic-bezier(.2, .9, .3, 1.05); box-shadow: 0 -10px 30px -12px rgba(70, 30, 80, .35); display: grid; gap: 10px; color: #33263f; }
+.sheet { max-height: 90%; overflow: auto; }
 .sheet.open { transform: none; }
 .sheet-head { display: flex; justify-content: space-between; align-items: center; }
 .sheet-head b { font-family: var(--display); font-weight: 600; font-size: 17px; }
@@ -273,6 +299,7 @@ button { cursor: pointer; }
     <li>Turn on <b>Asleep</b> for Mia, then send from Leo. It arrives quietly and the scene turns to night. Turn Asleep off to feel the heartbeat.</li>
     <li>Send from both phones within 15 seconds for a rare <b>in-sync</b> hug.</li>
     <li>Turn on <b>Discreet mode</b> to blur messages until you tap them.</li>
+    <li><b>Special days:</b> open a widget and tap 📅. Birthdays, anniversaries and other moments are listed with a countdown. Add your own, and choose a celebration (confetti, balloons, fireworks, light show, drone show or everything). Mia's birthday is set for tomorrow, so Leo gets a private reminder a few seconds after the page loads. Tap ⏰ to preview a day-before reminder or 🎉 to preview the celebration on both phones.</li>
     <li><b>Customize the characters:</b> under each phone, open "Customize … name and look" to rename them or change their style: hijab styles (classic, khimar, turban wrap, niqab), hair (buzz cut, quiff, man bun, wolf cut, braids, bun and more), 13 beard and moustache styles, tops, bottoms, dresses (abaya, gown, churidar, saree, burqa and more), shoes, skin tone, eye color, hair or hijab color, outfit, facial hair and glasses.</li>
     <li><b>Slideshow:</b> open the widget, tap 📷, pick a few photos (or "Use sample photos"), choose a transition and send. The other widget starts a slideshow. Tap 🎞️ to switch between the slideshow and the couple scene.</li>
     <li><b>Pop-up text:</b> tap ✏️, choose <b>Pop-up ✨</b> and send. It types out in huge letters over a blurred background and slides across like a news ticker.</li>
@@ -300,6 +327,7 @@ button { cursor: pointer; }
     accent: ['#3f4a66', '#2f2a3a', '#e8d5c4', '#c98fb4', '#d4a24c', '#7a2f45', '#5b7fb3', '#ffffff']
   };
   const SW_LABEL = { accent: 'Second color', eyes: 'Eye color', skin: 'Skin tone', hair: 'Hair color', hijab: 'Hijab color', outfit: 'Outfit color' };
+  const CEL_OPTS = [['auto', 'Surprise me'], ['confetti', 'Confetti'], ['balloons', 'Balloons'], ['fireworks', 'Fireworks'], ['lightshow', 'Light show'], ['drones', 'Drone show'], ['all', 'Everything']];
   const PRESETS = ['thinking of you 🤍', 'miss you 🥺', 'mwah 😘', 'sending a hug 🤗', 'drink water, cutie 💧', 'proud of you ⭐', 'good morning ☀️', 'good night 🌙'];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const narrow = matchMedia('(max-width: 760px)');
@@ -363,9 +391,10 @@ button { cursor: pointer; }
             <div class="label-slot"></div>
             <div class="pill compact-only"></div>
             <span class="badge compact-only" hidden>♥</span>
+            <button class="day-ribbon" hidden></button>
             <div class="w-top ui">
               <div class="who"><span class="pdot"></span><b class="pname"></b><span class="ptime"></span></div>
-              <div class="chips"><span class="chip status"></span><span class="chip cd" title="Days until you're together"></span><button class="chip chip-btn slides-toggle" hidden aria-pressed="false" aria-label="Slideshow">🎞️</button><button class="close-w" aria-label="Close">✕</button></div>
+              <div class="chips"><span class="chip status"></span><span class="chip cd" title="Days until you're together"></span><button class="chip chip-btn days-btn" aria-label="Special days" title="Special days">📅</button><button class="chip chip-btn slides-toggle" hidden aria-pressed="false" aria-label="Slideshow">🎞️</button><button class="close-w" aria-label="Close">✕</button></div>
             </div>
             <div class="w-bottom ui">
               <div class="bubble">
@@ -417,6 +446,19 @@ button { cursor: pointer; }
               <label class="tog"><input id="save-${id}" type="checkbox"> Save to my gallery too</label>
               <p class="hint">Send two or more and their widget plays a slideshow. In the app this also opens a quick camera.</p>
               <div class="row"><span class="count pcount"></span><button class="send send-photo" disabled>Send 💌</button></div>
+            </div>
+            <div class="s-days" hidden>
+              <div class="days-list"></div>
+              <details class="add-day"><summary>＋ Add a special day</summary><div class="grid">
+                <label for="d-type-${id}">Type <select class="d-type" id="d-type-${id}"><option value="birthday">Birthday</option><option value="anniversary">Anniversary</option><option value="custom">Other special day</option></select></label>
+                <label class="d-title-row" for="d-title-${id}" hidden>Name it <input type="text" class="d-title" id="d-title-${id}" maxlength="30" placeholder="First date"></label>
+                <label for="d-who-${id}">For <select class="d-who" id="d-who-${id}"></select></label>
+                <label for="d-date-${id}">Date <input type="date" class="d-date" id="d-date-${id}"></label>
+                <label for="d-year-${id}">Count the years <input type="checkbox" class="d-year" id="d-year-${id}" checked></label>
+                <label for="d-cel-${id}">Celebration <select class="d-cel" id="d-cel-${id}">${CEL_OPTS.map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}</select></label>
+                <div class="row"><span class="count d-err"></span><button class="send d-add">Save day</button></div>
+              </div></details>
+              <div class="mem"></div>
             </div>
           </div>
         </div>
@@ -1269,7 +1311,7 @@ button { cursor: pointer; }
     s.playing = true;
     while (s.queue.length && isViewing(id)) {
       const it = s.queue.shift();
-      await (it.kind === 'pop' ? playPop(id, it.text) : playFly(id, it.ch));
+      await (it.kind === 'pop' ? playPop(id, it.text) : it.kind === 'celebrate' ? playCelebrate(id, it) : playFly(id, it.ch));
       await wait(250);
     }
     s.playing = false;
@@ -1422,6 +1464,271 @@ button { cursor: pointer; }
     SAMPLES = out; return out;
   }
 
+  // ---------- Special days: birthdays, anniversaries and other moments ----------
+  const esc = v => String(v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  const ordinal = n => { const sfx = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (sfx[(v - 20) % 10] || sfx[v] || sfx[0]); };
+  const DAY_EMO = { birthday: '🎂', anniversary: '💞', custom: '✨' };
+  const store = {
+    get(k, fb) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch (e) { return fb; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } }
+  };
+  function seedDays() {
+    const now = new Date(), at = n => { const d = new Date(now); d.setDate(d.getDate() + n); return d; };
+    const mk = (id, type, who, title, d, yearsAgo, cel) => ({ id, type, who, title, month: d.getMonth() + 1, day: d.getDate(), year: d.getFullYear() - yearsAgo, countYears: true, cel });
+    return [
+      mk('d1', 'birthday', 'mia', '', at(1), 23, 'auto'),
+      mk('d2', 'birthday', 'leo', '', at(64), 26, 'auto'),
+      mk('d3', 'anniversary', 'both', '', at(38), 3, 'fireworks'),
+      mk('d4', 'custom', 'both', 'The day we met', at(150), 4, 'drones')
+    ];
+  }
+  let DAYS = store.get('hearby-days', null) || seedDays();
+  let MEMORIES = store.get('hearby-memories', []);
+  const saveDays = () => store.set('hearby-days', DAYS);
+
+  function today0() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+  function nextOcc(ev) { const t = today0(); let d = new Date(t.getFullYear(), ev.month - 1, ev.day); if (d < t) d = new Date(t.getFullYear() + 1, ev.month - 1, ev.day); return d; }
+  const daysUntil = ev => Math.round((nextOcc(ev) - today0()) / 86400000);
+  const yearsAt = ev => { if (!ev.countYears || !ev.year) return null; const n = nextOcc(ev).getFullYear() - ev.year; return n > 0 ? n : null; };
+  const both = () => `${P.leo.name} & ${P.mia.name}`;
+  function dayLabel(ev) {
+    if (ev.type === 'birthday') return `${P[ev.who].name}'s birthday`;
+    if (ev.type === 'anniversary') return 'Our anniversary';
+    return ev.who === 'both' ? ev.title : `${ev.title} (${P[ev.who].name})`;
+  }
+  function todayText(ev, id) {
+    const n = yearsAt(ev);
+    if (ev.type === 'birthday') {
+      const who = P[ev.who].name;
+      if (id === ev.who) return { big: n ? `Happy ${ordinal(n)} Birthday, ${who}!` : `Happy Birthday, ${who}!`, small: 'Wishing you the happiest day 🎂', ribbon: `🎂 Happy ${n ? ordinal(n) + ' ' : ''}Birthday, ${who}` };
+      return { big: `It's ${who}'s ${n ? ordinal(n) + ' ' : ''}birthday!`, small: `Send ${who} a wish 💌`, ribbon: `🎂 ${who}'s birthday today` };
+    }
+    if (ev.type === 'anniversary') return { big: n ? `Happy ${ordinal(n)} Anniversary!` : 'Happy Anniversary!', small: `${both()} 💞`, ribbon: `💞 Happy ${n ? ordinal(n) + ' ' : ''}Anniversary` };
+    if (ev.who === 'both') return { big: `Happy ${ev.title}!`, small: n ? `${n} year${n > 1 ? 's' : ''} · ${both()}` : both(), ribbon: `✨ ${ev.title}` };
+    const who = P[ev.who].name;
+    if (id === ev.who) return { big: `Happy ${ev.title}, ${who}!`, small: n ? `${n} year${n > 1 ? 's' : ''} ✨` : '✨', ribbon: `✨ Happy ${ev.title}, ${who}` };
+    return { big: `Today is ${who}'s ${ev.title}`, small: `Make it special for ${who} ✨`, ribbon: `✨ ${who}'s ${ev.title} today` };
+  }
+  function tomorrowText(ev) {
+    const n = yearsAt(ev);
+    if (ev.type === 'birthday') { const who = P[ev.who].name; return { title: `Tomorrow is ${who}'s ${n ? ordinal(n) + ' ' : ''}birthday 🎂`, tip: `Make ${who}'s day special: plan a surprise or send a wish at midnight 💝`, ribbon: `⏰ Tomorrow: ${who}'s birthday` }; }
+    if (ev.type === 'anniversary') return { title: `Tomorrow is your ${n ? ordinal(n) + ' ' : ''}anniversary 💞`, tip: 'Plan something sweet together 💝', ribbon: '⏰ Tomorrow: your anniversary' };
+    if (ev.who === 'both') return { title: `Tomorrow: ${ev.title} ✨`, tip: 'A special day for you both is coming', ribbon: `⏰ Tomorrow: ${ev.title}` };
+    const who = P[ev.who].name;
+    return { title: `Tomorrow is ${who}'s ${ev.title} ✨`, tip: `Wish ${who} well and make the day special 💝`, ribbon: `⏰ Tomorrow: ${who}'s ${ev.title}` };
+  }
+  const reminderFor = ev => (ev.who === 'both' ? IDS.slice() : [other(ev.who)]);
+
+  function remind(ev, preview) {
+    const tt = tomorrowText(ev), to = reminderFor(ev);
+    to.forEach(id => {
+      banner(id, `${esc(tt.title)}<small>${esc(tt.tip)}</small>`);
+      buzz(id, tt.tip, 7000);
+      const pl = W[id].q('.pill'); pl.textContent = tt.title; pl.classList.add('show');
+      clearTimeout(pl._t); pl._t = setTimeout(() => pl.classList.remove('show'), 8000);
+    });
+    if (preview) IDS.filter(id => !to.includes(id)).forEach(id => toast(id, `Reminder sent to ${to.map(i => P[i].name).join(' & ')} only 🤫`));
+  }
+  function celebrate(ev, preview) {
+    IDS.forEach(id => deliverVisual(id, { kind: 'celebrate', ev }));
+    if (!preview) {
+      const yr = today0().getFullYear(), key = `${ev.id}-${yr}`;
+      if (!MEMORIES.some(m => m.key === key)) {
+        const n = yearsAt(ev);
+        const what = ev.type === 'birthday' ? `${P[ev.who].name}'s ${n ? ordinal(n) + ' ' : ''}birthday` : ev.type === 'anniversary' ? `your ${n ? ordinal(n) + ' ' : ''}anniversary` : ev.title;
+        MEMORIES.unshift({ key, text: `Celebrated ${what}`, date: today0().toISOString().slice(0, 10) });
+        MEMORIES = MEMORIES.slice(0, 30); store.set('hearby-memories', MEMORIES); renderDays();
+      }
+    }
+  }
+  const shown = new Set();
+  function checkDays() {
+    const k = today0().toISOString().slice(0, 10);
+    DAYS.forEach(ev => {
+      const d = daysUntil(ev);
+      if (d === 0 && !shown.has(`c${ev.id}${k}`)) { shown.add(`c${ev.id}${k}`); celebrate(ev, false); }
+      if (d === 1 && !shown.has(`r${ev.id}${k}`)) { shown.add(`r${ev.id}${k}`); remind(ev, false); }
+    });
+    setRibbons();
+  }
+  function setRibbons() {
+    IDS.forEach(id => {
+      const s = W[id], rb = s.q('.day-ribbon');
+      const todayEv = DAYS.find(ev => daysUntil(ev) === 0);
+      const tomorrowEv = DAYS.find(ev => daysUntil(ev) === 1 && reminderFor(ev).includes(id));
+      s.ribbonEv = todayEv || tomorrowEv || null;
+      rb.hidden = !s.ribbonEv;
+      if (todayEv) { rb.textContent = todayText(todayEv, id).ribbon; rb.title = 'Tap to celebrate again'; }
+      else if (tomorrowEv) { rb.textContent = tomorrowText(tomorrowEv).ribbon; rb.title = 'Reminder'; }
+    });
+  }
+
+  function fillWho(id) {
+    const s = W[id], ty = s.q('.d-type').value, sel = s.q('.d-who'), prev = sel.value;
+    const opts = ty === 'anniversary' ? [['both', 'Both of us']] : ty === 'birthday' ? [['leo', P.leo.name], ['mia', P.mia.name]] : [['both', 'Both of us'], ['leo', P.leo.name], ['mia', P.mia.name]];
+    sel.innerHTML = opts.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join('');
+    sel.value = opts.some(o => o[0] === prev) ? prev : (ty === 'birthday' ? other(id) : opts[0][0]);
+  }
+  function renderDays() {
+    const sorted = DAYS.slice().sort((a, b) => daysUntil(a) - daysUntil(b));
+    IDS.forEach(id => {
+      const s = W[id];
+      s.q('.days-list').innerHTML = sorted.length ? sorted.map(ev => {
+        const d = daysUntil(ev), n = yearsAt(ev), occ = nextOcc(ev);
+        const when = d === 0 ? 'today 🎉' : d === 1 ? 'tomorrow' : `in ${d} days`;
+        const yrs = n ? (ev.type === 'birthday' ? ` · turns ${n}` : ` · ${n} year${n > 1 ? 's' : ''}`) : '';
+        return `<div class="day-row"><span class="day-emo">${DAY_EMO[ev.type]}</span><div><b>${esc(dayLabel(ev))}</b><small>${occ.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} · ${when}${yrs}</small></div>
+          <div class="day-acts"><button data-do="before" data-id="${ev.id}" title="Preview the day-before reminder" aria-label="Preview reminder for ${esc(dayLabel(ev))}">⏰</button><button data-do="day" data-id="${ev.id}" title="Preview the celebration" aria-label="Preview celebration for ${esc(dayLabel(ev))}">🎉</button><button data-do="del" data-id="${ev.id}" title="Delete" aria-label="Delete ${esc(dayLabel(ev))}">🗑️</button></div></div>`;
+      }).join('') : '<p class="hint">No special days yet. Add your first one below.</p>';
+      s.q('.mem').innerHTML = MEMORIES.length ? `<b>Memories</b>${MEMORIES.slice(0, 5).map(m => `<p>🎉 ${esc(m.text)} · ${new Date(m.date + 'T00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>`).join('')}` : '';
+      fillWho(id);
+    });
+  }
+
+  // ---------- Celebration effects drawn over the widget ----------
+  const PAL = ['#ff6fa8', '#ffd166', '#7ad7f0', '#b388ff', '#7ee0a1', '#ff9f6e', '#ffffff'];
+  function sampleText(txt, Wd, Hh, n) {
+    const off = document.createElement('canvas'); off.width = Math.round(Wd); off.height = Math.round(Hh);
+    const g = off.getContext('2d');
+    let size = Hh * 0.34; g.font = `800 ${size}px Fredoka, Nunito, sans-serif`;
+    while (g.measureText(txt).width > Wd * 0.8 && size > 8) { size -= 2; g.font = `800 ${size}px Fredoka, Nunito, sans-serif`; }
+    g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#fff'; g.fillText(txt, Wd / 2, Hh * 0.42);
+    const data = g.getImageData(0, 0, off.width, off.height).data, pts = [], step = Math.max(2, Math.round(Wd / 70));
+    for (let y = 0; y < off.height; y += step) for (let x = 0; x < off.width; x += step) if (data[(y * off.width + x) * 4 + 3] > 128) pts.push([x, y]);
+    for (let i = pts.length - 1; i > 0; i--) { const j = rnd(i + 1); [pts[i], pts[j]] = [pts[j], pts[i]]; }
+    return Array.from({ length: n }, (_, i) => pts.length ? pts[i % pts.length] : [Wd / 2, Hh / 2]);
+  }
+  const ENGINES = {
+    confetti(Wd, Hh) {
+      const ps = Array.from({ length: 110 }, () => ({ x: rand() * Wd, y: -rand() * Hh * 0.9 - 10, vx: (rand() - 0.5) * 30, vy: 45 + rand() * 60, r: rand() * 6.3, vr: (rand() - 0.5) * 9, w: 2.5 + rand() * 3.5, h: 4 + rand() * 5, col: pick(PAL) }));
+      return (c, t, dt) => ps.forEach(q => {
+        q.x += (q.vx + Math.sin(t * 3 + q.r) * 12) * dt; q.y += q.vy * dt * (Hh / 250); q.r += q.vr * dt;
+        if (q.y > Hh + 10 && t < 4.5) { q.y = -10; q.x = rand() * Wd; }
+        c.save(); c.translate(q.x, q.y); c.rotate(q.r); c.scale(1, Math.cos(q.r * 1.7)); c.fillStyle = q.col; c.fillRect(-q.w / 2, -q.h / 2, q.w, q.h); c.restore();
+      });
+    },
+    balloons(Wd, Hh) {
+      const bs = Array.from({ length: 11 }, (_, i) => ({ x: Wd * (0.06 + (i / 10) * 0.88) + (rand() - 0.5) * 10, y: Hh + 20 + rand() * Hh * 0.7, v: 30 + rand() * 25, p: rand() * 6, r: Wd * (0.05 + rand() * 0.03), col: pick(PAL.slice(0, 6)) }));
+      return (c, t, dt) => bs.forEach(b => {
+        b.y -= b.v * dt * (Hh / 250); const x = b.x + Math.sin(t * 1.5 + b.p) * 4;
+        c.strokeStyle = 'rgba(255,255,255,.7)'; c.lineWidth = 0.8; c.beginPath(); c.moveTo(x, b.y + b.r * 1.2); c.quadraticCurveTo(x + 4, b.y + b.r * 2, x - 2, b.y + b.r * 3); c.stroke();
+        c.fillStyle = b.col; c.beginPath(); c.ellipse(x, b.y, b.r, b.r * 1.2, 0, 0, TAU); c.fill();
+        c.beginPath(); c.moveTo(x - 2, b.y + b.r * 1.25); c.lineTo(x + 2, b.y + b.r * 1.25); c.lineTo(x, b.y + b.r * 1.15); c.fill();
+        c.fillStyle = 'rgba(255,255,255,.45)'; c.beginPath(); c.ellipse(x - b.r * 0.35, b.y - b.r * 0.45, b.r * 0.22, b.r * 0.35, -0.4, 0, TAU); c.fill();
+      });
+    },
+    fireworks(Wd, Hh, it, dur) {
+      const rockets = [], sparks = [], k = Hh / 250; let last = -1;
+      return (c, t, dt) => {
+        if (t - last > 0.42 && t < dur - 1.6) {
+          last = t; rockets.push({ x: Wd * (0.15 + rand() * 0.7), y: Hh, ty: Hh * (0.14 + rand() * 0.3), col: pick(PAL), multi: rand() < 0.3 });
+        }
+        c.save(); c.globalCompositeOperation = 'lighter';
+        for (let i = rockets.length - 1; i >= 0; i--) {
+          const r = rockets[i]; r.y -= Hh * 1.15 * dt;
+          c.fillStyle = '#fff3c4'; c.beginPath(); c.arc(r.x, r.y, 1.4, 0, TAU); c.fill();
+          c.fillStyle = 'rgba(255,220,150,.4)'; c.beginPath(); c.arc(r.x, r.y + 5, 1, 0, TAU); c.fill();
+          if (r.y <= r.ty) {
+            rockets.splice(i, 1);
+            for (let j = 0; j < 48; j++) { const a = (j / 48) * TAU, sp = (45 + rand() * 45) * k; sparks.push({ x: r.x, y: r.ty, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 1.3 + rand() * 0.4, col: r.multi ? pick(PAL) : r.col }); }
+          }
+        }
+        for (let i = sparks.length - 1; i >= 0; i--) {
+          const q = sparks[i]; q.vx *= 0.985; q.vy = q.vy * 0.985 + 38 * k * dt; q.x += q.vx * dt; q.y += q.vy * dt; q.life -= dt;
+          if (q.life <= 0) { sparks.splice(i, 1); continue; }
+          c.globalAlpha = Math.min(1, q.life); c.strokeStyle = q.col; c.lineWidth = 1.6;
+          c.beginPath(); c.moveTo(q.x - q.vx * 0.05, q.y - q.vy * 0.05); c.lineTo(q.x, q.y); c.stroke();
+        }
+        c.restore();
+      };
+    },
+    lightshow(Wd, Hh) {
+      const glitter = Array.from({ length: 40 }, () => ({ x: rand() * Wd, y: rand() * Hh * 0.8, p: rand() * 6 }));
+      return (c, t) => {
+        c.save(); c.globalCompositeOperation = 'lighter';
+        for (let i = 0; i < 5; i++) {
+          const bx = Wd * (0.1 + i * 0.2), ang = Math.sin(t * 1.3 + i * 1.1) * 0.6, len = Hh * 1.2, spread = 0.11;
+          const g = c.createLinearGradient(bx, Hh, bx + Math.sin(ang) * len, Hh - Math.cos(ang) * len);
+          const hue = (t * 70 + i * 72) % 360;
+          g.addColorStop(0, `hsla(${hue},95%,65%,.55)`); g.addColorStop(1, `hsla(${hue},95%,65%,0)`);
+          c.fillStyle = g; c.beginPath(); c.moveTo(bx, Hh);
+          c.lineTo(bx + Math.sin(ang - spread) * len, Hh - Math.cos(ang - spread) * len);
+          c.lineTo(bx + Math.sin(ang + spread) * len, Hh - Math.cos(ang + spread) * len); c.closePath(); c.fill();
+          c.fillStyle = `hsla(${hue},95%,75%,.8)`; c.beginPath(); c.arc(bx, Hh - 2, 4, 0, TAU); c.fill();
+        }
+        glitter.forEach(q => { const a = Math.max(0, Math.sin(t * 4 + q.p)); c.fillStyle = `rgba(255,255,255,${a})`; c.beginPath(); c.arc(q.x, q.y, 1.1, 0, TAU); c.fill(); });
+        c.restore();
+      };
+    },
+    drones(Wd, Hh, it) {
+      const N = 90, ev = it.ev, n = yearsAt(ev);
+      const txt = n ? `${n}` : ev.who === 'both' ? `${P.leo.name[0]}♥${P.mia.name[0]}` : P[ev.who].name[0];
+      const heart = Array.from({ length: N }, (_, i) => {
+        const a = (i / N) * TAU, s = Wd * 0.021;
+        return [Wd / 2 + 16 * Math.sin(a) ** 3 * s, Hh * 0.4 - (13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a)) * s];
+      });
+      const word = sampleText(txt, Wd, Hh, N);
+      const ds = Array.from({ length: N }, () => ({ x: rand() * Wd, y: Hh + rand() * 20, hx: rand() * Wd, hy: Hh * (0.2 + rand() * 0.5) }));
+      return (c, t, dt) => {
+        const phase = t < 1.2 ? 0 : t < 4.6 ? 1 : 2;
+        c.save(); c.globalCompositeOperation = 'lighter';
+        ds.forEach((d, i) => {
+          const [tx, ty] = phase === 0 ? [d.hx, d.hy] : phase === 1 ? heart[i] : word[i];
+          d.x += (tx - d.x) * Math.min(1, dt * 2.4); d.y += (ty - d.y) * Math.min(1, dt * 2.4);
+          const col = phase === 2 ? '255,226,140' : phase === 1 ? '255,122,184' : '170,200,255';
+          const tw = 0.7 + 0.3 * Math.sin(t * 6 + i);
+          const g = c.createRadialGradient(d.x, d.y, 0, d.x, d.y, 4); g.addColorStop(0, `rgba(${col},${tw})`); g.addColorStop(1, `rgba(${col},0)`);
+          c.fillStyle = g; c.fillRect(d.x - 4, d.y - 4, 8, 8);
+          c.fillStyle = `rgba(255,255,255,${tw})`; c.beginPath(); c.arc(d.x, d.y, 0.9, 0, TAU); c.fill();
+        });
+        c.restore();
+      };
+    }
+  };
+  function effectsFor(ev) {
+    if (ev.cel === 'all') return ['fireworks', 'confetti', 'balloons'];
+    if (ev.cel && ev.cel !== 'auto') return [ev.cel];
+    const opts = ev.type === 'birthday' ? [['confetti', 'balloons'], ['drones'], ['fireworks', 'confetti']]
+      : ev.type === 'anniversary' ? [['fireworks'], ['drones'], ['lightshow', 'fireworks']]
+        : [['confetti'], ['lightshow'], ['fireworks', 'balloons']];
+    return pick(opts);
+  }
+  function playCelebrate(id, it) {
+    return new Promise(res => {
+      const wd = W[id].widget, Wd = wd.clientWidth, Hh = wd.clientHeight;
+      const ov = document.createElement('div'); ov.className = 'celebrate';
+      const cv = document.createElement('canvas'), dpr = Math.min(2, window.devicePixelRatio || 1);
+      cv.width = Math.round(Wd * dpr); cv.height = Math.round(Hh * dpr);
+      const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const tt = todayText(it.ev, id);
+      const msg = document.createElement('div'); msg.className = 'cel-msg';
+      const big = document.createElement('b'); big.textContent = tt.big;
+      const small = document.createElement('span'); small.textContent = tt.small;
+      msg.append(big, small); msg.style.fontSize = `${Math.max(12, Hh * 0.085)}px`;
+      ov.append(cv, msg); wd.appendChild(ov);
+      const fx = effectsFor(it.ev);
+      const dur = reduced.matches ? 3 : fx.includes('drones') ? 8.5 : 7;
+      const engines = fx.map(name => ENGINES[name](Wd, Hh, it, dur));
+      const night = fx.some(nm => nm === 'fireworks' || nm === 'drones' || nm === 'lightshow');
+      const stars = Array.from({ length: 30 }, () => [rand() * Wd, rand() * Hh * 0.6, rand() * 6]);
+      const start = performance.now(); let prev = start;
+      function frame(now) {
+        const t = (now - start) / 1000, dt = Math.min(0.05, (now - prev) / 1000); prev = now;
+        c.clearRect(0, 0, Wd, Hh);
+        if (night) {
+          const a = Math.min(1, t / 0.8) * Math.min(1, Math.max(0, (dur - t) / 0.8));
+          const g = c.createLinearGradient(0, 0, 0, Hh); g.addColorStop(0, `rgba(10,10,40,${0.85 * a})`); g.addColorStop(1, `rgba(40,20,70,${0.75 * a})`);
+          c.fillStyle = g; c.fillRect(0, 0, Wd, Hh);
+          stars.forEach(([sx, sy, sp]) => { c.fillStyle = `rgba(255,248,220,${a * (0.4 + 0.6 * Math.abs(Math.sin(t * 2 + sp)))})`; c.fillRect(sx, sy, 1.2, 1.2); });
+        }
+        if (!reduced.matches) engines.forEach(e => e(c, t, dt));
+        if (t < dur) requestAnimationFrame(frame);
+        else { ov.classList.add('out'); setTimeout(() => { ov.remove(); res(); }, 500); }
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+
   // ---------- Sending ----------
   function sendFly(from, kind) {
     const to = other(from);
@@ -1470,10 +1777,10 @@ button { cursor: pointer; }
   }
 
   // ---------- Sheet ----------
-  const TITLES = { text: 'Write something', preset: 'Pick a preset', photo: 'Send a photo' };
+  const TITLES = { text: 'Write something', preset: 'Pick a preset', photo: 'Send a photo', days: 'Special days' };
   function openSheet(id, kind) {
     const s = W[id];
-    ['text', 'preset', 'photo'].forEach(k => { s.q(`.s-${k}`).hidden = k !== kind; });
+    ['text', 'preset', 'photo', 'days'].forEach(k => { s.q(`.s-${k}`).hidden = k !== kind; });
     s.q('.sheet-title').textContent = TITLES[kind];
     s.sheet.classList.add('open'); s.sheet.setAttribute('aria-hidden', 'false');
     setTimeout(() => { const el = kind === 'text' ? s.q('textarea') : s.q(`.s-${kind} button, .s-${kind} input`); el && el.focus(); }, 250);
@@ -1524,6 +1831,31 @@ button { cursor: pointer; }
     q('.slides-toggle').addEventListener('click', e => { e.stopPropagation(); setSlide(id, !s.slideOn); });
     document.getElementById(`slides-${id}`).addEventListener('change', e => setSlide(id, e.target.checked));
     q('.power').addEventListener('click', () => setScreen(id, !P[id].screen));
+    q('.days-btn').addEventListener('click', e => { e.stopPropagation(); renderDays(); openSheet(id, 'days'); });
+    q('.day-ribbon').addEventListener('click', e => {
+      e.stopPropagation();
+      const ev = s.ribbonEv;
+      if (ev && daysUntil(ev) === 0) deliverVisual(id, { kind: 'celebrate', ev });
+      else if (!s.open) openW(id);
+    });
+    const dType = q('.d-type');
+    dType.addEventListener('change', () => { q('.d-title-row').hidden = dType.value !== 'custom'; fillWho(id); });
+    q('.d-add').addEventListener('click', () => {
+      const err = q('.d-err'), date = q('.d-date').value, title = q('.d-title').value.trim(), ty = dType.value;
+      if (!date) { err.textContent = 'Pick a date'; return; }
+      if (ty === 'custom' && !title) { err.textContent = 'Give the day a name'; return; }
+      const [yy, mm, dd] = date.split('-').map(Number);
+      DAYS.push({ id: 'd' + Date.now(), type: ty, who: q('.d-who').value, title, month: mm, day: dd, year: q('.d-year').checked ? yy : null, countYears: q('.d-year').checked, cel: q('.d-cel').value });
+      saveDays(); err.textContent = ''; q('.d-date').value = ''; q('.d-title').value = ''; q('.add-day').open = false;
+      renderDays(); closeSheet(id); setTimeout(checkDays, 400); toast(id, 'Saved to your special days 📅');
+    });
+    q('.days-list').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      const ev = DAYS.find(d => d.id === b.dataset.id); if (!ev) return;
+      if (b.dataset.do === 'del') { DAYS = DAYS.filter(d => d !== ev); saveDays(); renderDays(); setRibbons(); }
+      else if (b.dataset.do === 'before') { closeSheet(id); remind(ev, true); }
+      else { closeSheet(id); celebrate(ev, true); }
+    });
     const av = q('.avatar');
     const syncRows = () => av.querySelectorAll('[data-show]').forEach(r => { r.hidden = !r.dataset.show.split(' ').includes(P[id].type); });
     av.addEventListener('input', e => { if (e.target.dataset.key === 'name') rename(id, e.target.value); });
@@ -1560,6 +1892,7 @@ button { cursor: pointer; }
     W[id].root.setAttribute('aria-label', `${name}'s phone`);
     W[id].q('.power').setAttribute('aria-label', `${name}'s power button`);
     IDS.forEach(i => { renderHead(i); renderBubble(i); });
+    renderDays(); setRibbons();
   }
   function setTab(id) {
     stage.dataset.active = id;
@@ -1570,6 +1903,9 @@ button { cursor: pointer; }
   document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
 
   IDS.forEach(id => { renderHead(id); notify(id); });
+  renderDays(); setRibbons();
+  setTimeout(checkDays, 2500);
+  setInterval(checkDays, 60000);
   let last = performance.now() / 1000;
   function frame(ms) {
     const t = ms / 1000, dt = Math.min(0.1, t - last);

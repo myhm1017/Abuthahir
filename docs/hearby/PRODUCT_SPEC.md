@@ -133,7 +133,20 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - The heartbeat vibration still happens on arrival, so the partner feels it in their pocket. The visual waits and plays as soon as they unlock and look.
 - Several waiting surprises play one after another.
 
-### 4.11 "In sync" moments (later)
+### 4.10f Special days (v1)
+- A **shared calendar** of birthdays, anniversaries and other moments ("the day we met", "Nikah day", graduation), managed from the widget (📅). Either partner can add, edit or delete days, and the list syncs end-to-end encrypted.
+- Each day has a type, who it's for (one person or both), a date, an optional "count the years" setting (age or years together) and a celebration style.
+- **The day before:**
+  - A personal day such as a birthday privately reminds **only the partner**, to keep the surprise: "Tomorrow is Mia's 23rd birthday 🎂 Make Mia's day special: plan a surprise or send a wish at midnight."
+  - A shared day such as an anniversary reminds **both** partners.
+- **On the day:**
+  - The widget pops a message such as "Happy 23rd Birthday, Mia!" on Mia's phone, while Leo's says "It's Mia's 23rd birthday! Send Mia a wish 💌". Anniversaries say "Happy 3rd Anniversary!" to both.
+  - A ribbon stays on the widget all day, and tapping it replays the celebration.
+- **Celebrations** play across the widget: confetti, balloons, fireworks, a light show, or a **drone show** (lights forming a heart, then the age or the couple's initials in the night sky). "Surprise me" picks one that fits the occasion.
+- Celebrations follow the "only when they're looking" rule.
+- **Memory:** every celebrated day is logged in Memories (and the Memory Jar). Ages and year counts update automatically each year.
+
+
 - If both partners send love within the same minute, a special animation plays: the characters run to each other and hug, with sparkles. It's rare, so it feels magical.
 
 ### 4.12 Memory Jar (later)

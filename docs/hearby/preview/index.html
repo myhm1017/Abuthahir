@@ -219,7 +219,7 @@ button { cursor: pointer; }
 .app-back { border: 1px solid rgba(255, 255, 255, .7); background: rgba(255, 255, 255, .4); border-radius: 50%; width: 26px; height: 26px; font-size: 17px; font-weight: 800; line-height: 1; color: #4a3858; padding: 0; }
 .app-body { flex: 1; overflow-y: auto; padding: 4px 10px 10px; }
 .app-body .tab { display: grid; gap: 8px; align-content: start; }
-.app-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 6px 8px 16px; background: rgba(255, 255, 255, .38); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid rgba(255, 255, 255, .65); }
+.app-nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; padding: 6px 8px 16px; background: rgba(255, 255, 255, .38); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid rgba(255, 255, 255, .65); }
 .app-nav button { border: 0; background: transparent; display: grid; justify-items: center; font-size: 17px; gap: 1px; color: #6b5a7b; border-radius: 12px; padding: 3px 0; }
 .app-nav button span { font-size: 9.5px; font-weight: 800; }
 .app-nav button[aria-current="page"] { background: rgba(255, 255, 255, .6); color: #c43f76; }
@@ -228,6 +228,13 @@ button { cursor: pointer; }
 .card b { font-size: 12.5px; }
 .card small { color: #6e5d7e; font-weight: 800; font-size: 9.5px; text-transform: uppercase; letter-spacing: .07em; }
 .card em { font-style: normal; color: #6e5d7e; font-size: 10.5px; font-weight: 700; }
+.moods { display: flex; justify-content: space-between; gap: 2px; }
+.moods button { flex: 1; min-width: 0; border: 1px solid rgba(255, 255, 255, .65); background: rgba(255, 255, 255, .35); border-radius: 10px; height: 30px; font-size: 15px; padding: 0; }
+.moods button[aria-pressed="true"] { background: rgba(255, 205, 225, .85); border-color: #db4f84; }
+.stats { display: grid; gap: 4px; font-size: 11.5px; }
+.stats .st-row { display: flex; justify-content: space-between; gap: 6px; }
+.stats .st-row span { font-variant-numeric: tabular-nums; }
+.stats .st-total { font-weight: 800; color: #b03a6a; }
 .hint2 { margin: 0; color: #4e3f5c; font-size: 11px; line-height: 1.4; }
 .hint2.center { text-align: center; }
 .mini2 { border: 1px solid rgba(255, 255, 255, .75); background: rgba(255, 255, 255, .5); border-radius: 10px; padding: 4px 9px; font-size: 11px; font-weight: 800; color: #4a3858; }
@@ -467,7 +474,7 @@ button { cursor: pointer; }
     <li><b>Games in the app:</b> Color Match (match a color or number), Ludo, Snakes and Ladders, Four in a Row and tic-tac-toe all play across both phones, taking turns. Plus draw and guess, an emoji story and a shared garden.</li>
     <li><b>Watch party, sleep together, date nights:</b> start a watch party (play, pause, reactions and chat sync on both phones), sleep together (both screens turn into the same starry sky, with optional rain, ocean or soft noise), and plan date nights with when, where, food, an activity and a movie.</li>
     <li><b>Albums and bucket list:</b> make albums from photos and play them as a slideshow, on your widget, or send them to your partner's widget. Bucket list places show as little scenery pictures in your dream season.</li>
-    <li><b>The full app:</b> tap the <b>💗 Hearby</b> icon on either home screen (or the partner's name in the open widget). <b>Us</b> has your big living scene, quick sending, the next special day and today's question. <b>Together</b> has daily couple questions (answers unlock only when you've both replied, so try both phones), tic-tac-toe across both phones, draw and guess (your drawing lands on the other widget), an emoji story, a shared garden that grows with every bit of love you send, watch and listen countdowns with live reactions, a shared Quran khatm and dua list, and date night ideas. <b>Memories</b> has the Memory Jar, your timeline, "open when" letters and a bucket list of places. <b>Me</b> shows your character, secret gift ideas, privacy and settings.</li>
+    <li><b>The full app:</b> tap the <b>💗 Hearby</b> icon on either home screen (or the partner's name in the open widget). Five tabs: <b>Home</b> (living scene, quick sending, mood check-in, today's question, next special day and date night, this week's love stats, and the distance and time between you), <b>Games</b> (every game on its own page), <b>Together</b> (watch party, sleep together, date night planner, dua list), <b>Memories</b> (Memory Jar, albums, timeline, "open when" letters, bucket list) and <b>Me</b> (your character, secret gift ideas, privacy, settings).</li>
     <li><b>Gentle reminders:</b> every now and then (about once a minute in this preview, a few times a day in the real app), each phone gets a soft nudge to message or check on the other, or to make dua for each other and for you both, such as "Take a moment to make dua for Mia and for you both 🤲". Choose love and dua, love and prayer, love only, or off under each phone, or tap "Show a reminder now".</li>
     <li><b>Meet-up countdown:</b> open a widget and tap the ✈️ chip to set or change the date, add a note, choose "We don't know the date yet" (shows "soon"), or hide the countdown. Both phones update.</li>
     <li><b>Teasing reminders:</b> the day before, the app only asks something cheeky like "What day is tomorrow 😉?" and leaves them to work it out. On the day, a clear notification says what day it is, and if nobody has sent a wish about 15 seconds after the celebration (hours later in the real app), it nudges them: "Have you wished Mia yet? 👀 Just checking…".</li>
@@ -536,6 +543,7 @@ button { cursor: pointer; }
     likely: ['Who is more likely to cry at a movie?', 'Who is more likely to forget an anniversary?', 'Who is more likely to get lost on a trip?', 'Who is more likely to say sorry first?', 'Who is more likely to fall asleep on a call?']
   };
   const QCATS = [['sweet', '💗 Sweet'], ['funny', '😂 Funny'], ['deep', '🌊 Deep'], ['future', '🔮 Future'], ['faith', '🤲 Faith'], ['thisorthat', '⚖️ This or that'], ['likely', "👀 Who's more likely"]];
+  const MOODS = [['😊', 'happy'], ['🥰', 'loved'], ['😴', 'sleepy'], ['😔', 'a bit down'], ['😤', 'stressed'], ['🤒', 'unwell'], ['🥳', 'excited'], ['🤲', 'grateful']];
   const LETTER_WHENS = ['you miss me', "you can't sleep", "you're having a hard day", 'you need a smile', 'our next monthversary comes', "you're proud of yourself"];
   const DN = {
     places: ['Same café, two cities ☕', 'Video call from a park 🌳', 'Rooftop café 🌆', 'Beach walk at sunset 🌅', 'Botanical garden 🌸', 'Night market 🏮', 'Cozy home dinner 🕯️', 'Lakeside picnic 🧺'],
@@ -554,28 +562,24 @@ button { cursor: pointer; }
         <section class="tab" data-tab="us">
           <div class="us-scene"><canvas class="us-canvas" aria-label="Your couple scene"></canvas><div class="us-chips"><span class="chip us-partner"></span><span class="chip us-cd"></span></div></div>
           <div class="card quick" aria-label="Send love"><button data-q="kiss" aria-label="Flying kiss">💋</button><button data-q="heart" aria-label="Flying heart">❤️</button><button data-q="text" aria-label="Message">✏️</button><button data-q="photo" aria-label="Photos">📷</button><button data-q="pop" aria-label="Pop-up text">✨</button></div>
-          <div class="card us-day"></div>
-          <div class="card us-date"></div>
-          <div class="card"><small>Today's question</small><p class="q-text us-q"></p><button class="link go-play">Answer it →</button></div>
-          <div class="card"><small>A moment for you</small><p class="hint2 us-moment"></p></div>
-        </section>
-
-        <section class="tab" data-tab="play" hidden>
-          <div class="card"><b>💬 Daily question</b>
+          <div class="card"><div class="card-h"><b>💭 How are you feeling?</b><em class="mood-mine"></em></div>
+            <div class="moods">${MOODS.map(([e, l]) => `<button data-mood="${e}" aria-label="Feeling ${l}" title="${l}">${e}</button>`).join('')}</div>
+            <p class="hint2 mood-partner"></p></div>
+          <div class="card"><b>💬 Today's question</b>
             <div class="cats">${QCATS.map(([k, l]) => `<button data-cat="${k}" aria-pressed="${k === 'sweet'}">${l}</button>`).join('')}</div>
             <p class="q-text play-q"></p>
             <textarea class="q-ans" id="q-ans-${id}" maxlength="160" placeholder="Your answer…" aria-label="Your answer"></textarea>
             <div class="ans q-partner"></div>
             <button class="send q-send">Answer</button>
           </div>
+          <div class="card us-day"></div>
+          <div class="card us-date"></div>
+          <div class="card"><b>💞 This week</b><div class="stats"></div></div>
+          <div class="card"><b>🌍 Between us</b><p class="hint2 dist"></p></div>
+          <div class="card"><small>A moment for you</small><p class="hint2 us-moment"></p></div>
+        </section>
 
-          <div class="card"><b>🎲 Games</b><p class="hint2">Play across both phones. Each move shows up on ${nm}'s phone.</p>
-            <div class="games">
-              <button data-game="cards">🃏<span>Color Match</span></button><button data-game="ludo">🎯<span>Ludo</span></button><button data-game="snakes">🐍<span>Snakes and Ladders</span></button><button data-game="four">🔴<span>Four in a Row</span></button>
-              <button data-game="ttt">❌<span>Tic-tac-toe</span></button><button data-game="draw">🎨<span>Draw and guess</span></button><button data-game="emoji">😄<span>Emoji story</span></button><button data-game="garden">🌱<span>Our garden</span></button>
-            </div>
-            <div class="game-area"></div>
-          </div>
+        <section class="tab" data-tab="play" hidden>
 
           <div class="card"><b>🍿 Watch party</b><p class="hint2">Pick something to watch. Play and pause stay in sync on both phones, with live reactions and chat.</p>
             <div class="add-row"><input type="text" list="dl-movie-${id}" class="wp-title" id="wp-title-${id}" maxlength="60" placeholder="Movie, show or YouTube link" aria-label="What to watch">${dl('movie', DN.movies)}<button class="send wp-start">Start</button></div>
@@ -608,6 +612,17 @@ button { cursor: pointer; }
           <div class="card"><b>🤲 Our dua list</b><div class="duas"></div>
             <div class="add-row"><input type="text" class="dua-in" id="dua-in-${id}" maxlength="60" placeholder="Add something to pray for" aria-label="New dua"><button class="mini2 dua-add">Add</button></div>
           </div>
+        </section>
+
+        <section class="tab" data-tab="games" hidden>
+          <div class="card"><b>🎲 Games</b><p class="hint2">Play across both phones. Each move shows up on ${nm}'s phone.</p>
+            <div class="games">
+              <button data-game="cards">🃏<span>Color Match</span></button><button data-game="ludo">🎯<span>Ludo</span></button><button data-game="snakes">🐍<span>Snakes and Ladders</span></button><button data-game="four">🔴<span>Four in a Row</span></button>
+              <button data-game="ttt">❌<span>Tic-tac-toe</span></button><button data-game="draw">🎨<span>Draw and guess</span></button><button data-game="emoji">😄<span>Emoji story</span></button><button data-game="garden">🌱<span>Our garden</span></button>
+            </div>
+            <div class="game-area"></div>
+          </div>
+
         </section>
 
         <section class="tab" data-tab="mem" hidden>
@@ -658,7 +673,7 @@ button { cursor: pointer; }
         </section>
       </main>
       <div class="album-player" hidden><div class="ap-stage"></div><div class="ap-cap"></div><button class="ap-close" aria-label="Close slideshow">✕</button></div>
-      <nav class="app-nav" aria-label="App sections"><button data-tab="us" aria-current="page">🏡<span>Us</span></button><button data-tab="play">🎲<span>Together</span></button><button data-tab="mem">📖<span>Memories</span></button><button data-tab="me">⚙️<span>Me</span></button></nav>
+      <nav class="app-nav" aria-label="App sections"><button data-tab="us" aria-current="page">🏡<span>Home</span></button><button data-tab="games">🎮<span>Games</span></button><button data-tab="play">💞<span>Together</span></button><button data-tab="mem">📖<span>Memories</span></button><button data-tab="me">⚙️<span>Me</span></button></nav>
     </div>
     <div class="sleep-layer" hidden><canvas class="sleep-canvas" aria-hidden="true"></canvas><div class="sleep-ui"><b class="sl-title">Sleeping together 💤</b><span class="sl-sub"></span><button class="mini2 sl-wake">☀️ Wake up</button></div></div>`;
   }
@@ -2810,6 +2825,29 @@ button { cursor: pointer; }
     }).join('');
   }
 
+  // ---------- Home extras: mood, weekly love stats, distance ----------
+  if (!APP.mood) APP.mood = {};
+  function weekStats() {
+    const wk = Math.floor(dayIdx() / 7);
+    if (!APP.stats || APP.stats.week !== wk) APP.stats = { week: wk, leo: { kiss: 2, heart: 3, msg: 4, photo: 1, felt: 2 }, mia: { kiss: 3, heart: 2, msg: 5, photo: 2, felt: 3 } };
+    return APP.stats;
+  }
+  function bumpStat(id, k) { weekStats(); APP.stats[id][k] = (APP.stats[id][k] || 0) + 1; saveApp(); renderAppAll(); }
+  const CITY_GEO = { London: [51.5074, -0.1278], Toronto: [43.6532, -79.3832] };
+  function tzOffsetMin(tz) { const d = new Date(); return (new Date(d.toLocaleString('en-US', { timeZone: tz })) - new Date(d.toLocaleString('en-US', { timeZone: 'UTC' }))) / 60000; }
+  function distText(id) {
+    const me = P[id], pa = P[other(id)], a = CITY_GEO[me.city], b = CITY_GEO[pa.city];
+    let km = '';
+    if (a && b) {
+      const R = 6371, rad = x => x * Math.PI / 180, dLat = rad(b[0] - a[0]), dLon = rad(b[1] - a[1]);
+      const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a[0])) * Math.cos(rad(b[0])) * Math.sin(dLon / 2) ** 2;
+      km = `${Math.round(2 * R * Math.asin(Math.sqrt(h))).toLocaleString('en-US')} km apart`;
+    }
+    const diff = Math.round((tzOffsetMin(pa.tz) - tzOffsetMin(me.tz)) / 60);
+    const tdiff = diff === 0 ? 'the same time zone' : `${esc(pa.name)}'s day is ${Math.abs(diff)} hour${Math.abs(diff) === 1 ? '' : 's'} ${diff < 0 ? 'behind' : 'ahead of'} yours`;
+    return `📍 ${esc(me.city)} ↔ ${esc(pa.city)}${km ? ` · ${km}` : ''}<br>🕰️ ${tdiff} · it's ${fmtTime(pa.tz)} there<br>🌙 Different skies, same moon.`;
+  }
+
   // ---------- Rendering the tabs ----------
   function makeScene(canvas, src) {
     return {
@@ -2824,7 +2862,7 @@ button { cursor: pointer; }
     const s = W[id];
     closeW(id); closeSheet(id);
     s.appOpen = true; s.q('.happ').hidden = false;
-    s.appUI = s.appUI || { tab: 'us', cat: 'sweet', game: null };
+    s.appUI = s.appUI || { tab: 'us', cat: QCATS[dayIdx() % QCATS.length][0], game: null };
     s.appUI.moment = gentleLine(id).line;
     s.appScene = makeScene(s.q('.us-canvas'), s);
     syncAppSettings(id); setAppTab(id, s.appUI.tab);
@@ -2838,7 +2876,7 @@ button { cursor: pointer; }
     if (tab === 'us' && s.appScene) s.appScene.w = 0;
     renderApp(id);
   }
-  function renderApp(id) { const s = W[id]; if (!s.appOpen) return; ({ us: renderUs, play: renderPlay, mem: renderMem, me: renderMe })[s.appUI.tab](id); }
+  function renderApp(id) { const s = W[id]; if (!s.appOpen) return; ({ us: renderUs, games: renderGame, play: renderPlay, mem: renderMem, me: renderMe })[s.appUI.tab](id); }
   const renderAppAll = () => IDS.forEach(renderApp);
   function syncAppSettings(id) {
     document.getElementById(`app-discreet-${id}`).checked = P[id].discreet;
@@ -2847,7 +2885,7 @@ button { cursor: pointer; }
   }
   function renderUs(id) {
     const s = W[id], pa = P[other(id)];
-    s.q('.us-partner').textContent = `${pa.quiet ? '😴' : STATUSES[pa.status]} ${pa.name} · ${fmtTime(pa.tz)}`;
+    s.q('.us-partner').textContent = `${pa.quiet ? '😴' : (APP.mood[other(id)] || {}).e || STATUSES[pa.status]} ${pa.name} · ${fmtTime(pa.tz)}`;
     const md = meetDays(), cd = s.q('.us-cd');
     cd.hidden = !MEET.on; cd.textContent = md === null ? '✈️ soon' : md === 0 ? '💞 today!' : md < 0 ? '✈️ ?' : `✈️ ${md} days`;
     const next = DAYS.slice().sort((a, b) => daysUntil(a) - daysUntil(b)).find(ev => daysUntil(ev) !== Infinity);
@@ -2855,10 +2893,19 @@ button { cursor: pointer; }
     else s.q('.us-day').innerHTML = '<small>Special days</small><p class="hint2">Add your first special day from the widget 📅</p>';
     const dn = upcomingDates()[0];
     s.q('.us-date').innerHTML = dn ? `<small>Next date night</small><b>${dn.kind === 'person' ? '💞' : '💻'} ${esc(fmtWhen(dn.when))}</b><p class="hint2">${esc([dn.place, dn.food, dn.movie].filter(Boolean).join(' · ') || 'Details to be decided')}</p>` : '<small>Date night</small><p class="hint2">Nothing planned yet.</p><button class="link go-date">Plan a date night →</button>';
-    s.q('.us-q').textContent = qOf(QCATS[dayIdx() % QCATS.length][0]);
+    renderQuestion(id);
+    const mm = APP.mood[id], pm = APP.mood[other(id)], label = e => (MOODS.find(m => m[0] === e) || [e, ''])[1];
+    s.q('.moods').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(!!mm && b.dataset.mood === mm.e)));
+    s.q('.mood-mine').textContent = mm ? `you: ${mm.e} ${label(mm.e)}` : '';
+    s.q('.mood-partner').textContent = pm ? `${pa.name} is feeling ${pm.e} ${label(pm.e)} · ${ago(pm.at)}` : `${pa.name} hasn't checked in yet today.`;
+    weekStats();
+    const row = (who, st) => `<div class="st-row"><b>${esc(who)}</b><span>💋 ${st.kiss} · ❤️ ${st.heart} · 💬 ${st.msg} · 📷 ${st.photo} · 💗 ${st.felt}</span></div>`;
+    const tot = ['leo', 'mia'].reduce((n, pid) => n + Object.values(APP.stats[pid]).reduce((x, y) => x + y, 0), 0);
+    s.q('.stats').innerHTML = row('You', APP.stats[id]) + row(pa.name, APP.stats[other(id)]) + `<p class="st-total">You've thought of each other ${tot} times this week 💞</p>`;
+    s.q('.dist').innerHTML = distText(id);
     s.q('.us-moment').textContent = s.appUI.moment;
   }
-  function renderPlay(id) {
+  function renderQuestion(id) {
     const s = W[id], cat = s.appUI.cat, k = qKey(cat), o = other(id), qa = APP.qa[k] || {};
     s.q('.play-q').textContent = qOf(cat);
     s.q('.cats').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cat === cat)));
@@ -2867,7 +2914,10 @@ button { cursor: pointer; }
     s.q('.q-partner').innerHTML = mine
       ? `<b>You:</b> ${esc(mine)}<br>${theirs ? `<b>${on}:</b> ${esc(theirs)}` : `⏳ Waiting for ${on} to answer. Try answering on ${on}'s phone too.`}`
       : theirs ? `🔒 ${on} answered. Answer to unlock it.` : "🔒 Answers unlock once you've both replied.";
-    renderGame(id); renderWatch(id); renderDates(id);
+  }
+  function renderPlay(id) {
+    const s = W[id], o = other(id);
+    renderWatch(id); renderDates(id);
     s.q('.sl-status').textContent = APP.sleep[id] ? "You're sleeping together 💤" : APP.sleep[o] ? `🌙 ${P[o].name} is asleep and waiting for you` : '';
     s.q('.sl-go').textContent = APP.sleep[o] && !APP.sleep[id] ? `🌙 Join ${P[o].name}` : '🌙 Sleep together';
     s.q('.duas').innerHTML = APP.duas.map((d, i) => `<label class="dua-row${d.done ? ' done' : ''}" for="dua-${id}-${i}"><input type="checkbox" id="dua-${id}-${i}" data-dua="${i}"${d.done ? ' checked' : ''}><span>${esc(d.t)}</span>${d.done ? '<em>answered, alhamdulillah 🤍</em>' : ''}</label>`).join('');
@@ -2915,9 +2965,14 @@ button { cursor: pointer; }
       else if (q === 'photo') openSheet(id, 'photo');
       else { openSheet(id, 'text'); s.q(`input[name="mode-${id}"][value="${q === 'pop' ? 'pop' : 'msg'}"]`).checked = true; s.q('.modes').dispatchEvent(new Event('change', { bubbles: true })); }
     });
-    on('.go-play', 'click', () => { s.appUI.cat = QCATS[dayIdx() % QCATS.length][0]; setAppTab(id, 'play'); });
     on('.us-date', 'click', e => { if (e.target.closest('.go-date')) { setAppTab(id, 'play'); setTimeout(() => scrollApp(id, a.querySelector('.dn-form')), 50); } });
-    on('.cats', 'click', e => { const b = e.target.closest('button'); if (!b) return; s.appUI.cat = b.dataset.cat; s.q('.q-ans').value = ''; renderPlay(id); });
+    on('.cats', 'click', e => { const b = e.target.closest('button'); if (!b) return; s.appUI.cat = b.dataset.cat; s.q('.q-ans').value = ''; renderQuestion(id); });
+    on('.moods', 'click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      APP.mood[id] = { e: b.dataset.mood, at: Date.now() }; saveApp(); renderAppAll();
+      const l = (MOODS.find(m => m[0] === b.dataset.mood) || ['', ''])[1];
+      toast(id, `Mood shared ${b.dataset.mood}`); tellPartner(id, `💭 ${P[id].name} is feeling ${b.dataset.mood} ${l}`);
+    });
     on('.q-send', 'click', () => {
       const v = s.q('.q-ans').value.trim(); if (!v) return;
       const k = qKey(s.appUI.cat); APP.qa[k] = { ...(APP.qa[k] || {}), [id]: v }; saveApp();
@@ -3042,7 +3097,7 @@ button { cursor: pointer; }
   function sendFly(from, kind) {
     const to = other(from);
     const ch = kind === 'kiss' ? pick(['💋', '😘']) : pick(['❤️', '💖', '💗']);
-    growGarden(1);
+    growGarden(1); bumpStat(from, kind);
     toast(from, kind === 'kiss' ? `Kiss sent to ${P[to].name} 💋` : `Heart sent to ${P[to].name} ❤️`);
     if (narrow.matches) setTimeout(() => setTab(to), 650);
     setTimeout(() => {
@@ -3055,7 +3110,7 @@ button { cursor: pointer; }
     const msg = { from, text: payload.text || '', img: payload.img || (payload.imgs && payload.imgs[0]) || null, pop: !!payload.pop, at: t, kept: false, felt: false, revealed: false };
     closeSheet(from);
     setTimeout(() => closeW(from), 350);
-    growGarden(1);
+    growGarden(1); bumpStat(from, payload.imgs || payload.img ? 'photo' : 'msg');
     toast(from, payload.pop ? `Pop-up sent ✨ plays when ${P[to].name} looks` : `Sent to ${P[to].name} 💌`);
     const sync = t - W[to].lastSentAt < 15000;
     W[from].lastSentAt = t;
@@ -3077,7 +3132,7 @@ button { cursor: pointer; }
   function feltIt(id) {
     const s = W[id], m = s.msg;
     if (!m || m.felt) return;
-    m.felt = true; renderBubble(id);
+    m.felt = true; renderBubble(id); bumpStat(id, 'felt');
     toast(id, `${P[m.from].name} will know you felt it 💗`);
     const back = m.from;
     setTimeout(() => {

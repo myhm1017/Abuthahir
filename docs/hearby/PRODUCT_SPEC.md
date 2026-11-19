@@ -185,17 +185,25 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 
 ## 4b. The app (beyond the widget)
 
-Opening Hearby feels like the widget opened up: the same calm painted scenery, glassy cards and your two characters. Four tabs:
+Opening Hearby feels like the widget opened up: the same calm painted scenery, glassy cards and your two characters. Five tabs: Home, Games, Together, Memories and Me.
 
-### 🏡 Us (v1)
+### 🏡 Home (v1)
 - A large version of the living scene (today's place and season).
-- Partner's time and status, the meet-up countdown, the next special day.
+- Partner's time, mood and status, and the meet-up countdown.
 - A quick-send bar: 💋 kiss, ❤️ heart, ✏️ message, 📷 photos, ✨ pop-up.
-- Today's question and a small "moment for you" (a love nudge or a dua reminder).
+- **Mood check-in:** tap how you feel (happy, loved, sleepy, a bit down, stressed, unwell, excited, grateful); your partner sees it and gets a gentle heads-up.
+- **Today's question:** daily couple questions in seven categories; answers unlock only once you've both replied.
+- The next special day and the next planned date night.
+- **This week:** a soft count of kisses, hearts, messages, photos and "felt it" taps from each of you ("You've thought of each other 28 times this week 💞"). It resets weekly and never shames anyone for a low number.
+- **Between us:** the distance between your cities, the time difference and your partner's local time ("Different skies, same moon").
+- A small "moment for you" (a love nudge or a dua reminder).
 
-### 🎲 Together
-- **Daily couple questions (v1):** categories sweet, funny, deep, future, faith, this-or-that and who's-more-likely. Answers unlock only once you've both replied. Wholesome by default.
-- **Board and card games (later), played turn by turn across both phones:**
+### 🎮 Games
+- Its own tab, separate from everything else (see the games list under Together below, which now lives here).
+
+### 💞 Together
+- (Daily questions moved to Home.)
+- **Board and card games (later, shown in the Games tab), played turn by turn across both phones:**
   - **Color Match:** an original match-the-color-or-number card game with skip, +2 and rainbow wild cards (same family of mechanics as popular shedding card games, under its own name).
   - **Ludo** (2-player), **Snakes and Ladders**, **Four in a Row**, tic-tac-toe.
   - Draw and guess (drawings land on the partner's widget), emoji story.
@@ -293,7 +301,7 @@ Opening Hearby feels like the widget opened up: the same calm painted scenery, g
 | Area | v1 | Later |
 |---|---|---|
 | Pairing (link, QR, ID, code), 1 partner | ✅ | Family circles, other relationships |
-| App tabs: Us, Together (daily questions), Memories (jar, timeline, open-when letters), Me | ✅ | |
+| App tabs: Home (questions, mood, weekly stats, distance), Memories (jar, timeline, open-when letters), Me | ✅ | |
 | Board and card games, our garden, watch party, sleep together, date night planner, albums, bucket list with scenery | | ✅ |
 | End-to-end encryption of everything personal | ✅ | Encrypted passphrase backup |
 | Discreet mode, app lock, content-free notifications | ✅ | |

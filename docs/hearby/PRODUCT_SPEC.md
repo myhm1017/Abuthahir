@@ -69,7 +69,8 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 
 ### 4.5 Avatars (v1)
 - The app **creates a cute default chibi pair** automatically, so it works right away.
-- An **optional avatar builder**: hair, skin tone, eyes, outfit and accessories.
+- An **optional avatar builder**: style (for example a man with facial hair, a woman in a hijab with a modest long dress, or long hair), skin tone, hair or hijab color, outfit color, facial hair (moustache, beard, clean shaven), glasses and accessories.
+- Modest and cultural styles (hijab, modest dress, beards, and more over time) are first-class options, not afterthoughts.
 - Built from **layered sprites** so every customization works with every animation.
 - *Later:* generate an avatar from a selfie.
 

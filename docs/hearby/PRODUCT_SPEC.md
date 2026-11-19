@@ -145,6 +145,10 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - **Celebrations** play across the widget: confetti, balloons, fireworks, a light show, or a **drone show** (lights forming a heart, then the age or the couple's initials in the night sky). "Surprise me" picks one that fits the occasion.
 - Celebrations follow the "only when they're looking" rule.
 - **Memory:** every celebrated day is logged in Memories (and the Memory Jar). Ages and year counts update automatically each year.
+- **Teasing reminders:** reminders are playful, never nagging.
+  - The day before, the app teases first ("What day is tomorrow 😉?", "Don't forget what day it is tomorrow 🤨", "Hint: 🎂 + Mia = ?") and reveals the answer a moment later.
+  - On the day, if a partner hasn't sent a wish by midday, it nudges them with humor ("Have you wished Mia yet? 👀 Just checking…", "Still no wish for Mia? Bold move 😬").
+  - Teases never spoil a surprise: personal days only tease the partner.
 - **Repeats:** each day can repeat every year, every month (for example a monthly "monthversary" on the 9th, the day you united), every week on a chosen weekday, every day, or just once. Monthly days can count months ("Happy 15th Monthversary").
 
 

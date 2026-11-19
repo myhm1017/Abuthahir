@@ -301,6 +301,7 @@ button { cursor: pointer; }
     <li>Turn on <b>Discreet mode</b> to blur messages until you tap them.</li>
     <li><b>Special days:</b> open a widget and tap 📅. Birthdays, anniversaries and other moments are listed with a countdown. Add your own, and choose a celebration (confetti, balloons, fireworks, light show, drone show or everything). Mia's birthday is set for tomorrow, so Leo gets a private reminder a few seconds after the page loads. Tap ⏰ to preview a day-before reminder or 🎉 to preview the celebration on both phones.</li>
     <li><b>Scenery:</b> every time someone looks at their screen (screen on, switching phones or coming back to the page), the widget moves to a new place and season: Santorini, the Swiss Alps, Mount Fuji, the Grand Canyon, a Banff trail, the Maldives, an Icelandic waterfall, Kyoto, Central Park, Dubai, Paris, the Taj Mahal, the Pyramids, the Golden Gate, Cappadocia and a Norwegian fjord, in spring, summer, autumn or winter. Pick a fixed place or season under each phone if you prefer.</li>
+    <li><b>Teasing reminders:</b> the day before, the app first asks something cheeky like "What day is tomorrow 😉?" and reveals the answer a few seconds later. On the day, if nobody has sent a wish about 15 seconds after the celebration (hours later in the real app), it nudges them: "Have you wished Mia yet? 👀 Just checking…".</li>
     <li><b>Repeating days:</b> special days can repeat every year, month, week or day, or happen just once. A monthly "Our monthversary" on the 9th is already in the list.</li>
     <li><b>Customize the characters:</b> under each phone, open "Customize … name and look" to rename them or change their style: hijab styles (classic, khimar, turban wrap, niqab), hair (buzz cut, quiff, man bun, wolf cut, braids, bun and more), 13 beard and moustache styles, tops, bottoms, dresses (abaya, gown, churidar, saree, burqa and more), shoes, skin tone, eye color, hair or hijab color, outfit, facial hair and glasses.</li>
     <li><b>Slideshow:</b> open the widget, tap 📷, pick a few photos (or "Use sample photos"), choose a transition and send. The other widget starts a slideshow. Tap 🎞️ to switch between the slideshow and the couple scene.</li>
@@ -1872,19 +1873,45 @@ button { cursor: pointer; }
     return { title: `Tomorrow is ${who}'s ${ev.title} ✨`, tip: `Wish ${who} well and make the day special 💝`, ribbon: `⏰ Tomorrow: ${who}'s ${ev.title}` };
   }
   const reminderFor = ev => (ev.who === 'both' ? IDS.slice() : [other(ev.who)]);
+  // Playful teasing lines: a question first, the answer a moment later.
+  function teaseBefore(ev) {
+    if (ev.who === 'both') return pick(["What day is tomorrow 😉?", "Don't you dare forget tomorrow 🤨", 'Psst… something sweet happens tomorrow 💞', 'Clear your schedule for tomorrow 😌', "Tomorrow isn't just any day, right? 👀", 'Quick quiz: what are we celebrating tomorrow? 🤔']);
+    const n = P[ev.who].name;
+    return pick(["What day is tomorrow 😉?", `Psst… guess who has a big day tomorrow 👀`, "Don't forget what day it is tomorrow 🤨", ev.type === 'birthday' ? `Hint: 🎂 + ${n} = ?` : `Hint: it's about ${n} 😏`, 'Your phone remembers tomorrow. Do you? 😏', 'Tomorrow is a big deal. Just saying 🙃']);
+  }
+  function teaseDay(ev) {
+    if (ev.who === 'both') return pick(["Don't forget what day it is 🤨", 'Have you two wished each other yet? 👀', "Today's special. Act like it 😌💞", 'Hello? Today?? Anyone?? 🙃']);
+    const n = P[ev.who].name;
+    return pick(["Don't forget what day it is 🤨", `Have you wished ${n} yet? 👀 Just checking…`, "Today's not a normal day, you know 😉", `${n} is waiting for a wish… no pressure 🙃`, `Still no wish for ${n}? Bold move 😬`]);
+  }
 
   function remind(ev, preview) {
     const tt = tomorrowText(ev), to = reminderFor(ev);
     to.forEach(id => {
-      banner(id, `${esc(tt.title)}<small>${esc(tt.tip)}</small>`);
-      buzz(id, tt.tip, 7000);
-      const pl = W[id].q('.pill'); pl.textContent = tt.title; pl.classList.add('show');
-      clearTimeout(pl._t); pl._t = setTimeout(() => pl.classList.remove('show'), 8000);
+      const tease = teaseBefore(ev), pl = W[id].q('.pill');
+      banner(id, `${esc(tease)}<small>Think about it… 🤔</small>`);
+      buzz(id, tease, 4200);
+      pl.textContent = tease; pl.classList.add('show');
+      clearTimeout(pl._t);
+      setTimeout(() => {
+        banner(id, `${esc(tt.title)}<small>${esc(tt.tip)}</small>`);
+        buzz(id, tt.tip, 7000);
+        pl.textContent = tt.title; pl.classList.add('show');
+        clearTimeout(pl._t); pl._t = setTimeout(() => pl.classList.remove('show'), 8000);
+      }, 4200);
     });
     if (preview) IDS.filter(id => !to.includes(id)).forEach(id => toast(id, `Reminder sent to ${to.map(i => P[i].name).join(' & ')} only 🤫`));
   }
   function celebrate(ev, preview) {
     IDS.forEach(id => deliverVisual(id, { kind: 'celebrate', ev }));
+    // If nobody has sent a wish a while after the celebration, nudge them with a tease.
+    const startedAt = Date.now();
+    reminderFor(ev).forEach(id => setTimeout(() => {
+      if (W[id].lastSentAt >= startedAt) return;
+      const line = teaseDay(ev);
+      banner(id, `${esc(line)}<small>Send a wish, a kiss or a pop-up 💌</small>`);
+      buzz(id, line, 6000);
+    }, 16000));
     if (!preview) {
       const key = `${ev.id}-${today0().toISOString().slice(0, 10)}`;
       if (!MEMORIES.some(m => m.key === key)) {

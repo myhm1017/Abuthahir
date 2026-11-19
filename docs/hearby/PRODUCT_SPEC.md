@@ -183,6 +183,38 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 
 ---
 
+## 4b. The app (beyond the widget)
+
+Opening Hearby feels like the widget opened up: the same calm painted scenery, glassy cards and your two characters. Four tabs:
+
+### 🏡 Us (v1)
+- A large version of the living scene (today's place and season).
+- Partner's time and status, the meet-up countdown, the next special day.
+- A quick-send bar: 💋 kiss, ❤️ heart, ✏️ message, 📷 photos, ✨ pop-up.
+- Today's question and a small "moment for you" (a love nudge or a dua reminder).
+
+### 🎲 Together
+- **Daily couple questions (v1):** categories sweet, funny, deep, future, faith, this-or-that and who's-more-likely. Answers unlock only once you've both replied. Wholesome by default.
+- **Games (later):**
+  - Live: tic-tac-toe, Connect Four, Ludo.
+  - Anytime: draw and guess (drawings land on the partner's widget), emoji story, guess my answer, how-well-do-you-know-me quiz.
+  - **Our garden:** a shared plant that grows with every bit of love sent and never wilts (no streak guilt).
+- **Watch and listen together (later):** YouTube in sync with live floating reactions; a synced "3, 2, 1, press play" countdown for Netflix and music.
+- **Faith together (later):** a shared Quran khatm goal with a progress ring and page or juz logging; a shared dua list where answered duas get ticked with "alhamdulillah"; Ramadan mode with suhoor and iftar times in both time zones.
+- **Date night ideas (later):** cook the same recipe, watch the same sunset, a virtual café date, pray together on a call.
+
+### 📖 Memories (v1 core)
+- **Memory Jar:** kept messages, photos and celebrated days; "open the jar" pulls a random memory.
+- **Timeline** of celebrated days, visits and milestones.
+- **"Open when…" letters:** sealed letters that unlock in a moment (you miss me, you can't sleep, a hard day, our next monthversary).
+- **Bucket list (later):** places to visit together, linked to the scenery places; ticked places join the timeline.
+
+### ⚙️ Me (v1)
+- Your character with the full wardrobe.
+- **Secret gift ideas** for your partner, never visible to them.
+- Privacy: end-to-end encryption status, the safety code to verify with your partner, discreet mode, screenshot protection.
+- Settings: reminders, quiet hours, scenery, status, pairing.
+
 ## 5. Privacy and security (hard requirement)
 
 **Promise to users:** *only you and your partner can ever see what you share.* Every user has their own privacy, with no data leakage. Hearby's servers only relay and temporarily store **encrypted data they cannot read**.
@@ -257,6 +289,8 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 | Area | v1 | Later |
 |---|---|---|
 | Pairing (link, QR, ID, code), 1 partner | ✅ | Family circles, other relationships |
+| App tabs: Us, Together (daily questions), Memories (jar, timeline, open-when letters), Me | ✅ | |
+| Games, our garden, watch/listen together, Quran khatm and dua list, bucket list, date ideas | | ✅ |
 | End-to-end encryption of everything personal | ✅ | Encrypted passphrase backup |
 | Discreet mode, app lock, content-free notifications | ✅ | |
 | 4x4 resizable, customizable widget | ✅ | More layouts and themes |

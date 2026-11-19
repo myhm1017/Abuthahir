@@ -20,6 +20,7 @@
 }
 :root[data-theme="dark"] { --bg: #19141f; --fg: #f3eaf6; --muted: #b6a8c4; --accent: #ff7eab; --card: #241c2c; --line: #3a2f44; color-scheme: dark; }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body {
   background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.5;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
@@ -65,7 +66,7 @@ button { cursor: pointer; }
 .statusbar { height: 32px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; font-size: 12px; font-weight: 700; color: #3a2c47; }
 .statusbar .cam { width: 11px; height: 11px; border-radius: 50%; background: #15111b; }
 .sb-icons { letter-spacing: 2px; font-size: 11px; }
-.banner { position: absolute; top: 32px; left: 10px; right: 10px; z-index: 6; background: rgba(255, 255, 255, .45); backdrop-filter: blur(16px) saturate(1.5); -webkit-backdrop-filter: blur(16px) saturate(1.5); border: 1px solid rgba(255, 255, 255, .5); border-radius: 18px; padding: 8px 13px; font-weight: 700; font-size: 13px; box-shadow: 0 8px 20px -10px rgba(70, 30, 80, .4); animation: drop 2.8s ease both; }
+.banner { position: absolute; top: 32px; left: 10px; right: 10px; z-index: 12; background: rgba(255, 255, 255, .45); backdrop-filter: blur(16px) saturate(1.5); -webkit-backdrop-filter: blur(16px) saturate(1.5); border: 1px solid rgba(255, 255, 255, .5); border-radius: 18px; padding: 8px 13px; font-weight: 700; font-size: 13px; box-shadow: 0 8px 20px -10px rgba(70, 30, 80, .4); animation: drop 2.8s ease both; }
 .banner small { display: block; font-weight: 600; color: #7a6a88; font-size: 11px; }
 @keyframes drop { 0% { transform: translateY(-120%); opacity: 0 } 10%, 82% { transform: none; opacity: 1 } 100% { transform: translateY(-120%); opacity: 0 } }
 
@@ -133,7 +134,7 @@ button { cursor: pointer; }
 .dock .app i { background: rgba(255, 255, 255, .75); }
 .navbar { height: 20px; display: grid; place-items: center; }
 .navbar::after { content: ""; width: 92px; height: 4px; border-radius: 4px; background: rgba(50, 30, 60, .35); }
-.toast { position: absolute; left: 50%; bottom: 100px; transform: translateX(-50%); z-index: 6; background: #3a2a48; color: #fff; font-weight: 700; font-size: 12px; padding: 7px 14px; border-radius: 999px; white-space: nowrap; animation: pop 2.2s ease both; }
+.toast { position: absolute; left: 50%; bottom: 100px; transform: translateX(-50%); z-index: 12; background: #3a2a48; color: #fff; font-weight: 700; font-size: 12px; padding: 7px 14px; border-radius: 999px; white-space: nowrap; animation: pop 2.2s ease both; }
 
 /* ---------- Slideshow ---------- */
 .slides { position: absolute; inset: 0; z-index: 1; overflow: hidden; background: #1b1424; }
@@ -205,6 +206,89 @@ button { cursor: pointer; }
 .screen.off .off-layer { opacity: 1; pointer-events: auto; }
 .off-clock { font-family: var(--display); color: rgba(255, 255, 255, .26); font-size: 42px; font-weight: 500; }
 .off-hint { position: absolute; bottom: 40px; font-size: 11px; font-weight: 700; color: rgba(255, 255, 255, .3); }
+
+/* ---------- The full app inside the phone ---------- */
+.hearby-icon { border: 0; background: none; padding: 0; font: inherit; cursor: pointer; }
+.hearby-icon i { background: linear-gradient(135deg, #ff8fb8, #b388ff) !important; color: #fff; box-shadow: 0 4px 10px -4px rgba(180, 60, 120, .6); }
+.happ { position: absolute; inset: 0; z-index: 7; display: flex; flex-direction: column; color: #33263f; border-radius: 35px; overflow: hidden; animation: appIn .35s cubic-bezier(.2, .9, .3, 1.1) both;
+  background: radial-gradient(120% 60% at 10% 0%, #ffd9e8 0%, transparent 60%), radial-gradient(90% 55% at 100% 40%, #d9d2ff 0%, transparent 60%), linear-gradient(170deg, #fbe7f1, #e8e1fb 60%, #fbeadf); }
+@keyframes appIn { from { opacity: 0; transform: scale(.92) } }
+.app-top { padding: 32px 12px 4px; display: grid; grid-template-columns: 28px 1fr 28px; align-items: center; text-align: center; }
+.app-top b { font-family: var(--display); font-weight: 600; font-size: 18px; }
+.app-top b span { color: #db4f84; font-size: .7em; vertical-align: .3em; }
+.app-back { border: 1px solid rgba(255, 255, 255, .7); background: rgba(255, 255, 255, .4); border-radius: 50%; width: 26px; height: 26px; font-size: 17px; font-weight: 800; line-height: 1; color: #4a3858; padding: 0; }
+.app-body { flex: 1; overflow-y: auto; padding: 4px 10px 10px; }
+.app-body .tab { display: grid; gap: 8px; align-content: start; }
+.app-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 6px 8px 16px; background: rgba(255, 255, 255, .38); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid rgba(255, 255, 255, .65); }
+.app-nav button { border: 0; background: transparent; display: grid; justify-items: center; font-size: 17px; gap: 1px; color: #6b5a7b; border-radius: 12px; padding: 3px 0; }
+.app-nav button span { font-size: 9.5px; font-weight: 800; }
+.app-nav button[aria-current="page"] { background: rgba(255, 255, 255, .6); color: #c43f76; }
+.card { background: rgba(255, 255, 255, .34); border: 1px solid rgba(255, 255, 255, .65); backdrop-filter: blur(12px) saturate(1.4); -webkit-backdrop-filter: blur(12px) saturate(1.4); border-radius: 16px; padding: 9px 10px; display: grid; gap: 6px; font-size: 12px; min-width: 0; }
+.card-h { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.card b { font-size: 12.5px; }
+.card small { color: #6e5d7e; font-weight: 800; font-size: 9.5px; text-transform: uppercase; letter-spacing: .07em; }
+.card em { font-style: normal; color: #6e5d7e; font-size: 10.5px; font-weight: 700; }
+.hint2 { margin: 0; color: #4e3f5c; font-size: 11px; line-height: 1.4; }
+.hint2.center { text-align: center; }
+.mini2 { border: 1px solid rgba(255, 255, 255, .75); background: rgba(255, 255, 255, .5); border-radius: 10px; padding: 4px 9px; font-size: 11px; font-weight: 800; color: #4a3858; }
+.link { border: 0; background: none; color: #c43f76; font-weight: 800; font-size: 11.5px; justify-self: start; padding: 0; cursor: pointer; }
+.us-scene { position: relative; border-radius: 18px; overflow: hidden; height: 186px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .55); background: #bfe0f2; }
+.us-canvas { width: 100%; height: 100%; display: block; }
+.us-chips { position: absolute; top: 6px; left: 6px; right: 6px; display: flex; justify-content: space-between; gap: 4px; }
+.quick { grid-template-columns: repeat(5, 1fr); }
+.quick button { border: 1px solid rgba(255, 255, 255, .65); background: rgba(255, 255, 255, .38); border-radius: 12px; height: 34px; font-size: 16px; }
+.q-text { margin: 0; font-family: var(--display); font-weight: 600; font-size: 14px; line-height: 1.25; text-wrap: balance; }
+.cats { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px; }
+.cats button { flex: none; border: 1px solid rgba(255, 255, 255, .7); background: rgba(255, 255, 255, .32); border-radius: 999px; padding: 3px 8px; font-size: 10.5px; font-weight: 800; color: #4a3858; }
+.cats button[aria-pressed="true"] { background: #db4f84; color: #fff; border-color: #db4f84; }
+.card textarea, .card input[type="text"], .card select { border: 1px solid rgba(255, 255, 255, .75); background: rgba(255, 255, 255, .5); border-radius: 10px; padding: 6px 8px; font-size: 12px; color: #33263f; width: 100%; min-width: 0; }
+.card textarea { height: 52px; resize: none; }
+.card select.inline-sel { width: auto; }
+.ans { background: rgba(255, 255, 255, .42); border-radius: 10px; padding: 6px 8px; font-size: 11.5px; line-height: 1.45; overflow-wrap: anywhere; }
+.games { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+.games button { border: 1px solid rgba(255, 255, 255, .65); background: rgba(255, 255, 255, .34); border-radius: 12px; padding: 6px 2px; display: grid; justify-items: center; gap: 2px; font-size: 17px; }
+.games button span { font-size: 8.5px; font-weight: 800; color: #4a3858; text-align: center; line-height: 1.1; }
+.games button.soon { opacity: .55; }
+.games button[aria-pressed="true"] { background: rgba(255, 205, 225, .7); }
+.ttt { display: grid; grid-template-columns: repeat(3, 46px); gap: 4px; justify-content: center; }
+.ttt button { height: 46px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, .75); background: rgba(255, 255, 255, .5); font-size: 20px; padding: 0; }
+.doodle { width: 100%; height: 140px; background: #fff; border-radius: 12px; touch-action: none; cursor: crosshair; display: block; }
+.colors { display: flex; gap: 5px; }
+.colors button { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #fff; padding: 0; }
+.story { font-size: 20px; min-height: 30px; background: rgba(255, 255, 255, .45); border-radius: 10px; padding: 3px 6px; overflow-wrap: anywhere; line-height: 1.3; }
+.emojis { display: flex; flex-wrap: wrap; gap: 4px; }
+.emojis button { border: 0; background: rgba(255, 255, 255, .5); border-radius: 8px; font-size: 17px; width: 30px; height: 30px; padding: 0; }
+.garden { text-align: center; font-size: 48px; line-height: 1.1; }
+.bar { height: 7px; background: rgba(255, 255, 255, .55); border-radius: 99px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: linear-gradient(90deg, #7ee0a1, #db4f84); border-radius: 99px; }
+.watch-stage { position: relative; background: #1d1530; color: #fff; border-radius: 12px; height: 92px; display: grid; place-items: center; overflow: hidden; font-family: var(--display); font-size: 24px; }
+.watch-stage .prog { position: absolute; left: 8px; right: 8px; bottom: 8px; height: 4px; background: rgba(255, 255, 255, .25); border-radius: 9px; }
+.watch-stage .prog i { display: block; height: 100%; width: 0; background: #ff7eab; border-radius: 9px; }
+.reacts { display: flex; gap: 5px; justify-content: center; }
+.reacts button { border: 0; background: rgba(255, 255, 255, .5); border-radius: 999px; font-size: 16px; width: 34px; height: 28px; padding: 0; }
+.floatemo { position: absolute; bottom: 12px; font-size: 20px; animation: floatUp 1.6s ease-out forwards; }
+@keyframes floatUp { to { transform: translateY(-70px); opacity: 0 } }
+.quran { display: grid; grid-template-columns: 70px 1fr; gap: 8px; align-items: center; }
+.ring { width: 70px; height: 70px; }
+.dua-row, .bk-row, .gift-row { display: flex; align-items: center; gap: 6px; font-size: 12px; flex-wrap: wrap; }
+.gift-row { justify-content: space-between; }
+.dua-row.done span, .bk-row.done span { text-decoration: line-through; opacity: .6; }
+.add-row { display: grid; grid-template-columns: 1fr auto; gap: 5px; }
+.grid2 { display: grid; gap: 6px; margin-top: 6px; }
+.mem-photos { display: flex; gap: 5px; overflow-x: auto; }
+.mem-photos img { width: 58px; height: 58px; object-fit: cover; border-radius: 10px; flex: none; }
+.pop-in { animation: celPop .6s cubic-bezier(.2, 1.4, .4, 1) both; }
+.timeline { display: grid; gap: 6px; border-left: 2px solid rgba(219, 79, 132, .5); padding-left: 9px; margin-left: 3px; }
+.timeline p { margin: 0; font-size: 11.5px; }
+.timeline p b { display: block; font-size: 9.5px; color: #8a7898; font-weight: 800; }
+.letter { display: flex; justify-content: space-between; align-items: center; gap: 6px; background: rgba(255, 255, 255, .42); border-radius: 10px; padding: 6px 8px; font-size: 11.5px; }
+.letter.sealed { opacity: .75; }
+.letter-open { background: #fffaf3; border-radius: 12px; padding: 10px 12px; font-family: var(--display); font-size: 13px; line-height: 1.45; animation: unfold .5s ease both; box-shadow: 0 6px 16px -10px rgba(120, 60, 40, .5); transform-origin: top; }
+@keyframes unfold { from { transform: scaleY(.2); opacity: 0 } }
+.me-card { grid-template-columns: 100px 1fr; align-items: center; }
+.me-canvas { width: 100px; height: 118px; border-radius: 14px; background: linear-gradient(#c9e3f7, #fde8ef); }
+.safety { font-family: ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .08em; background: rgba(255, 255, 255, .55); border-radius: 8px; padding: 3px 6px; font-size: 12px; justify-self: start; }
+.set-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-weight: 700; }
 
 /* ---------- Bottom sheet inside the phone ---------- */
 .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 8; background: rgba(255, 255, 255, .34); backdrop-filter: blur(22px) saturate(1.6); -webkit-backdrop-filter: blur(22px) saturate(1.6); border-top: 1px solid rgba(255, 255, 255, .6); border-radius: 26px 26px 0 0; padding: 14px 16px 18px; transform: translateY(105%); transition: transform .35s cubic-bezier(.2, .9, .3, 1.05); box-shadow: 0 -10px 30px -12px rgba(70, 30, 80, .35); display: grid; gap: 10px; color: #33263f; }
@@ -303,6 +387,7 @@ button { cursor: pointer; }
     <li>Turn on <b>Discreet mode</b> to blur messages until you tap them.</li>
     <li><b>Special days:</b> open a widget and tap 📅. Birthdays, anniversaries and other moments are listed with a countdown. Add your own, and choose a celebration (confetti, balloons, fireworks, light show, drone show or everything). Mia's birthday is set for tomorrow, so Leo gets a private tease a few seconds after the page loads. Tap ⏰ to preview a day-before reminder or 🎉 to preview the celebration on both phones.</li>
     <li><b>Scenery:</b> every time someone looks at their screen (screen on, switching phones or coming back to the page), the widget moves to a new place and season: Santorini, the Swiss Alps, Mount Fuji, the Grand Canyon, a Banff trail, the Maldives, an Icelandic waterfall, Kyoto, Central Park, Dubai, Paris, the Taj Mahal, the Pyramids, the Golden Gate, Cappadocia and a Norwegian fjord, in spring, summer, autumn or winter. Pick a fixed place or season under each phone if you prefer.</li>
+    <li><b>The full app:</b> tap the <b>💗 Hearby</b> icon on either home screen (or the partner's name in the open widget). <b>Us</b> has your big living scene, quick sending, the next special day and today's question. <b>Together</b> has daily couple questions (answers unlock only when you've both replied, so try both phones), tic-tac-toe across both phones, draw and guess (your drawing lands on the other widget), an emoji story, a shared garden that grows with every bit of love you send, watch and listen countdowns with live reactions, a shared Quran khatm and dua list, and date night ideas. <b>Memories</b> has the Memory Jar, your timeline, "open when" letters and a bucket list of places. <b>Me</b> shows your character, secret gift ideas, privacy and settings.</li>
     <li><b>Gentle reminders:</b> every now and then (about once a minute in this preview, a few times a day in the real app), each phone gets a soft nudge to message or check on the other, or to make dua for each other and for you both, such as "Take a moment to make dua for Mia and for you both 🤲". Choose love and dua, love and prayer, love only, or off under each phone, or tap "Show a reminder now".</li>
     <li><b>Meet-up countdown:</b> open a widget and tap the ✈️ chip to set or change the date, add a note, choose "We don't know the date yet" (shows "soon"), or hide the countdown. Both phones update.</li>
     <li><b>Teasing reminders:</b> the day before, the app only asks something cheeky like "What day is tomorrow 😉?" and leaves them to work it out. On the day, a clear notification says what day it is, and if nobody has sent a wish about 15 seconds after the celebration (hours later in the real app), it nudges them: "Have you wished Mia yet? 👀 Just checking…".</li>
@@ -361,6 +446,89 @@ button { cursor: pointer; }
     dress: [['abaya', 'Abaya'], ['gown', 'Gown'], ['churidar', 'Churidar with dupatta'], ['saree', 'Saree'], ['burqa', 'Burqa (parda)'], ['jeans', 'Top and jeans'], ['skirt', 'Top and long skirt'], ['jumper', 'Jumper dress']],
     shoes: [['sneakers', 'Sneakers'], ['boots', 'Boots'], ['loafers', 'Loafers'], ['sandals', 'Sandals'], ['flats', 'Flats'], ['heels', 'Heels']]
   };
+  const QBANK = {
+    sweet: ['What made you smile about me this week?', 'What is your favorite memory of us so far?', 'Which song makes you think of me?', 'What is one small thing I do that you love?', 'Describe me in three emojis.'],
+    funny: ['If we swapped lives for a day, what would you do first?', 'What weird food do you secretly like?', 'Which cartoon character am I most like?', 'What would our couple name be?', 'Who would survive longer in a zombie movie, you or me?'],
+    deep: ['When do you feel most loved by me?', 'What is something you have never told anyone?', 'What fear would you like to let go of?', 'What does home mean to you?', 'How can I support you better from far away?'],
+    future: ['Where should we travel together first?', 'What does a perfect weekend together look like?', 'What tradition do you want us to start?', 'Where do you see us in five years?', 'What do you want our home to feel like?'],
+    faith: ['Which dua do you make most for us?', 'Which Quran verse comforts you the most?', 'How can we grow closer to Allah together?', 'What is your favorite Ramadan memory?', 'Which good habit should we start together?'],
+    thisorthat: ['Sunrise or sunset?', 'Mountains or beaches?', 'Tea or coffee?', 'Calls or voice notes?', 'Rainy days or sunny days?'],
+    likely: ['Who is more likely to cry at a movie?', 'Who is more likely to forget an anniversary?', 'Who is more likely to get lost on a trip?', 'Who is more likely to say sorry first?', 'Who is more likely to fall asleep on a call?']
+  };
+  const QCATS = [['sweet', '💗 Sweet'], ['funny', '😂 Funny'], ['deep', '🌊 Deep'], ['future', '🔮 Future'], ['faith', '🤲 Faith'], ['thisorthat', '⚖️ This or that'], ['likely', "👀 Who's more likely"]];
+  const LETTER_WHENS = ['you miss me', "you can't sleep", "you're having a hard day", 'you need a smile', 'our next monthversary comes', "you're proud of yourself"];
+  const DATE_IDEAS = [
+    "Cook the same recipe on a video call and rate each other's plate 🍝", 'Watch the sunset at the same time and send a photo 🌅',
+    'Have a virtual café date: same drink, same playlist ☕', 'Stargaze together and find the moon from both cities 🌙',
+    'Read the same short chapter and talk about it 📖', 'Plan your dream trip from the bucket list, day by day 🗺️',
+    'Take a walk "together" on a call and describe what you see 🚶', 'Pray together on a call, then share one dua each 🤲',
+    'Draw each other from memory and swap drawings 🎨', 'Photo challenge: something blue, something sweet, something that reminds you of me 📸'
+  ];
+  function appHTML(id) {
+    const o = other(id), on = P[o].name, nm = `<span class="nm-${o}">${on}</span>`;
+    return `<div class="happ" hidden aria-label="Hearby app">
+      <header class="app-top"><button class="app-back" aria-label="Close the app">‹</button><b>hearby<span>♥</span></b><span title="End-to-end encrypted">🔒</span></header>
+      <main class="app-body">
+        <section class="tab" data-tab="us">
+          <div class="us-scene"><canvas class="us-canvas" aria-label="Your couple scene"></canvas><div class="us-chips"><span class="chip us-partner"></span><span class="chip us-cd"></span></div></div>
+          <div class="card quick" aria-label="Send love"><button data-q="kiss" aria-label="Flying kiss">💋</button><button data-q="heart" aria-label="Flying heart">❤️</button><button data-q="text" aria-label="Message">✏️</button><button data-q="photo" aria-label="Photos">📷</button><button data-q="pop" aria-label="Pop-up text">✨</button></div>
+          <div class="card us-day"></div>
+          <div class="card"><small>Today's question</small><p class="q-text us-q"></p><button class="link go-play">Answer it →</button></div>
+          <div class="card"><small>A moment for you</small><p class="hint2 us-moment"></p></div>
+        </section>
+        <section class="tab" data-tab="play" hidden>
+          <div class="card"><b>💬 Daily question</b>
+            <div class="cats">${QCATS.map(([k, l]) => `<button data-cat="${k}" aria-pressed="${k === 'sweet'}">${l}</button>`).join('')}</div>
+            <p class="q-text play-q"></p>
+            <textarea class="q-ans" id="q-ans-${id}" maxlength="160" placeholder="Your answer…" aria-label="Your answer"></textarea>
+            <div class="ans q-partner"></div>
+            <button class="send q-send">Answer</button>
+          </div>
+          <div class="card"><b>🎲 Games</b>
+            <div class="games">
+              <button data-game="ttt">❌<span>Tic-tac-toe</span></button><button data-game="draw">🎨<span>Draw and guess</span></button><button data-game="emoji">😄<span>Emoji story</span></button><button data-game="garden">🌱<span>Our garden</span></button>
+              <button class="soon" data-game="soon">🤔<span>Guess my answer</span></button><button class="soon" data-game="soon">🧠<span>Know me quiz</span></button><button class="soon" data-game="soon">🔴<span>Connect Four</span></button><button class="soon" data-game="soon">🎲<span>Ludo</span></button>
+            </div>
+            <div class="game-area"></div>
+          </div>
+          <div class="card"><b>🍿 Watch and listen together</b><p class="hint2">YouTube plays in sync with live reactions. For Netflix or music, count down and press play together.</p>
+            <div class="row"><button class="mini2 watch-go">🍿 3, 2, 1 movie</button><button class="mini2 listen-go">🎵 Listen together</button></div>
+            <div class="watch-stage" hidden><span class="ws-text"></span><div class="prog"><i></i></div></div>
+            <div class="reacts" hidden>${['😂', '😍', '😮', '😭', '💗'].map(e => `<button aria-label="React ${e}">${e}</button>`).join('')}</div>
+          </div>
+          <div class="card"><b>🤲 Faith together</b>
+            <div class="quran"><svg class="ring" viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,.65)" stroke-width="9"/><circle class="ring-fill" cx="40" cy="40" r="32" fill="none" stroke="#3f9a72" stroke-width="9" stroke-linecap="round" transform="rotate(-90 40 40)" stroke-dasharray="201" stroke-dashoffset="201"/><text class="ring-txt" x="40" y="45" text-anchor="middle" font-size="15" font-weight="800" fill="#2f5f4a"></text></svg>
+              <div><b>Quran khatm together</b><p class="hint2 q-stats"></p><div class="row"><button class="mini2 q-page">+1 page</button><button class="mini2 q-juz">+1 juz</button></div></div></div>
+            <b>Our dua list</b><div class="duas"></div>
+            <div class="add-row"><input type="text" class="dua-in" id="dua-in-${id}" maxlength="60" placeholder="Add something to pray for" aria-label="New dua"><button class="mini2 dua-add">Add</button></div>
+          </div>
+          <div class="card"><b>🌙 Date night idea</b><p class="hint2 date-idea"></p><button class="mini2 date-next">Another idea</button></div>
+        </section>
+        <section class="tab" data-tab="mem" hidden>
+          <div class="card"><div class="card-h"><b>🫙 Memory Jar</b><button class="mini2 jar-open">Open the jar</button></div><p class="hint2 jar-pick">Kept messages, photos and celebrated days live here.</p><div class="mem-photos"></div></div>
+          <div class="card"><b>🕰️ Our timeline</b><div class="timeline"></div></div>
+          <div class="card"><b>💌 Open when…</b><div class="letters"></div><div class="letter-view"></div>
+            <details class="write-letter"><summary class="link">Write a letter for ${nm}</summary>
+              <div class="grid2"><select class="lt-when" id="lt-when-${id}" aria-label="Open when">${LETTER_WHENS.map(w => `<option value="${w}">Open when ${w}</option>`).join('')}</select>
+              <textarea class="lt-text" id="lt-text-${id}" maxlength="300" placeholder="Write from the heart…" aria-label="Letter"></textarea><button class="send lt-seal">Seal it 💌</button></div></details>
+          </div>
+          <div class="card"><b>🗺️ Our bucket list</b><div class="bucket"></div><div class="add-row"><select class="bk-sel" id="bk-sel-${id}" aria-label="Add a place">${PLACE_META.map(m => `<option value="${m.key}">${m.flag} ${m.name}</option>`).join('')}</select><button class="mini2 bk-add">Add</button></div></div>
+        </section>
+        <section class="tab" data-tab="me" hidden>
+          <div class="card me-card"><canvas class="me-canvas" aria-label="Your character"></canvas><div><b class="me-name nm-${id}">${P[id].name}</b><p class="hint2">Paired with ${nm} 💞</p><button class="mini2 me-edit">Change my look</button></div></div>
+          <div class="card"><b>🎁 Secret gift ideas</b><p class="hint2">Ideas for ${nm}. ${nm} never sees this list.</p><div class="gifts"></div><div class="add-row"><input type="text" class="gift-in" id="gift-in-${id}" maxlength="50" placeholder="Add a gift idea" aria-label="New gift idea"><button class="mini2 gift-add">Add</button></div></div>
+          <div class="card"><b>🔒 Privacy</b><p class="hint2">Everything is end-to-end encrypted. Your safety code with ${nm}:</p><span class="safety">4821 9930 1174</span>
+            <label class="set-row" for="app-discreet-${id}">Discreet mode <input type="checkbox" id="app-discreet-${id}"></label>
+            <label class="set-row" for="app-shot-${id}">Screenshot protection <input type="checkbox" id="app-shot-${id}" checked></label></div>
+          <div class="card"><b>⚙️ Settings</b>
+            <label class="set-row" for="app-quiet-${id}">Quiet hours (asleep) <input type="checkbox" id="app-quiet-${id}"></label>
+            <label class="set-row" for="app-nudges-${id}">Reminders <select id="app-nudges-${id}" class="inline-sel"><option value="dua">Love and dua</option><option value="pray">Love and prayer</option><option value="love">Love only</option><option value="off">Off</option></select></label>
+            <p class="hint2">Scenery, status and your look are also under the phone in this preview.</p></div>
+        </section>
+      </main>
+      <nav class="app-nav" aria-label="App sections"><button data-tab="us" aria-current="page">🏡<span>Us</span></button><button data-tab="play">🎲<span>Together</span></button><button data-tab="mem">📖<span>Memories</span></button><button data-tab="me">⚙️<span>Me</span></button></nav>
+    </div>`;
+  }
   function swatches(id, key) {
     return `<div class="sw-row" role="radiogroup" aria-label="${SW_LABEL[key]}">${SW[key].map(col => `<label class="sw" style="--c:${col}" title="${SW_LABEL[key]}"><input type="radio" name="${key}-${id}" value="${col}"${P[id][key] === col ? ' checked' : ''}><span></span></label>`).join('')}</div>`;
   }
@@ -430,12 +598,13 @@ button { cursor: pointer; }
             </div>
           </div>
           <div class="apps">
-            <div class="app"><i>🖼️</i>Photos</div><div class="app"><i>⏰</i>Clock</div><div class="app"><i>📝</i>Notes</div><div class="app"><i>⚙️</i>Settings</div>
+            <div class="app"><i>🖼️</i>Photos</div><div class="app"><i>⏰</i>Clock</div><button class="app hearby-icon" aria-label="Open the Hearby app"><i>💗</i>Hearby</button><div class="app"><i>⚙️</i>Settings</div>
           </div>
           <div class="dock">
             <div class="app"><i>📞</i></div><div class="app"><i>💬</i></div><div class="app"><i>🌐</i></div><div class="app"><i>🎵</i></div>
           </div>
           <div class="navbar"></div>
+          ${appHTML(id)}
           <div class="toast-slot"></div>
           <div class="off-layer" title="Tap to wake"><span class="off-clock"></span><span class="off-hint">Screen off · tap to wake</span></div>
           <div class="sheet" aria-hidden="true">
@@ -1367,8 +1536,8 @@ button { cursor: pointer; }
     c.fillStyle = '#ffffff'; c.fillText(text, x, y); c.restore();
   }
 
-  function draw(id, t, dt) {
-    const s = W[id];
+  function draw(id, t, dt, st) {
+    const s = st || W[id];
     if (!s.w) { fit(s); if (!s.w) return; }
     const c = s.ctx, me = P[id], pa = P[other(id)], { w, h } = s;
     if (t - s.sceneStart > SCENE_LEN) { s.sceneIdx = (s.sceneIdx + 1) % SCENES.length; s.sceneStart = t; }
@@ -1650,7 +1819,7 @@ button { cursor: pointer; }
   // ---------- Shown only while the person is looking ----------
   const wait = ms => new Promise(r => setTimeout(r, ms));
   function isViewing(id) {
-    return P[id].screen && !P[id].quiet && (!narrow.matches || stage.dataset.active === id) && document.visibilityState === 'visible';
+    return P[id].screen && !P[id].quiet && !W[id].appOpen && (!narrow.matches || stage.dataset.active === id) && document.visibilityState === 'visible';
   }
   function deliverVisual(id, item) {
     W[id].queue.push(item);
@@ -2151,10 +2320,266 @@ button { cursor: pointer; }
     clearTimeout(pl._t); pl._t = setTimeout(() => pl.classList.remove('show'), 8000);
   }
 
+  // ---------- The full app: Us, Together, Memories, Me ----------
+  const APP = store.get('hearby-app', null) || {
+    qa: {}, ttt: Array(9).fill(''), tttTurn: 'leo', tttStarter: 'leo', story: ['🌙'], garden: 4,
+    quran: { leo: 212, mia: 187 },
+    duas: [{ t: "That we're together soon", done: false }, { t: 'Health and barakah for both our families', done: false }, { t: 'Ease in our work and studies', done: false }],
+    letters: [
+      { from: 'mia', when: 'you miss me', text: "Close your eyes and imagine me holding your hand. I'm counting the days too. 🤍", opened: false },
+      { from: 'leo', when: "you can't sleep", text: "Breathe slowly. Think of our walk under the cherry trees. I'm right there with you. 🌙", opened: false }
+    ],
+    bucket: [{ key: 'santorini', done: false }, { key: 'kyoto', done: false }, { key: 'alps', done: true }],
+    gifts: { leo: ['Handwritten letter set', 'Favorite perfume'], mia: ['A cozy jumper', 'Matching keychains'] }
+  };
+  const saveApp = () => store.set('hearby-app', APP);
+  const dayIdx = () => Math.floor(today0().getTime() / 86400000);
+  const qOf = cat => QBANK[cat][dayIdx() % QBANK[cat].length];
+  const qKey = cat => `${cat}-${dayIdx()}`;
+  const MARK = { leo: '❌', mia: '⭕' };
+  const GARDEN = [[0, '🌱', 'Seedling'], [4, '🌿', 'Sprout'], [10, '🪴', 'Little plant'], [18, '🌷', 'First flower'], [30, '🌸', 'Blooming'], [45, '🌳', 'Our love tree']];
+
+  function makeScene(canvas, src) {
+    return {
+      canvas, ctx: canvas.getContext('2d'), w: 0, h: 0, sceneIdx: 0, sceneStart: performance.now() / 1000, scroll: 0,
+      override: null, overrideStart: 0, overrideUntil: 0, bub: [], lastBub: 0, open: true,
+      place: src.place, season: src.season, seed: src.seed, pal: src.pal, treeKind: src.treeKind, flakes: null,
+      clouds: [{ x: 0.1, y: 0.14, s: 1.1 }, { x: 0.6, y: 0.08, s: 1.3 }, { x: 1.0, y: 0.2, s: 0.9 }],
+      motes: Array.from({ length: 12 }, () => ({ x: rand(), y: 0.15 + rand() * 0.45, p: rand() * 6.28, v: 0.4 + rand() * 0.6 }))
+    };
+  }
+  function openApp(id) {
+    const s = W[id];
+    closeW(id); closeSheet(id);
+    s.appOpen = true; s.q('.happ').hidden = false;
+    s.appUI = s.appUI || { tab: 'us', cat: 'sweet', game: null };
+    s.appUI.moment = gentleLine(id).line;
+    s.appScene = makeScene(s.q('.us-canvas'), s);
+    syncAppSettings(id); setAppTab(id, s.appUI.tab);
+  }
+  function closeApp(id) { const s = W[id]; s.appOpen = false; s.q('.happ').hidden = true; setTimeout(() => flush(id), 300); }
+  function setAppTab(id, tab) {
+    const s = W[id]; s.appUI.tab = tab;
+    s.q('.happ').querySelectorAll('.tab').forEach(el => { el.hidden = el.dataset.tab !== tab; });
+    s.q('.app-nav').querySelectorAll('button').forEach(b => { if (b.dataset.tab === tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+    s.q('.app-body').scrollTop = 0;
+    if (tab === 'us' && s.appScene) s.appScene.w = 0;
+    renderApp(id);
+  }
+  function renderApp(id) { const s = W[id]; if (!s.appOpen) return; ({ us: renderUs, play: renderPlay, mem: renderMem, me: renderMe })[s.appUI.tab](id); }
+  const renderAppAll = () => IDS.forEach(renderApp);
+  function syncAppSettings(id) {
+    document.getElementById(`app-discreet-${id}`).checked = P[id].discreet;
+    document.getElementById(`app-quiet-${id}`).checked = P[id].quiet;
+    document.getElementById(`app-nudges-${id}`).value = P[id].nudges || 'dua';
+  }
+
+  function renderUs(id) {
+    const s = W[id], pa = P[other(id)];
+    s.q('.us-partner').textContent = `${pa.quiet ? '😴' : STATUSES[pa.status]} ${pa.name} · ${fmtTime(pa.tz)}`;
+    const md = meetDays(), cd = s.q('.us-cd');
+    cd.hidden = !MEET.on; cd.textContent = md === null ? '✈️ soon' : md === 0 ? '💞 today!' : md < 0 ? '✈️ ?' : `✈️ ${md} days`;
+    const next = DAYS.slice().sort((a, b) => daysUntil(a) - daysUntil(b)).find(ev => daysUntil(ev) !== Infinity);
+    if (next) {
+      const d = daysUntil(next), when = d === 0 ? 'Today 🎉' : d === 1 ? 'Tomorrow' : `In ${d} days`;
+      s.q('.us-day').innerHTML = `<small>Next special day</small><b>${DAY_EMO[next.type]} ${esc(dayLabel(next))}</b><p class="hint2">${when} · ${esc(repeatText(next))}</p>`;
+    } else s.q('.us-day').innerHTML = '<small>Special days</small><p class="hint2">Add your first special day from the widget 📅</p>';
+    s.q('.us-q').textContent = qOf(QCATS[dayIdx() % QCATS.length][0]);
+    s.q('.us-moment').textContent = s.appUI.moment;
+  }
+
+  function renderPlay(id) {
+    const s = W[id], cat = s.appUI.cat, k = qKey(cat), o = other(id), qa = APP.qa[k] || {};
+    s.q('.play-q').textContent = qOf(cat);
+    s.q('.cats').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cat === cat)));
+    const mine = qa[id], theirs = qa[o], on = esc(P[o].name);
+    s.q('.q-ans').hidden = !!mine; s.q('.q-send').hidden = !!mine;
+    s.q('.q-partner').innerHTML = mine
+      ? `<b>You:</b> ${esc(mine)}<br>${theirs ? `<b>${on}:</b> ${esc(theirs)}` : `⏳ Waiting for ${on} to answer. Try answering on ${on}'s phone too.`}`
+      : theirs ? `🔒 ${on} answered. Answer to unlock it.` : "🔒 Answers unlock once you've both replied.";
+    renderGame(id); renderFaith(id);
+    if (!s.appUI.idea) s.appUI.idea = pick(DATE_IDEAS);
+    s.q('.date-idea').textContent = s.appUI.idea;
+  }
+  function tttWinner() {
+    const b = APP.ttt, L = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+    for (const [a, c, d] of L) if (b[a] && b[a] === b[c] && b[a] === b[d]) return b[a];
+    return b.every(Boolean) ? 'draw' : null;
+  }
+  function gardenStage() {
+    let i = 0; while (i < GARDEN.length - 1 && APP.garden >= GARDEN[i + 1][0]) i++;
+    const cur = GARDEN[i], nxt = GARDEN[i + 1];
+    return { emo: cur[1], name: cur[2], pct: nxt ? Math.round(((APP.garden - cur[0]) / (nxt[0] - cur[0])) * 100) : 100 };
+  }
+  function growGarden(n) { APP.garden += n; saveApp(); renderAppAll(); }
+  function renderGame(id) {
+    const s = W[id], g = s.appUI.game, area = s.q('.game-area'), o = other(id), on = esc(P[o].name);
+    s.q('.games').querySelectorAll('button[data-game]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.game === g)));
+    if (!g) { area.innerHTML = ''; return; }
+    if (g === 'ttt') {
+      const win = tttWinner(), my = APP.tttTurn === id;
+      const msg = win ? (win === 'draw' ? "It's a draw 🤝" : `${esc(P[win].name)} wins! 🎉`) : my ? `Your turn (${MARK[id]})` : `${on}'s turn. Play it on ${on}'s phone.`;
+      area.innerHTML = `<p class="hint2">${msg}</p><div class="ttt">${APP.ttt.map((v, i) => `<button data-cell="${i}" aria-label="Square ${i + 1}"${v || win || !my ? ' disabled' : ''}>${v ? MARK[v] : ''}</button>`).join('')}</div><button class="mini2 ttt-reset">New game</button>`;
+    } else if (g === 'draw') {
+      if (area.querySelector('.doodle')) return;
+      area.innerHTML = `<p class="hint2">Draw something and send it. It lands on ${on}'s widget, and ${on} guesses what it is.</p><canvas class="doodle" width="440" height="280" aria-label="Drawing board"></canvas>
+        <div class="row"><div class="colors">${['#33263f', '#db4f84', '#3f8ad8', '#3f9a72', '#f0a33a'].map(col => `<button data-col="${col}" style="background:${col}" aria-label="Pen color"></button>`).join('')}</div><button class="mini2 dd-clear">Clear</button><button class="send dd-send">Send 🎨</button></div>`;
+      setupDoodle(id);
+    } else if (g === 'emoji') {
+      area.innerHTML = `<p class="hint2">Build a story together, one emoji at a time. ${on} sees every emoji you add.</p><div class="story">${APP.story.join(' ')}</div><div class="emojis">${['🌙', '✈️', '🏔️', '🌊', '🍕', '🎁', '💍', '🐱', '🌧️', '🌸', '😴', '💗'].map(e => `<button data-emo="${e}">${e}</button>`).join('')}</div><button class="mini2 st-reset">Start over</button>`;
+    } else if (g === 'garden') {
+      const st = gardenStage();
+      area.innerHTML = `<div class="garden">${st.emo}</div><p class="hint2 center">${st.name}. It grows every time either of you sends love, and it never wilts.</p><div class="bar"><i style="width:${st.pct}%"></i></div><button class="mini2 gd-water">💧 Water it</button>`;
+    }
+  }
+  function setupDoodle(id) {
+    const s = W[id], cv = s.q('.doodle'), c = cv.getContext('2d');
+    c.fillStyle = '#ffffff'; c.fillRect(0, 0, cv.width, cv.height);
+    c.lineCap = 'round'; c.lineJoin = 'round'; c.lineWidth = 7; s.ddColor = s.ddColor || '#33263f';
+    let last = null;
+    const pos = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * (cv.width / r.width), (e.clientY - r.top) * (cv.height / r.height)]; };
+    cv.addEventListener('pointerdown', e => { last = pos(e); cv.setPointerCapture(e.pointerId); });
+    cv.addEventListener('pointermove', e => { if (!last) return; const p = pos(e); c.strokeStyle = s.ddColor; c.beginPath(); c.moveTo(last[0], last[1]); c.lineTo(p[0], p[1]); c.stroke(); last = p; });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => cv.addEventListener(ev, () => { last = null; }));
+  }
+  function renderFaith(id) {
+    const s = W[id], total = APP.quran.leo + APP.quran.mia, pct = Math.min(1, total / 604);
+    s.q('.ring-fill').setAttribute('stroke-dashoffset', String(201 * (1 - pct)));
+    s.q('.ring-txt').textContent = `${Math.round(pct * 100)}%`;
+    s.q('.q-stats').textContent = total >= 604 ? 'Khatm complete, alhamdulillah! 🎉' : `Together ${total} of 604 pages · ${P.leo.name} ${APP.quran.leo}, ${P.mia.name} ${APP.quran.mia}`;
+    s.q('.duas').innerHTML = APP.duas.map((d, i) => `<label class="dua-row${d.done ? ' done' : ''}" for="dua-${id}-${i}"><input type="checkbox" id="dua-${id}-${i}" data-dua="${i}"${d.done ? ' checked' : ''}><span>${esc(d.t)}</span>${d.done ? '<em>answered, alhamdulillah 🤍</em>' : ''}</label>`).join('');
+  }
+  function runWatch(i, kind, starter) {
+    const s = W[i], stage = s.q('.watch-stage'), txt = s.q('.ws-text'), bar = s.q('.prog i');
+    clearInterval(s.watchT); stage.hidden = false; s.q('.reacts').hidden = false;
+    bar.style.transition = 'none'; bar.style.width = '0';
+    let n = 3; txt.textContent = '3';
+    s.watchT = setInterval(() => {
+      n--;
+      if (n > 0) txt.textContent = String(n);
+      else {
+        clearInterval(s.watchT); txt.textContent = kind === 'movie' ? '▶ Playing together' : '🎵 Listening together';
+        requestAnimationFrame(() => { bar.style.transition = 'width 90s linear'; bar.style.width = '100%'; });
+      }
+    }, 1000);
+    if (i !== starter) banner(i, `${kind === 'movie' ? '🍿' : '🎵'} ${esc(P[starter].name)} started ${kind === 'movie' ? 'a movie' : 'a song'} countdown<small>3… 2… 1… press play together</small>`);
+  }
+  function floatEmo(i, e) {
+    const st = W[i].q('.watch-stage'); if (st.hidden) return;
+    const el = document.createElement('span'); el.className = 'floatemo'; el.textContent = e; el.style.left = `${15 + rand() * 70}%`;
+    st.appendChild(el); setTimeout(() => el.remove(), 1700);
+  }
+
+  function renderMem(id) {
+    const s = W[id], o = other(id), on = esc(P[o].name);
+    const photos = [...(s.slides || []), ...samplePhotos()].slice(0, 8);
+    s.q('.mem-photos').innerHTML = photos.map(src => `<img src="${src}" alt="Memory photo">`).join('');
+    const pairDay = new Date(today0()); pairDay.setDate(pairDay.getDate() - 120);
+    const items = [...MEMORIES.map(m => ({ date: m.date, text: m.text })), { date: isoDate(pairDay), text: 'Paired on Hearby 💞' }]
+      .concat(APP.bucket.filter(b => b.done).map(b => { const m = PLACE_META.find(x => x.key === b.key); return { date: b.at || isoDate(pairDay), text: `Visited ${m.flag} ${m.name} together` }; }))
+      .sort((a, b) => (a.date < b.date ? 1 : -1));
+    s.q('.timeline').innerHTML = items.map(it => `<p><b>${new Date(it.date + 'T00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</b>${esc(it.text)}</p>`).join('');
+    const toMe = APP.letters.map((l, i) => ({ ...l, i })).filter(l => l.from === o), fromMe = APP.letters.filter(l => l.from === id);
+    s.q('.letters').innerHTML = (toMe.map(l => `<div class="letter"><span>💌 <b>Open when ${esc(l.when)}</b><br><em>from ${on}</em></span><button class="mini2" data-letter="${l.i}">${l.opened ? 'Read again' : 'Open'}</button></div>`).join('') || `<p class="hint2">No letters from ${on} yet.</p>`)
+      + fromMe.map(l => `<div class="letter sealed"><span>🔒 Sealed for ${on}<br><em>open when ${esc(l.when)}</em></span></div>`).join('');
+    s.q('.bucket').innerHTML = APP.bucket.map((b, i) => { const m = PLACE_META.find(x => x.key === b.key); return `<label class="bk-row${b.done ? ' done' : ''}" for="bk-${id}-${i}"><input type="checkbox" id="bk-${id}-${i}" data-bk="${i}"${b.done ? ' checked' : ''}><span>${m.flag} ${m.name}</span>${b.done ? '<em>visited ✓</em>' : ''}</label>`; }).join('');
+  }
+  function renderMe(id) {
+    const s = W[id];
+    s.q('.gifts').innerHTML = (APP.gifts[id] || []).map((g, i) => `<div class="gift-row"><span>🎁 ${esc(g)}</span><button class="mini2" data-gift="${i}" aria-label="Remove ${esc(g)}">✕</button></div>`).join('') || '<p class="hint2">No ideas yet.</p>';
+  }
+  function drawMe(id, t) {
+    const s = W[id], cv = s.q('.me-canvas'), r = cv.getBoundingClientRect();
+    if (!r.width) return;
+    const d = Math.min(2, window.devicePixelRatio || 1);
+    if (cv.width !== Math.round(r.width * d)) { cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d); }
+    const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); c.clearRect(0, 0, r.width, r.height);
+    c.fillStyle = 'rgba(120,180,110,.35)'; c.beginPath(); c.ellipse(r.width / 2, r.height * 0.93, r.width * 0.4, r.height * 0.06, 0, 0, TAU); c.fill();
+    kid(c, { h: (r.height * 0.82 / 18) * 92 }, r.width / 2, r.height * 0.92, P[id], { face: 0, blink: (t % 4) < 0.12, wave: (t % 6) < 2, happy: (t % 6) >= 2 && (t % 6) < 2.6 }, t);
+  }
+
+  function wireApp(id) {
+    const s = W[id], a = s.q('.happ'), o = other(id);
+    s.q('.hearby-icon').addEventListener('click', () => openApp(id));
+    s.q('.who').addEventListener('click', e => { if (s.open) { e.stopPropagation(); openApp(id); } });
+    a.querySelector('.app-back').addEventListener('click', () => closeApp(id));
+    a.querySelector('.app-nav').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setAppTab(id, b.dataset.tab); });
+    a.querySelector('.quick').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      const q = b.dataset.q;
+      if (q === 'kiss' || q === 'heart') sendFly(id, q);
+      else if (q === 'photo') openSheet(id, 'photo');
+      else { openSheet(id, 'text'); const r = s.q(`input[name="mode-${id}"][value="${q === 'pop' ? 'pop' : 'msg'}"]`); r.checked = true; s.q('.modes').dispatchEvent(new Event('change', { bubbles: true })); }
+    });
+    a.querySelector('.go-play').addEventListener('click', () => { s.appUI.cat = QCATS[dayIdx() % QCATS.length][0]; setAppTab(id, 'play'); });
+    a.querySelector('.cats').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; s.appUI.cat = b.dataset.cat; s.q('.q-ans').value = ''; renderPlay(id); });
+    a.querySelector('.q-send').addEventListener('click', () => {
+      const v = s.q('.q-ans').value.trim(); if (!v) return;
+      const k = qKey(s.appUI.cat); APP.qa[k] = { ...(APP.qa[k] || {}), [id]: v }; saveApp();
+      s.q('.q-ans').value = ''; renderAppAll(); toast(id, 'Answer sent 💬');
+      buzz(o, `💬 ${P[id].name} answered today's question. Answer yours to see it!`, 6000);
+    });
+    a.querySelector('.games').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.game === 'soon') { toast(id, 'Coming in a later update ✨'); return; }
+      s.appUI.game = s.appUI.game === b.dataset.game ? null : b.dataset.game;
+      s.q('.game-area').innerHTML = ''; renderGame(id);
+    });
+    a.querySelector('.game-area').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.cell !== undefined) {
+        APP.ttt[+b.dataset.cell] = id; APP.tttTurn = o; saveApp(); renderAppAll();
+        const win = tttWinner();
+        buzz(o, win ? (win === 'draw' ? "Tic-tac-toe: it's a draw 🤝" : `Tic-tac-toe: ${P[win].name} wins! 🎉`) : `${P[id].name} played ${MARK[id]}. Your turn!`, 5000);
+      } else if (b.classList.contains('ttt-reset')) { APP.tttStarter = APP.tttStarter === 'leo' ? 'mia' : 'leo'; APP.ttt = Array(9).fill(''); APP.tttTurn = APP.tttStarter; saveApp(); renderAppAll(); }
+      else if (b.dataset.col) s.ddColor = b.dataset.col;
+      else if (b.classList.contains('dd-clear')) { const cv = s.q('.doodle'), c = cv.getContext('2d'); c.fillStyle = '#ffffff'; c.fillRect(0, 0, cv.width, cv.height); }
+      else if (b.classList.contains('dd-send')) { send(id, { img: s.q('.doodle').toDataURL('image/png'), text: 'drew you something 🎨 Guess what it is!' }); toast(id, `Drawing sent to ${P[o].name} 🎨`); }
+      else if (b.dataset.emo) { APP.story.push(b.dataset.emo); APP.story = APP.story.slice(-30); saveApp(); renderAppAll(); buzz(o, `😄 ${P[id].name} added ${b.dataset.emo} to your emoji story`, 4000); }
+      else if (b.classList.contains('st-reset')) { APP.story = ['🌙']; saveApp(); renderAppAll(); }
+      else if (b.classList.contains('gd-water')) { if (Date.now() - (s.lastWater || 0) < 1500) return; s.lastWater = Date.now(); growGarden(1); toast(id, 'Watered 💧'); }
+    });
+    a.querySelector('.watch-go').addEventListener('click', () => IDS.forEach(i => runWatch(i, 'movie', id)));
+    a.querySelector('.listen-go').addEventListener('click', () => IDS.forEach(i => runWatch(i, 'music', id)));
+    a.querySelector('.reacts').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; floatEmo(id, b.textContent); floatEmo(o, b.textContent); buzz(o, `${P[id].name} reacted ${b.textContent}`, 2500); });
+    a.querySelector('.q-page').addEventListener('click', () => { APP.quran[id] += 1; saveApp(); renderAppAll(); });
+    a.querySelector('.q-juz').addEventListener('click', () => { APP.quran[id] += 20; saveApp(); renderAppAll(); buzz(o, `📖 ${P[id].name} read a juz. MashaAllah!`, 4000); });
+    a.querySelector('.duas').addEventListener('change', e => { const i = e.target.dataset.dua; if (i === undefined) return; APP.duas[+i].done = e.target.checked; saveApp(); renderAppAll(); });
+    a.querySelector('.dua-add').addEventListener('click', () => { const inp = s.q('.dua-in'), v = inp.value.trim(); if (!v) return; APP.duas.push({ t: v, done: false }); inp.value = ''; saveApp(); renderAppAll(); buzz(o, `🤲 ${P[id].name} added to your dua list: "${v}"`, 5000); });
+    a.querySelector('.date-next').addEventListener('click', () => { s.appUI.idea = pick(DATE_IDEAS.filter(x => x !== s.appUI.idea)); renderPlay(id); });
+    a.querySelector('.jar-open').addEventListener('click', () => {
+      const kept = IDS.map(i => W[i].msg).filter(m => m && m.kept).map(m => `"${m.text}" from ${P[m.from].name}`);
+      const pool = [...kept, ...MEMORIES.map(m => m.text), 'Your first call that lasted four hours 📞', 'The day you both watched the same sunset 🌅', ...APP.letters.filter(l => l.opened).map(l => `A letter: "${l.text}"`)];
+      const el = s.q('.jar-pick'); el.textContent = `🫙 ${pick(pool)}`; el.classList.remove('pop-in'); void el.offsetWidth; el.classList.add('pop-in');
+    });
+    a.querySelector('.letters').addEventListener('click', e => {
+      const b = e.target.closest('button[data-letter]'); if (!b) return;
+      const l = APP.letters[+b.dataset.letter]; l.opened = true; saveApp();
+      s.q('.letter-view').innerHTML = `<div class="letter-open">${esc(l.text)}<br><em>— ${esc(P[l.from].name)}</em></div>`;
+      renderMem(id);
+    });
+    a.querySelector('.lt-seal').addEventListener('click', () => {
+      const tx = s.q('.lt-text'), when = s.q('.lt-when').value, v = tx.value.trim(); if (!v) return;
+      APP.letters.push({ from: id, when, text: v, opened: false }); saveApp(); tx.value = ''; s.q('.write-letter').open = false;
+      renderAppAll(); toast(id, 'Letter sealed 💌');
+      buzz(o, `💌 ${P[id].name} sealed a letter for you: "Open when ${when}"`, 6000);
+    });
+    a.querySelector('.bucket').addEventListener('change', e => { const i = e.target.dataset.bk; if (i === undefined) return; APP.bucket[+i].done = e.target.checked; APP.bucket[+i].at = isoDate(today0()); saveApp(); renderAppAll(); });
+    a.querySelector('.bk-add').addEventListener('click', () => { const k = s.q('.bk-sel').value; if (APP.bucket.some(b => b.key === k)) { toast(id, 'Already on your list ✓'); return; } APP.bucket.push({ key: k, done: false }); saveApp(); renderAppAll(); });
+    a.querySelector('.gift-add').addEventListener('click', () => { const inp = s.q('.gift-in'), v = inp.value.trim(); if (!v) return; (APP.gifts[id] = APP.gifts[id] || []).push(v); inp.value = ''; saveApp(); renderMe(id); });
+    a.querySelector('.gifts').addEventListener('click', e => { const b = e.target.closest('button[data-gift]'); if (!b) return; APP.gifts[id].splice(+b.dataset.gift, 1); saveApp(); renderMe(id); });
+    a.querySelector('.me-edit').addEventListener('click', () => { const d = s.root.querySelector('details.avatar'); d.open = true; d.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+    const mirror = (appId, ctlId, prop) => document.getElementById(appId).addEventListener('change', e => { const ctl = document.getElementById(ctlId); ctl[prop] = e.target[prop]; ctl.dispatchEvent(new Event('change')); });
+    mirror(`app-discreet-${id}`, `discreet-${id}`, 'checked');
+    mirror(`app-quiet-${id}`, `quiet-${id}`, 'checked');
+    mirror(`app-nudges-${id}`, `nudges-${id}`, 'value');
+  }
+
   // ---------- Sending ----------
   function sendFly(from, kind) {
     const to = other(from);
     const ch = kind === 'kiss' ? pick(['💋', '😘']) : pick(['❤️', '💖', '💗']);
+    growGarden(1);
     toast(from, kind === 'kiss' ? `Kiss sent to ${P[to].name} 💋` : `Heart sent to ${P[to].name} ❤️`);
     if (narrow.matches) setTimeout(() => setTab(to), 650);
     setTimeout(() => {
@@ -2167,6 +2592,7 @@ button { cursor: pointer; }
     const msg = { from, text: payload.text || '', img: payload.img || (payload.imgs && payload.imgs[0]) || null, pop: !!payload.pop, at: t, kept: false, felt: false, revealed: false };
     closeSheet(from);
     setTimeout(() => closeW(from), 350);
+    growGarden(1);
     toast(from, payload.pop ? `Pop-up sent ✨ plays when ${P[to].name} looks` : `Sent to ${P[to].name} 💌`);
     const sync = t - W[to].lastSentAt < 15000;
     W[from].lastSentAt = t;
@@ -2336,7 +2762,7 @@ button { cursor: pointer; }
     W[id].root.setAttribute('aria-label', `${name}'s phone`);
     W[id].q('.power').setAttribute('aria-label', `${name}'s power button`);
     IDS.forEach(i => { renderHead(i); renderBubble(i); });
-    renderDays(); setRibbons();
+    renderDays(); setRibbons(); renderAppAll();
   }
   function setTab(id) {
     stage.dataset.active = id;
@@ -2347,6 +2773,7 @@ button { cursor: pointer; }
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') IDS.forEach(id => newPlace(id, true)); IDS.forEach(flush); });
   document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
 
+  IDS.forEach(wireApp);
   IDS.forEach(id => newPlace(id, false));
   IDS.forEach(id => { renderHead(id); notify(id); });
   renderDays(); setRibbons();
@@ -2356,7 +2783,7 @@ button { cursor: pointer; }
   let last = performance.now() / 1000;
   function frame(ms) {
     const t = ms / 1000, dt = Math.min(0.1, t - last);
-    if (dt >= 1 / 32) { last = t; IDS.forEach(id => { const s = W[id]; if (P[id].screen && !(s.slideOn && s.slides.length)) draw(id, t, reduced.matches ? dt * 0.4 : dt); }); }
+    if (dt >= 1 / 32) { last = t; IDS.forEach(id => { const s = W[id]; if (P[id].screen && !(s.slideOn && s.slides.length)) draw(id, t, reduced.matches ? dt * 0.4 : dt); if (s.appOpen && P[id].screen) { if (s.appUI.tab === 'us') draw(id, t, dt, s.appScene); else if (s.appUI.tab === 'me') drawMe(id, t); } }); }
     requestAnimationFrame(frame);
   }
   IDS.forEach(id => draw(id, last, 0));

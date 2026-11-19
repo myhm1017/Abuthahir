@@ -285,7 +285,7 @@ button { cursor: pointer; }
 <script>
 (() => {
   const P = {
-    leo: { id: 'leo', name: 'Leo', city: 'London', tz: 'Europe/London', type: 'man', skin: '#e8b894', hair: '#2b1d17', eyes: '#5a3a24', outfit: '#7fa6d9', hijab: '#c98fb4', facial: 'moustache', glasses: false, status: 'free to talk', quiet: false, discreet: false, screen: true },
+    leo: { id: 'leo', name: 'Leo', city: 'London', tz: 'Europe/London', type: 'man', skin: '#e8b894', hair: '#2b1d17', eyes: '#5a3a24', outfit: '#7fa6d9', hijab: '#c98fb4', facial: 'full', glasses: false, status: 'free to talk', quiet: false, discreet: false, screen: true },
     mia: { id: 'mia', name: 'Mia', city: 'Toronto', tz: 'America/Toronto', type: 'hijabi', skin: '#f3d0b5', hair: '#2b1d17', eyes: '#6b4a2b', outfit: '#8f7bb8', hijab: '#c98fb4', facial: 'none', glasses: false, status: 'at work', quiet: false, discreet: false, screen: true }
   };
   const IDS = ['leo', 'mia'];
@@ -320,7 +320,7 @@ button { cursor: pointer; }
       <div class="av-row" data-show="hijabi">Hijab color ${swatches(id, 'hijab')}</div>
       <div class="av-row" data-show="man woman">Hair color ${swatches(id, 'hair')}</div>
       <div class="av-row">Outfit color ${swatches(id, 'outfit')}</div>
-      <label for="facial-${id}" data-show="man">Facial hair ${sel('facial', [['moustache', 'Moustache'], ['beard', 'Moustache and beard'], ['none', 'Clean shaven']])}</label>
+      <label for="facial-${id}" data-show="man">Facial hair ${sel('facial', [['full', 'Full natural beard'], ['beard', 'Short beard'], ['moustache', 'Moustache only'], ['none', 'Clean shaven']])}</label>
       <label for="glasses-${id}">Glasses <input type="checkbox" data-key="glasses" id="glasses-${id}"${p.glasses ? ' checked' : ''}></label>
     </div></details>`;
   }
@@ -697,13 +697,38 @@ button { cursor: pointer; }
       c.strokeStyle = p.hair; c.lineWidth = 1.4 * u; c.beginPath(); c.arc(hx, hy + 0.2 * u, r * 0.88, 0.12 * Math.PI, 0.88 * Math.PI); c.stroke();
       c.fillStyle = p.hair; c.beginPath(); c.ellipse(hx + face * 0.3 * u, hy + r * 0.92, r * 0.42, r * 0.28, 0, 0, TAU); c.fill();
     }
-    const my = ey + (stache ? 1.9 : 1.3) * u;
+    if (man && p.facial === 'full') {
+      // Full, natural beard: covers the jaw and chin with soft, untrimmed edges.
+      const bx = hx + face * 0.25 * u;
+      c.fillStyle = p.hair; c.beginPath();
+      c.moveTo(bx - r * 1.0, hy - 0.1 * u);
+      c.quadraticCurveTo(bx - r * 1.14, hy + r * 0.95, bx - r * 0.6, hy + r * 1.32);
+      const tufts = 5;
+      for (let i = 0; i < tufts; i++) {
+        const x0 = bx - r * 0.6 + (i / tufts) * r * 1.2, x1 = bx - r * 0.6 + ((i + 1) / tufts) * r * 1.2;
+        const depth = 1.48 + Math.sin((i + 0.5) / tufts * Math.PI) * 0.22;
+        c.quadraticCurveTo((x0 + x1) / 2, hy + r * depth, x1, hy + r * (1.32 + Math.sin((i + 1) / tufts * Math.PI) * 0.12));
+      }
+      c.quadraticCurveTo(bx + r * 1.14, hy + r * 0.95, bx + r * 1.0, hy - 0.1 * u);
+      c.lineTo(bx + r * 0.8, hy - 0.1 * u);
+      c.quadraticCurveTo(bx + r * 0.78, hy + r * 0.5, bx + r * 0.38, hy + r * 0.6);
+      c.quadraticCurveTo(bx, hy + r * 0.52, bx - r * 0.38, hy + r * 0.6);
+      c.quadraticCurveTo(bx - r * 0.78, hy + r * 0.5, bx - r * 0.8, hy - 0.1 * u);
+      c.closePath(); c.fill();
+      c.strokeStyle = lighten(p.hair, 0.22); c.lineWidth = 0.28 * u;
+      [[-0.55, 0.85, -0.45, 1.2], [-0.15, 0.95, -0.1, 1.35], [0.25, 0.92, 0.3, 1.3], [0.6, 0.8, 0.55, 1.12]].forEach(([a1, b1, a2, b2]) => {
+        c.beginPath(); c.moveTo(bx + a1 * r, hy + b1 * r); c.lineTo(bx + a2 * r, hy + b2 * r); c.stroke();
+      });
+    }
+    const full = man && p.facial === 'full';
+    const my = ey + (full ? 2.05 : stache ? 1.9 : 1.3) * u;
     if (o.blow) { c.fillStyle = '#a34e63'; c.beginPath(); c.ellipse(ex - face * 0.3 * u, my + 0.4 * u, 0.42 * u, 0.5 * u, 0, 0, TAU); c.fill(); }
     else { c.strokeStyle = '#a34e63'; c.lineWidth = 0.45 * u; c.beginPath(); c.arc(ex, my, 0.5 * u, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke(); }
     if (stache) {
       c.fillStyle = p.hair; c.beginPath();
-      c.ellipse(ex - 0.72 * u, ey + 1.2 * u, 0.95 * u, 0.42 * u, -0.3, 0, TAU);
-      c.ellipse(ex + 0.72 * u, ey + 1.2 * u, 0.95 * u, 0.42 * u, 0.3, 0, TAU);
+      const mw = full ? 1.2 : 0.95, mh = full ? 0.6 : 0.42;
+      c.ellipse(ex - 0.78 * u, ey + 1.25 * u, mw * u, mh * u, -0.3, 0, TAU);
+      c.ellipse(ex + 0.78 * u, ey + 1.25 * u, mw * u, mh * u, 0.3, 0, TAU);
       c.fill();
     }
     if (p.glasses) {

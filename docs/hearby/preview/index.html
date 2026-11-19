@@ -227,6 +227,7 @@ button { cursor: pointer; }
 .thumbs { display: flex; gap: 6px; overflow-x: auto; min-height: 0; }
 .thumbs img { width: 46px; height: 46px; border-radius: 10px; object-fit: cover; flex: none; }
 .tsel { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; }
+.tsel input[type="date"] { border: 1px solid rgba(255, 255, 255, .7); border-radius: 10px; padding: 4px 6px; background: rgba(255, 255, 255, .45); color: #33263f; font-size: 12.5px; }
 .tsel select { border: 1px solid rgba(255, 255, 255, .7); border-radius: 10px; padding: 4px 6px; background: rgba(255, 255, 255, .45); color: #33263f; font-size: 12.5px; }
 .presets { display: flex; flex-wrap: wrap; gap: 7px; }
 .presets button { border: 1px solid rgba(255, 255, 255, .6); background: rgba(255, 255, 255, .32); border-radius: 999px; padding: 6px 11px; font-weight: 700; font-size: 13px; color: #4a3858; }
@@ -301,6 +302,7 @@ button { cursor: pointer; }
     <li>Turn on <b>Discreet mode</b> to blur messages until you tap them.</li>
     <li><b>Special days:</b> open a widget and tap 📅. Birthdays, anniversaries and other moments are listed with a countdown. Add your own, and choose a celebration (confetti, balloons, fireworks, light show, drone show or everything). Mia's birthday is set for tomorrow, so Leo gets a private reminder a few seconds after the page loads. Tap ⏰ to preview a day-before reminder or 🎉 to preview the celebration on both phones.</li>
     <li><b>Scenery:</b> every time someone looks at their screen (screen on, switching phones or coming back to the page), the widget moves to a new place and season: Santorini, the Swiss Alps, Mount Fuji, the Grand Canyon, a Banff trail, the Maldives, an Icelandic waterfall, Kyoto, Central Park, Dubai, Paris, the Taj Mahal, the Pyramids, the Golden Gate, Cappadocia and a Norwegian fjord, in spring, summer, autumn or winter. Pick a fixed place or season under each phone if you prefer.</li>
+    <li><b>Meet-up countdown:</b> open a widget and tap the ✈️ chip to set or change the date, add a note, choose "We don't know the date yet" (shows "soon"), or hide the countdown. Both phones update.</li>
     <li><b>Teasing reminders:</b> the day before, the app first asks something cheeky like "What day is tomorrow 😉?" and reveals the answer a few seconds later. On the day, if nobody has sent a wish about 15 seconds after the celebration (hours later in the real app), it nudges them: "Have you wished Mia yet? 👀 Just checking…".</li>
     <li><b>Repeating days:</b> special days can repeat every year, month, week or day, or happen just once. A monthly "Our monthversary" on the 9th is already in the list.</li>
     <li><b>Customize the characters:</b> under each phone, open "Customize … name and look" to rename them or change their style: hijab styles (classic, khimar, turban wrap, niqab), hair (buzz cut, quiff, man bun, wolf cut, braids, bun and more), 13 beard and moustache styles, tops, bottoms, dresses (abaya, gown, churidar, saree, burqa and more), shoes, skin tone, eye color, hair or hijab color, outfit, facial hair and glasses.</li>
@@ -407,7 +409,7 @@ button { cursor: pointer; }
             <button class="day-ribbon" hidden></button>
             <div class="w-top ui">
               <div class="who"><span class="pdot"></span><b class="pname"></b><span class="ptime"></span></div>
-              <div class="chips"><span class="chip status"></span><span class="chip cd" title="Days until you're together"></span><button class="chip chip-btn days-btn" aria-label="Special days" title="Special days">📅</button><button class="chip chip-btn slides-toggle" hidden aria-pressed="false" aria-label="Slideshow">🎞️</button><button class="close-w" aria-label="Close">✕</button></div>
+              <div class="chips"><span class="chip status"></span><button class="chip chip-btn cd" title="Days until you meet: tap to change"></button><button class="chip chip-btn days-btn" aria-label="Special days" title="Special days">📅</button><button class="chip chip-btn slides-toggle" hidden aria-pressed="false" aria-label="Slideshow">🎞️</button><button class="close-w" aria-label="Close">✕</button></div>
             </div>
             <div class="w-bottom ui">
               <div class="bubble">
@@ -459,6 +461,14 @@ button { cursor: pointer; }
               <label class="tog"><input id="save-${id}" type="checkbox"> Save to my gallery too</label>
               <p class="hint">Send two or more and their widget plays a slideshow. In the app this also opens a quick camera.</p>
               <div class="row"><span class="count pcount"></span><button class="send send-photo" disabled>Send 💌</button></div>
+            </div>
+            <div class="s-meet" hidden>
+              <label class="tog" for="meet-on-${id}"><input type="checkbox" id="meet-on-${id}"> Show the countdown on the widget</label>
+              <label class="tog" for="meet-unsure-${id}"><input type="checkbox" id="meet-unsure-${id}"> We don't know the date yet (shows "soon")</label>
+              <label class="tsel" for="meet-date-${id}">Meeting date <input type="date" id="meet-date-${id}" class="meet-date"></label>
+              <textarea id="meet-note-${id}" maxlength="50" placeholder="Optional note, for example: Leo flies to Toronto ✈️" aria-label="Note" style="height:52px"></textarea>
+              <p class="hint">You both see the same countdown, and either of you can change it.</p>
+              <div class="row"><span class="count meet-info"></span><button class="send meet-save">Save</button></div>
             </div>
             <div class="s-days" hidden>
               <div class="days-list"></div>
@@ -1579,7 +1589,10 @@ button { cursor: pointer; }
     const st = s.q('.chip.status');
     st.textContent = pa.quiet ? '😴' : STATUSES[pa.status];
     st.title = pa.quiet ? `${pa.name} is asleep` : `${pa.name} is ${pa.status}`;
-    s.q('.chip.cd').textContent = '✈️ 12d';
+    const cd = s.q('.chip.cd'), md = meetDays();
+    cd.hidden = !MEET.on;
+    cd.textContent = md === null ? '✈️ soon' : md === 0 ? '💞 today!' : md < 0 ? '✈️ ?' : `✈️ ${md}d`;
+    cd.title = (md === null ? 'Meeting date not set yet' : md === 0 ? 'You meet today!' : md < 0 ? 'Meeting date has passed: tap to set the next one' : `${md} day${md > 1 ? 's' : ''} until you meet`) + (MEET.note ? ` · ${MEET.note}` : '') + ' (tap to change)';
   }
   function renderBubble(id) {
     const s = W[id], m = s.msg, q = s.q;
@@ -1824,6 +1837,9 @@ button { cursor: pointer; }
   const REPEAT_OPTS = [['yearly', 'Every year'], ['monthly', 'Every month'], ['weekly', 'Every week'], ['daily', 'Every day'], ['once', 'Just once']];
   const repeatText = ev => ({ daily: 'every day', weekly: `every ${WEEKDAYS[ev.weekday ?? 0]}`, monthly: `every month on the ${ordinal(ev.day)}`, once: 'one time' }[ev.repeat] || 'every year');
   let MEMORIES = store.get('hearby-memories', []);
+  const isoDate = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  let MEET = store.get('hearby-meet', null) || (() => { const d = new Date(); d.setDate(d.getDate() + 12); return { on: true, date: isoDate(d), note: '' }; })();
+  function meetDays() { if (!MEET.date) return null; const [y, m, d] = MEET.date.split('-').map(Number); return Math.round((new Date(y, m - 1, d) - today0()) / 86400000); }
   const saveDays = () => store.set('hearby-days', DAYS);
 
   function today0() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
@@ -1930,6 +1946,9 @@ button { cursor: pointer; }
       if (d === 0 && !shown.has(`c${ev.id}${k}`)) { shown.add(`c${ev.id}${k}`); celebrate(ev, false); }
       if (d === 1 && ev.repeat !== 'daily' && !shown.has(`r${ev.id}${k}`)) { shown.add(`r${ev.id}${k}`); remind(ev, false); }
     });
+    const md = MEET.on ? meetDays() : null;
+    if (md === 1 && !shown.has(`m1${k}`)) { shown.add(`m1${k}`); IDS.forEach(id => { banner(id, `${esc(pick(["Guess who you're seeing tomorrow? 😍", 'Pack your smile, tomorrow is the day ✈️', 'Last sleep before you meet 🥹']))}<small>Tomorrow you're together 💞</small>`); buzz(id, 'Tomorrow you finally meet 💞', 6000); }); }
+    if (md === 0 && !shown.has(`m0${k}`)) { shown.add(`m0${k}`); IDS.forEach(id => { banner(id, `Today's the day you meet! 💞<small>${esc(MEET.note || 'Enjoy every second together')}</small>`); }); }
     setRibbons();
   }
   function setRibbons() {
@@ -2159,10 +2178,10 @@ button { cursor: pointer; }
   }
 
   // ---------- Sheet ----------
-  const TITLES = { text: 'Write something', preset: 'Pick a preset', photo: 'Send a photo', days: 'Special days' };
+  const TITLES = { text: 'Write something', preset: 'Pick a preset', photo: 'Send a photo', days: 'Special days', meet: 'Next time we meet' };
   function openSheet(id, kind) {
     const s = W[id];
-    ['text', 'preset', 'photo', 'days'].forEach(k => { s.q(`.s-${k}`).hidden = k !== kind; });
+    ['text', 'preset', 'photo', 'days', 'meet'].forEach(k => { s.q(`.s-${k}`).hidden = k !== kind; });
     s.q('.sheet-title').textContent = TITLES[kind];
     s.sheet.classList.add('open'); s.sheet.setAttribute('aria-hidden', 'false');
     setTimeout(() => { const el = kind === 'text' ? s.q('textarea') : s.q(`.s-${kind} button, .s-${kind} input`); el && el.focus(); }, 250);
@@ -2216,6 +2235,24 @@ button { cursor: pointer; }
     document.getElementById(`scenery-${id}`).addEventListener('change', e => { P[id].scenery = e.target.value; newPlace(id, true); });
     document.getElementById(`seasonPref-${id}`).addEventListener('change', e => { P[id].seasonPref = e.target.value; newPlace(id, true); });
     q('.days-btn').addEventListener('click', e => { e.stopPropagation(); renderDays(); openSheet(id, 'days'); });
+    const mOn = document.getElementById(`meet-on-${id}`), mUnsure = document.getElementById(`meet-unsure-${id}`), mDate = document.getElementById(`meet-date-${id}`), mNote = document.getElementById(`meet-note-${id}`);
+    const syncMeet = () => { mDate.disabled = mUnsure.checked || !mOn.checked; mUnsure.disabled = !mOn.checked; mNote.disabled = !mOn.checked; };
+    q('.chip.cd').addEventListener('click', e => {
+      e.stopPropagation();
+      mOn.checked = MEET.on; mUnsure.checked = !MEET.date; mDate.value = MEET.date || ''; mNote.value = MEET.note || '';
+      q('.meet-info').textContent = ''; syncMeet(); openSheet(id, 'meet');
+    });
+    [mOn, mUnsure].forEach(el => el.addEventListener('change', syncMeet));
+    q('.meet-save').addEventListener('click', () => {
+      if (mOn.checked && !mUnsure.checked && !mDate.value) { q('.meet-info').textContent = 'Pick a date, or tick "We don\'t know"'; return; }
+      MEET = { on: mOn.checked, date: mOn.checked && !mUnsure.checked ? mDate.value : (mUnsure.checked ? null : MEET.date), note: mNote.value.trim() };
+      store.set('hearby-meet', MEET);
+      IDS.forEach(renderHead); closeSheet(id);
+      const md = meetDays(), o = other(id);
+      toast(id, !MEET.on ? 'Countdown hidden for now' : md === null ? 'Countdown set to "soon" ✈️' : 'Countdown updated ✈️');
+      if (MEET.on) buzz(o, md === null ? `✈️ ${P[id].name} marked your next meet-up as "soon"` : `✈️ ${P[id].name} set your next meet-up: ${md} day${md === 1 ? '' : 's'} to go`, 6000);
+      setTimeout(checkDays, 300);
+    });
     q('.day-ribbon').addEventListener('click', e => {
       e.stopPropagation();
       const ev = s.ribbonEv;

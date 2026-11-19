@@ -108,8 +108,10 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - It answers "why haven't they replied?" without anyone typing a word.
 
 ### 4.10 Meet-up countdown (v1)
-- Set the next date you'll be together.
-- The widget shows *"12 days until we're together ✈️"*. The characters get more excited as the day gets closer, and something special plays on the day.
+- Tap the ✈️ chip to **set, change or remove** the next date you'll be together, with an optional note ("Leo flies to Toronto").
+- **Date not set yet?** Choose "We don't know the date yet" and the widget shows "✈️ soon", or **turn the countdown off** entirely.
+- Both partners share one countdown; either can edit it, and the other gets a gentle heads-up when it changes.
+- The widget shows *"12 days"*, the characters get more excited as the day gets closer, a playful tease comes the day before ("Guess who you're seeing tomorrow? 😍"), and something special plays on the day.
 
 ### 4.10a Widget states: small and expanded (v1)
 - **At rest** the widget is small and only plays the softly blurred, painted couple scene: no buttons.

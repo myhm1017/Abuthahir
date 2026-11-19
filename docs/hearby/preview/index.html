@@ -134,6 +134,52 @@ button { cursor: pointer; }
 .navbar::after { content: ""; width: 92px; height: 4px; border-radius: 4px; background: rgba(50, 30, 60, .35); }
 .toast { position: absolute; left: 50%; bottom: 100px; transform: translateX(-50%); z-index: 6; background: #3a2a48; color: #fff; font-weight: 700; font-size: 12px; padding: 7px 14px; border-radius: 999px; white-space: nowrap; animation: pop 2.2s ease both; }
 
+/* ---------- Slideshow ---------- */
+.slides { position: absolute; inset: 0; z-index: 1; overflow: hidden; background: #1b1424; }
+.slide { position: absolute; inset: 0; }
+.slide img { width: 100%; height: 100%; object-fit: cover; display: block; animation: kb 6s ease-out both; }
+@keyframes kb { from { transform: scale(1) } to { transform: scale(1.08) } }
+@keyframes s-first { from { opacity: 0 } }
+@keyframes s-in-fade { from { opacity: 0 } } @keyframes s-out-fade { to { opacity: 0 } }
+@keyframes s-in-blur { from { opacity: 0; filter: blur(18px) } } @keyframes s-out-blur { to { opacity: 0; filter: blur(18px) } }
+@keyframes s-in-left { from { transform: translateX(100%) } } @keyframes s-out-left { to { transform: translateX(-100%) } }
+@keyframes s-in-right { from { transform: translateX(-100%) } } @keyframes s-out-right { to { transform: translateX(100%) } }
+@keyframes s-in-up { from { transform: translateY(100%) } } @keyframes s-out-up { to { transform: translateY(-100%) } }
+@keyframes s-in-down { from { transform: translateY(-100%) } } @keyframes s-out-down { to { transform: translateY(100%) } }
+@keyframes s-in-white { 0%, 49% { opacity: 0 } 50%, 100% { opacity: 1 } } @keyframes s-out-white { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
+@keyframes s-in-black { 0%, 49% { opacity: 0 } 50%, 100% { opacity: 1 } } @keyframes s-out-black { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
+@keyframes s-in-zoom { from { opacity: 0; transform: scale(1.35) } } @keyframes s-out-zoom { to { opacity: 0; transform: scale(.82) } }
+.dip { position: absolute; inset: 0; z-index: 3; animation: dip 1.2s ease both; pointer-events: none; }
+.dip.white { background: #fff; } .dip.black { background: #000; }
+@keyframes dip { 0% { opacity: 0 } 50% { opacity: 1 } 100% { opacity: 0 } }
+.chip-btn { border: 0; cursor: pointer; color: #33263f; }
+.chip-btn[aria-pressed="true"] { background: #c43f76; color: #fff; }
+
+/* ---------- Pop-up text and fly-in kiss/heart ---------- */
+.pop { position: absolute; inset: 0; z-index: 7; overflow: hidden; background: rgba(46, 22, 64, .22); backdrop-filter: blur(16px) saturate(1.25); -webkit-backdrop-filter: blur(16px) saturate(1.25); animation: fadeIn .35s ease both; }
+.pop.out { animation: fadeOut .45s ease both; }
+.pop-line { position: absolute; left: 0; top: 50%; white-space: nowrap; font-family: var(--display); font-weight: 600; line-height: 1; color: #fff; text-shadow: 0 3px 16px rgba(214, 70, 130, .6), 0 1px 2px rgba(60, 20, 60, .35); will-change: transform; }
+.caret { display: inline-block; width: .07em; height: .78em; margin-left: .04em; background: #fff; vertical-align: -.06em; border-radius: 2px; animation: blink .8s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0 } }
+@keyframes fadeIn { from { opacity: 0 } }
+@keyframes fadeOut { to { opacity: 0 } }
+.fly { position: absolute; inset: 0; z-index: 7; pointer-events: none; display: grid; place-items: center; overflow: hidden; }
+.fly span { line-height: 1; animation: flyAt 2s cubic-bezier(.35, .05, .4, 1) both; filter: drop-shadow(0 6px 14px rgba(200, 40, 100, .35)); }
+@keyframes flyAt {
+  0% { opacity: 0; transform: translate(var(--dx), 18%) scale(.06) rotate(var(--rot)) }
+  14% { opacity: 1 }
+  62% { opacity: 1; transform: translate(calc(var(--dx) * .3), 0) scale(1) rotate(calc(var(--rot) * -.3)) }
+  100% { opacity: 0; transform: translate(0, 0) scale(2.6) rotate(0); filter: blur(8px) }
+}
+
+/* ---------- Screen off and power button ---------- */
+.power { position: absolute; right: -5px; top: 130px; width: 5px; height: 56px; border: 0; padding: 0; border-radius: 0 4px 4px 0; background: #3a3144; cursor: pointer; }
+.power:hover { background: #5d506b; }
+.off-layer { position: absolute; inset: 0; z-index: 20; background: #050307; display: grid; place-items: center; opacity: 0; pointer-events: none; transition: opacity .5s; cursor: pointer; }
+.screen.off .off-layer { opacity: 1; pointer-events: auto; }
+.off-clock { font-family: var(--display); color: rgba(255, 255, 255, .26); font-size: 42px; font-weight: 500; }
+.off-hint { position: absolute; bottom: 40px; font-size: 11px; font-weight: 700; color: rgba(255, 255, 255, .3); }
+
 /* ---------- Bottom sheet inside the phone ---------- */
 .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 8; background: rgba(255, 255, 255, .96); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-radius: 26px 26px 0 0; padding: 14px 16px 18px; transform: translateY(105%); transition: transform .35s cubic-bezier(.2, .9, .3, 1.05); box-shadow: 0 -10px 30px -12px rgba(70, 30, 80, .35); display: grid; gap: 10px; color: #33263f; }
 .sheet.open { transform: none; }
@@ -145,10 +191,20 @@ button { cursor: pointer; }
 .count { font-size: 11px; color: #8a7b98; font-weight: 700; }
 .send { border: 0; background: #db4f84; color: #fff; font-weight: 800; padding: 9px 18px; border-radius: 999px; }
 .send:disabled { opacity: .45; cursor: default; }
+.modes { display: flex; gap: 6px; }
+.modes label { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; border: 1.5px solid #f0d7e4; border-radius: 12px; padding: 6px; font-size: 12.5px; font-weight: 800; cursor: pointer; background: #fff7fb; }
+.modes label:has(input:checked) { background: #ffe1ee; border-color: #db4f84; color: #9a2f5e; }
+.modes input { accent-color: #db4f84; }
+.row2 { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: stretch; }
+.sample { border: 1.5px solid #f0d7e4; background: #fff; border-radius: 16px; padding: 0 10px; font-size: 12px; font-weight: 800; color: #4a3858; }
+.thumbs { display: flex; gap: 6px; overflow-x: auto; min-height: 0; }
+.thumbs img { width: 46px; height: 46px; border-radius: 10px; object-fit: cover; flex: none; }
+.tsel { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; }
+.tsel select { border: 1.5px solid #ead9ee; border-radius: 10px; padding: 4px 6px; background: #fff; color: #33263f; font-size: 12.5px; }
 .presets { display: flex; flex-wrap: wrap; gap: 7px; }
 .presets button { border: 1.5px solid #f0d7e4; background: #fff7fb; border-radius: 999px; padding: 6px 11px; font-weight: 700; font-size: 13px; color: #4a3858; }
 .presets button:hover { background: #ffe8f2; }
-.pick { position: relative; display: grid; place-items: center; border: 2px dashed #e7c7d8; border-radius: 16px; padding: 16px; font-weight: 800; color: #9a3e68; cursor: pointer; background: #fff7fb; }
+.pick { position: relative; display: grid; place-items: center; border: 2px dashed #e7c7d8; border-radius: 16px; padding: 12px; font-weight: 800; color: #9a3e68; cursor: pointer; background: #fff7fb; }
 .pick input { position: absolute; width: 1px; height: 1px; opacity: 0; }
 .pick:focus-within { outline: 3px solid #db4f84; outline-offset: 2px; }
 .preview { width: 100%; max-height: 110px; object-fit: cover; border-radius: 14px; }
@@ -183,7 +239,7 @@ button { cursor: pointer; }
 <header class="top">
   <div class="logo">hearby<span class="hb" aria-hidden="true">♥</span></div>
   <p class="tag">Miles apart, a heartbeat away.</p>
-  <p class="intro">A working preview of the 4x4 home-screen widget. Leo is in London and Mia is in Toronto. Send something from one phone and watch it land on the other.</p>
+  <p class="intro">A working preview of the Hearby home-screen widget. Leo is in London and Mia is in Toronto. Send something from one phone and watch it land on the other.</p>
 </header>
 
 <div class="tabs" role="tablist" aria-label="Choose a phone">
@@ -203,6 +259,10 @@ button { cursor: pointer; }
     <li>Turn on <b>Asleep</b> for Mia, then send from Leo. It arrives quietly and the scene turns to night. Turn Asleep off to feel the heartbeat.</li>
     <li>Send from both phones within 15 seconds for a rare <b>in-sync</b> hug.</li>
     <li>Turn on <b>Discreet mode</b> to blur messages until you tap them.</li>
+    <li><b>Slideshow:</b> open the widget, tap 📷, pick a few photos (or "Use sample photos"), choose a transition and send. The other widget starts a slideshow. Tap 🎞️ to switch between the slideshow and the couple scene.</li>
+    <li><b>Pop-up text:</b> tap ✏️, choose <b>Pop-up ✨</b> and send. It types out in huge letters over a blurred background and slides across like a news ticker.</li>
+    <li><b>Flying kiss or heart:</b> tap 💋 or ❤️. It flies at the other person, grows to fill the widget and fades.</li>
+    <li>Pop-ups, kisses and hearts only play while the person is looking. Turn off Mia's screen (the side button or the "Screen on" switch), send one from Leo, then turn the screen back on.</li>
   </ul>
   <p class="fine">This is a design preview. In the real Android app the heartbeat is a true vibration, messages are end-to-end encrypted, and the widget plays the scenes as short looping animations.</p>
 </section>
@@ -210,8 +270,8 @@ button { cursor: pointer; }
 <script>
 (() => {
   const P = {
-    leo: { id: 'leo', name: 'Leo', city: 'London', tz: 'Europe/London', hair: '#3d2a22', hairHi: '#5a4034', shirt: '#7fa6d9', pants: '#4c5878', skin: '#f6d6bf', long: false, status: 'free to talk', quiet: false, discreet: false },
-    mia: { id: 'mia', name: 'Mia', city: 'Toronto', tz: 'America/Toronto', hair: '#2a1f2e', hairHi: '#4a3650', shirt: '#f2a7bf', pants: '#8a6aa8', skin: '#efc3a2', long: true, status: 'at work', quiet: false, discreet: false }
+    leo: { id: 'leo', name: 'Leo', city: 'London', tz: 'Europe/London', hair: '#3d2a22', hairHi: '#5a4034', shirt: '#7fa6d9', pants: '#4c5878', skin: '#f6d6bf', long: false, status: 'free to talk', quiet: false, discreet: false, screen: true },
+    mia: { id: 'mia', name: 'Mia', city: 'Toronto', tz: 'America/Toronto', hair: '#2a1f2e', hairHi: '#4a3650', shirt: '#f2a7bf', pants: '#8a6aa8', skin: '#efc3a2', long: true, status: 'at work', quiet: false, discreet: false, screen: true }
   };
   const IDS = ['leo', 'mia'];
   const other = id => (id === 'leo' ? 'mia' : 'leo');
@@ -229,7 +289,7 @@ button { cursor: pointer; }
     return `
     <section class="device" data-id="${id}" aria-label="${me.name}'s phone">
       <div class="device-label">${me.name}'s phone <span>· ${me.city}</span></div>
-      <div class="phone"><span class="ring"></span>
+      <div class="phone"><span class="ring"></span><button class="power" aria-label="${me.name}'s power button" title="Power button"></button>
         <div class="screen">
           <div class="statusbar"><span class="clock"></span><span class="cam"></span><span class="sb-icons">▂▄▆ ▮</span></div>
           <div class="banner-slot"></div>
@@ -240,13 +300,14 @@ button { cursor: pointer; }
           <div class="scrim"></div>
           <div class="widget" role="button" tabindex="0" aria-label="Open Hearby" aria-expanded="false">
             <canvas class="art" aria-label="Painted scene of the couple"></canvas>
+            <div class="slides" hidden></div>
             <div class="fx" aria-hidden="true"></div>
             <div class="label-slot"></div>
             <div class="pill compact-only"></div>
             <span class="badge compact-only" hidden>♥</span>
             <div class="w-top ui">
               <div class="who"><span class="pdot"></span><b class="pname"></b><span class="ptime"></span></div>
-              <div class="chips"><span class="chip status"></span><span class="chip cd" title="Days until you're together"></span><button class="close-w" aria-label="Close">✕</button></div>
+              <div class="chips"><span class="chip status"></span><span class="chip cd" title="Days until you're together"></span><button class="chip chip-btn slides-toggle" hidden aria-pressed="false" aria-label="Slideshow">🎞️</button><button class="close-w" aria-label="Close">✕</button></div>
             </div>
             <div class="w-bottom ui">
               <div class="bubble">
@@ -258,6 +319,8 @@ button { cursor: pointer; }
                 <button data-act="photo" aria-label="Send a photo" title="Photo">📷</button>
                 <button data-act="text" aria-label="Write a message" title="Text">✏️</button>
                 <button data-act="preset" aria-label="Send a preset" title="Preset">💬</button>
+                <button data-act="kiss" aria-label="Send a flying kiss" title="Kiss">💋</button>
+                <button data-act="heart" aria-label="Send a flying heart" title="Heart">❤️</button>
                 <button data-act="felt" class="felt" aria-label="Felt it" title="Felt it">💗</button>
               </div>
             </div>
@@ -270,19 +333,32 @@ button { cursor: pointer; }
           </div>
           <div class="navbar"></div>
           <div class="toast-slot"></div>
+          <div class="off-layer" title="Tap to wake"><span class="off-clock"></span><span class="off-hint">Screen off · tap to wake</span></div>
           <div class="sheet" aria-hidden="true">
             <div class="sheet-head"><b class="sheet-title"></b><button class="close" aria-label="Close">✕</button></div>
             <div class="s-text" hidden>
+              <div class="modes" role="radiogroup" aria-label="How it shows">
+                <label><input type="radio" name="mode-${id}" value="msg" checked> Message</label>
+                <label><input type="radio" name="mode-${id}" value="pop"> Pop-up ✨</label>
+              </div>
               <textarea id="text-${id}" maxlength="120" placeholder="Say something sweet…" aria-label="Message"></textarea>
+              <p class="hint mode-hint" hidden>A pop-up types out big across their widget, but only once they're looking at their screen.</p>
               <div class="row"><span class="count">0 / 120</span><button class="send send-text" disabled>Send 💌</button></div>
             </div>
             <div class="s-preset" hidden><div class="presets">${PRESETS.map(t => `<button>${t}</button>`).join('')}</div></div>
             <div class="s-photo" hidden>
-              <label class="pick">Choose a photo<input id="photo-${id}" type="file" accept="image/*"></label>
-              <img class="preview" alt="Selected photo" hidden>
+              <div class="row2"><label class="pick">Choose photos<input id="photo-${id}" type="file" accept="image/*" multiple></label><button class="sample">Use sample photos</button></div>
+              <div class="thumbs"></div>
+              <label class="tsel" for="trans-${id}">Slideshow transition
+                <select id="trans-${id}">
+                  <option value="random">Random mix</option><option value="fade">Fade in / out</option><option value="blur">Blur in / out</option>
+                  <option value="left">Swipe left</option><option value="right">Swipe right</option><option value="up">Swipe up</option><option value="down">Swipe down</option>
+                  <option value="white">Dip to white</option><option value="black">Dip to black</option><option value="zoom">Zoom</option>
+                </select>
+              </label>
               <label class="tog"><input id="save-${id}" type="checkbox"> Save to my gallery too</label>
-              <p class="hint">In the app this opens a quick camera. Photos stay out of your gallery unless you choose to save them.</p>
-              <div class="row"><span></span><button class="send send-photo" disabled>Send 💌</button></div>
+              <p class="hint">Send two or more and their widget plays a slideshow. In the app this also opens a quick camera.</p>
+              <div class="row"><span class="count pcount"></span><button class="send send-photo" disabled>Send 💌</button></div>
             </div>
           </div>
         </div>
@@ -292,6 +368,8 @@ button { cursor: pointer; }
         <label for="status-${id}">Status <select id="status-${id}">${opts}</select></label>
         <label for="quiet-${id}">Asleep (quiet hours) <input type="checkbox" id="quiet-${id}"></label>
         <label for="discreet-${id}">Discreet mode <input type="checkbox" id="discreet-${id}"></label>
+        <label for="screen-${id}">Screen on <input type="checkbox" id="screen-${id}" checked></label>
+        <label for="slides-${id}">Slideshow in widget <input type="checkbox" id="slides-${id}" disabled></label>
         <p class="buzz" aria-live="polite"></p>
       </div>
     </section>`;
@@ -308,7 +386,7 @@ button { cursor: pointer; }
     W[id] = {
       root, q, canvas, ctx: canvas.getContext('2d'), phone: q('.phone'), widget: q('.widget'), fx: q('.fx'), sheet: q('.sheet'),
       w: 0, h: 0, sceneIdx: i * 2, sceneStart: performance.now() / 1000 - i * 2.5, scroll: i * 140,
-      override: null, overrideStart: 0, overrideUntil: 0, msg: null, pending: null, lastSentAt: 0, photo: null, open: false, unread: false, bub: [], lastBub: 0,
+      override: null, overrideStart: 0, overrideUntil: 0, msg: null, pending: null, lastSentAt: 0, photo: null, open: false, unread: false, bub: [], lastBub: 0, queue: [], playing: false, slides: [], slideOn: false, slideIdx: -1, trans: 'random', slideT: 0, photos: [],
       clouds: [{ x: 0.12, y: 0.16, s: 1 }, { x: 0.62, y: 0.1, s: 1.25 }, { x: 1.05, y: 0.24, s: 0.8 }].map(c => ({ ...c, x: c.x + i * 0.2 })),
       motes: Array.from({ length: 10 }, () => ({ x: rand(), y: 0.15 + rand() * 0.45, p: rand() * 6.28, v: 0.4 + rand() * 0.6 }))
     };
@@ -748,6 +826,7 @@ button { cursor: pointer; }
     return 'love';
   }
   function play(id, msg) {
+    if (msg.pop) { deliverVisual(id, { kind: 'pop', text: msg.text }); return; }
     const m = meaning(msg), fx = W[id].fx;
     if (reduced.matches) { spawn(fx, EMOJI[m], 0.5, 0.55, 0.5, 0.45, { s: 1.7, dur: 1300 }); return; }
     FX[m](fx, id);
@@ -771,6 +850,7 @@ button { cursor: pointer; }
   function renderHead(id) {
     const s = W[id], pa = P[other(id)], me = P[id];
     s.q('.clock').textContent = fmtClock(me.tz);
+    s.q('.off-clock').textContent = fmtClock(me.tz);
     s.q('.pname').textContent = pa.name;
     s.q('.ptime').textContent = fmtTime(pa.tz);
     s.q('.pdot').classList.toggle('asleep', pa.quiet);
@@ -793,7 +873,7 @@ button { cursor: pointer; }
     felt.disabled = m.felt;
     felt.textContent = m.felt ? '💞' : '💗';
     felt.title = m.felt ? 'Felt' : 'Felt it';
-    q('.pill').textContent = `${P[m.from].name}: ${m.img ? '📷 sent a photo' : m.text}`;
+    q('.pill').textContent = `${P[m.from].name}: ${m.img ? '📷 ' + m.text : m.text}`;
     q('.badge').hidden = !s.unread || s.open;
   }
   function openW(id) {
@@ -828,18 +908,198 @@ button { cursor: pointer; }
     buzz(id, '📳 ba-dum… the heartbeat vibration');
   }
 
+  // ---------- Shown only while the person is looking ----------
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  function isViewing(id) {
+    return P[id].screen && !P[id].quiet && (!narrow.matches || stage.dataset.active === id) && document.visibilityState === 'visible';
+  }
+  function deliverVisual(id, item) {
+    W[id].queue.push(item);
+    if (!isViewing(id)) buzz(id, `💌 Waiting until ${P[id].name} looks at the screen`, 5000);
+    flush(id);
+  }
+  async function flush(id) {
+    const s = W[id];
+    if (s.playing) return;
+    s.playing = true;
+    while (s.queue.length && isViewing(id)) {
+      const it = s.queue.shift();
+      await (it.kind === 'pop' ? playPop(id, it.text) : playFly(id, it.ch));
+      await wait(250);
+    }
+    s.playing = false;
+  }
+  function playFly(id, ch) {
+    return new Promise(res => {
+      const wd = W[id].widget, H = wd.clientHeight;
+      const ov = document.createElement('div'); ov.className = 'fly';
+      const sp = document.createElement('span'); sp.textContent = ch;
+      sp.style.fontSize = `${H * 0.8}px`;
+      sp.style.setProperty('--dx', `${Math.round(rand() * 40 - 20)}%`);
+      sp.style.setProperty('--rot', `${Math.round(rand() * 30 - 15)}deg`);
+      if (reduced.matches) sp.style.animation = 'fadeIn .6s ease both';
+      ov.appendChild(sp); wd.appendChild(ov);
+      setTimeout(() => { if (!reduced.matches) burst(W[id].fx, ['✨', '💗'], 0.5, 0.75, 6); }, 1150);
+      setTimeout(() => { ov.remove(); res(); }, reduced.matches ? 1400 : 2050);
+    });
+  }
+  function playPop(id, text) {
+    return new Promise(res => {
+      const wd = W[id].widget, H = wd.clientHeight, Wd = wd.clientWidth;
+      const ov = document.createElement('div'); ov.className = 'pop';
+      ov.innerHTML = '<div class="pop-line"><span class="pop-text"></span><span class="caret"></span></div>';
+      wd.appendChild(ov);
+      const line = ov.querySelector('.pop-line'), span = ov.querySelector('.pop-text'), caret = ov.querySelector('.caret');
+      line.style.fontSize = `${Math.round(H * 0.75)}px`;
+      const chars = Array.from(text), step = 1000 / 9, speed = H * 1.15;
+      let n = 0, x = Wd * 0.7, lastType = 0, doneAt = 0, prev = performance.now();
+      line.style.transform = `translate(${x}px, -50%)`;
+      function tick(now) {
+        const dt = Math.min(0.05, (now - prev) / 1000); prev = now;
+        if (n < chars.length && now - lastType > step) { n++; span.textContent = chars.slice(0, n).join(''); lastType = now; if (n === chars.length) doneAt = now; }
+        if (!doneAt || now - doneAt < 400) { const target = Wd * 0.72 - span.offsetWidth; x += (target - x) * Math.min(1, dt * 7); }
+        else { caret.style.display = 'none'; x -= speed * dt; }
+        line.style.transform = `translate(${x}px, -50%)`;
+        if (doneAt && now - doneAt > 400 && x + line.offsetWidth < -4) {
+          ov.classList.add('out'); setTimeout(() => { ov.remove(); res(); }, 450); return;
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+  function setScreen(id, on) {
+    P[id].screen = on;
+    W[id].q('.screen').classList.toggle('off', !on);
+    document.getElementById(`screen-${id}`).checked = on;
+    if (on) setTimeout(() => flush(id), 450); else closeW(id);
+  }
+
+  // ---------- Slideshow ----------
+  const TRANS = ['fade', 'blur', 'left', 'right', 'up', 'down', 'white', 'black', 'zoom'];
+  function setSlide(id, on) {
+    const s = W[id];
+    s.slideOn = !!on && s.slides.length > 0;
+    const chip = s.q('.slides-toggle');
+    chip.hidden = !s.slides.length; chip.setAttribute('aria-pressed', String(s.slideOn));
+    chip.title = s.slideOn ? 'Show the couple scene' : 'Show the slideshow';
+    const cb = document.getElementById(`slides-${id}`); cb.disabled = !s.slides.length; cb.checked = s.slideOn;
+    startSlides(id);
+  }
+  function startSlides(id) {
+    const s = W[id], box = s.q('.slides');
+    clearTimeout(s.slideT);
+    box.innerHTML = '';
+    box.hidden = !s.slideOn;
+    if (!s.slideOn) return;
+    s.slideIdx = -1; nextSlide(id, true);
+  }
+  function nextSlide(id, first) {
+    const s = W[id];
+    if (!s.slideOn) return;
+    const box = s.q('.slides');
+    s.slideIdx = (s.slideIdx + 1) % s.slides.length;
+    const old = box.querySelector('.slide.cur');
+    const el = document.createElement('div'); el.className = 'slide cur';
+    const img = document.createElement('img'); img.alt = ''; img.src = s.slides[s.slideIdx]; el.appendChild(img);
+    if (first || !old) { el.style.animation = 's-first .8s ease both'; box.appendChild(el); }
+    else {
+      const tr = s.trans === 'random' ? pick(TRANS) : s.trans;
+      const dur = reduced.matches ? '.6s' : '1.2s', name = reduced.matches ? 'fade' : tr;
+      old.classList.remove('cur');
+      old.style.animation = `s-out-${name} ${dur} ease both`; el.style.animation = `s-in-${name} ${dur} ease both`;
+      box.appendChild(el);
+      if (name === 'white' || name === 'black') { const d = document.createElement('div'); d.className = `dip ${name}`; box.appendChild(d); setTimeout(() => d.remove(), 1300); }
+      setTimeout(() => old.remove(), 1300);
+    }
+    if (s.slides.length > 1) s.slideT = setTimeout(() => nextSlide(id), 4200);
+  }
+  function shrink(file) {
+    return new Promise(res => {
+      const r = new FileReader();
+      r.onload = () => {
+        const im = new Image();
+        im.onload = () => {
+          const k = Math.min(1, 640 / Math.max(im.width, im.height)), cv = document.createElement('canvas');
+          cv.width = Math.round(im.width * k); cv.height = Math.round(im.height * k);
+          cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
+          res(cv.toDataURL('image/jpeg', 0.82));
+        };
+        im.onerror = () => res(null);
+        im.src = r.result;
+      };
+      r.onerror = () => res(null);
+      r.readAsDataURL(file);
+    });
+  }
+  let SAMPLES = null;
+  function samplePhotos() {
+    if (SAMPLES) return SAMPLES;
+    const S = 480, out = [];
+    const mk = fn => { const cv = document.createElement('canvas'); cv.width = cv.height = S; fn(cv.getContext('2d')); out.push(cv.toDataURL('image/jpeg', 0.85)); };
+    const lg = (c, y0, y1, stops) => { const g = c.createLinearGradient(0, y0, 0, y1); stops.forEach(([o, col]) => g.addColorStop(o, col)); return g; };
+    mk(c => { // sunset beach
+      c.fillStyle = lg(c, 0, S * 0.62, [[0, '#5b4b9a'], [0.5, '#f08a8a'], [1, '#ffd08a']]); c.fillRect(0, 0, S, S);
+      c.fillStyle = '#fff1c4'; c.beginPath(); c.arc(S * 0.5, S * 0.58, S * 0.11, 0, TAU); c.fill();
+      c.fillStyle = lg(c, S * 0.6, S, [[0, '#e98a7e'], [0.4, '#5b6aa8'], [1, '#2e3a6e']]); c.fillRect(0, S * 0.62, S, S * 0.38);
+      c.fillStyle = 'rgba(255,230,180,.55)'; for (let i = 0; i < 14; i++) c.fillRect(S * (0.38 + i * 0.006), S * 0.64 + i * S * 0.018, S * (0.24 - i * 0.012), 3);
+      c.fillStyle = '#e9c79a'; c.beginPath(); c.moveTo(0, S); c.quadraticCurveTo(S * 0.4, S * 0.8, S, S * 0.9); c.lineTo(S, S); c.fill();
+    });
+    mk(c => { // city at night
+      c.fillStyle = lg(c, 0, S, [[0, '#0f1638'], [0.6, '#3a2f6b'], [1, '#6b4a7c']]); c.fillRect(0, 0, S, S);
+      for (let i = 0; i < 60; i++) { c.fillStyle = `rgba(255,248,220,${0.3 + (i % 5) * 0.12})`; c.fillRect((i * 97.7) % S, ((i * 53.3) % (S * 0.5)), 2, 2); }
+      c.fillStyle = '#fff3cf'; c.beginPath(); c.arc(S * 0.78, S * 0.18, S * 0.06, 0, TAU); c.fill();
+      for (let i = 0; i < 11; i++) {
+        const bw = S * (0.07 + (i % 3) * 0.025), bh = S * (0.25 + ((i * 37) % 30) / 100), bx = i * S * 0.095 - 10;
+        c.fillStyle = i % 2 ? '#1c1838' : '#262148'; c.fillRect(bx, S - bh, bw, bh);
+        c.fillStyle = 'rgba(255,214,140,.8)';
+        for (let y = S - bh + 10; y < S - 8; y += 14) for (let x = bx + 6; x < bx + bw - 6; x += 10) if ((x * y) % 7 < 3) c.fillRect(x, y, 4, 6);
+      }
+    });
+    mk(c => { // mountains and lake
+      c.fillStyle = lg(c, 0, S * 0.55, [[0, '#6fa8dc'], [1, '#d8ecf7']]); c.fillRect(0, 0, S, S);
+      [['#8aa6c8', 0.3, 0.55], ['#5f7fa8', 0.38, 0.58], ['#3f5f86', 0.46, 0.6]].forEach(([col, top, base], j) => {
+        c.fillStyle = col; c.beginPath(); c.moveTo(0, S * base);
+        for (let x = 0; x <= S; x += 40) c.lineTo(x, S * (top + Math.abs(Math.sin(x * 0.012 + j * 2)) * 0.12));
+        c.lineTo(S, S * base); c.fill();
+      });
+      c.fillStyle = lg(c, S * 0.6, S, [[0, '#7fb0d6'], [1, '#3e6f98']]); c.fillRect(0, S * 0.6, S, S * 0.4);
+      c.fillStyle = 'rgba(255,255,255,.35)'; for (let i = 0; i < 9; i++) c.fillRect(S * 0.1 + i * 40, S * (0.66 + i * 0.03), 60, 2);
+      c.fillStyle = '#4f8a5c'; c.beginPath(); c.moveTo(0, S); c.quadraticCurveTo(S * 0.2, S * 0.84, S * 0.45, S); c.fill();
+    });
+    mk(c => { // cherry blossoms
+      c.fillStyle = lg(c, 0, S, [[0, '#a9d4f5'], [1, '#fde3ee']]); c.fillRect(0, 0, S, S);
+      c.strokeStyle = '#6b4a3c'; c.lineCap = 'round';
+      [[0, S * 0.15, S * 0.6, S * 0.35, 14], [S * 0.3, S * 0.27, S * 0.45, S * 0.12, 8], [S * 0.45, S * 0.31, S * 0.85, S * 0.5, 7]].forEach(([x1, y1, x2, y2, lw]) => { c.lineWidth = lw; c.beginPath(); c.moveTo(x1, y1); c.quadraticCurveTo((x1 + x2) / 2, y1 - 30, x2, y2); c.stroke(); });
+      for (let i = 0; i < 70; i++) { const x = (i * 71.3) % (S * 0.95), y = S * 0.05 + ((i * 41.7) % (S * 0.5)); c.fillStyle = i % 3 ? '#ffc3d8' : '#ffffff'; c.beginPath(); c.arc(x, y, 9 + (i % 4) * 3, 0, TAU); c.fill(); }
+      for (let i = 0; i < 25; i++) { c.fillStyle = 'rgba(255,170,200,.8)'; c.beginPath(); c.ellipse((i * 113) % S, S * 0.55 + (i * 67) % (S * 0.42), 5, 3, i, 0, TAU); c.fill(); }
+    });
+    SAMPLES = out; return out;
+  }
+
   // ---------- Sending ----------
+  function sendFly(from, kind) {
+    const to = other(from);
+    const ch = kind === 'kiss' ? pick(['💋', '😘']) : pick(['❤️', '💖', '💗']);
+    toast(from, kind === 'kiss' ? `Kiss sent to ${P[to].name} 💋` : `Heart sent to ${P[to].name} ❤️`);
+    if (narrow.matches) setTimeout(() => setTab(to), 650);
+    setTimeout(() => {
+      if (P[to].quiet) { W[to].queue.push({ kind: 'fly', ch }); buzz(to, `🌙 A ${kind} is waiting for ${P[to].name} in the morning.`, 4200); return; }
+      beat(to); deliverVisual(to, { kind: 'fly', ch });
+    }, narrow.matches ? 1000 : 700);
+  }
   function send(from, payload) {
     const to = other(from), t = Date.now();
-    const msg = { from, text: payload.text || '', img: payload.img || null, at: t, kept: false, felt: false, revealed: false };
+    const msg = { from, text: payload.text || '', img: payload.img || (payload.imgs && payload.imgs[0]) || null, pop: !!payload.pop, at: t, kept: false, felt: false, revealed: false };
     closeSheet(from);
     setTimeout(() => closeW(from), 350);
-    toast(from, `Sent to ${P[to].name} 💌`);
+    toast(from, payload.pop ? `Pop-up sent ✨ plays when ${P[to].name} looks` : `Sent to ${P[to].name} 💌`);
     const sync = t - W[to].lastSentAt < 15000;
     W[from].lastSentAt = t;
     if (narrow.matches) setTimeout(() => setTab(to), 650);
     setTimeout(() => {
       W[to].msg = msg; notify(to);
+      if (payload.imgs) { W[to].slides = payload.imgs; W[to].trans = payload.trans || 'random'; setSlide(to, true); }
       if (P[to].quiet) {
         W[to].pending = msg;
         banner(to, '🌙 Delivered quietly<small>The heartbeat waits until morning</small>');
@@ -880,7 +1140,8 @@ button { cursor: pointer; }
     const s = W[id], q = s.q;
     q('.actions').addEventListener('click', e => {
       const b = e.target.closest('button'); if (!b) return;
-      if (b.dataset.act === 'felt') feltIt(id); else openSheet(id, b.dataset.act);
+      const act = b.dataset.act;
+      if (act === 'felt') feltIt(id); else if (act === 'kiss' || act === 'heart') sendFly(id, act); else openSheet(id, act);
     });
     q('.close').addEventListener('click', () => closeSheet(id));
     s.widget.addEventListener('click', () => { if (!s.open) openW(id); });
@@ -890,20 +1151,36 @@ button { cursor: pointer; }
     const ta = q('textarea'), sendText = q('.send-text');
     ta.addEventListener('input', () => { q('.count').textContent = `${ta.value.length} / 120`; sendText.disabled = !ta.value.trim(); });
     ta.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && ta.value.trim()) { e.preventDefault(); sendText.click(); } });
-    sendText.addEventListener('click', () => { const v = ta.value.trim(); if (!v) return; send(id, { text: v }); ta.value = ''; q('.count').textContent = '0 / 120'; sendText.disabled = true; });
+    const modeOf = () => (root => root ? root.value : 'msg')(q(`input[name="mode-${id}"]:checked`));
+    q('.modes').addEventListener('change', () => { const pop = modeOf() === 'pop'; q('.mode-hint').hidden = !pop; sendText.textContent = pop ? 'Pop it ✨' : 'Send 💌'; });
+    sendText.addEventListener('click', () => { const v = ta.value.trim(); if (!v) return; send(id, { text: v, pop: modeOf() === 'pop' }); ta.value = ''; q('.count').textContent = '0 / 120'; sendText.disabled = true; });
     q('.presets').addEventListener('click', e => { const b = e.target.closest('button'); if (b) send(id, { text: b.textContent }); });
-    const file = q('input[type="file"]'), prev = q('.preview'), sendPhoto = q('.send-photo');
-    file.addEventListener('change', () => {
-      const fl = file.files && file.files[0]; if (!fl) return;
-      const r = new FileReader();
-      r.onload = () => { s.photo = r.result; prev.src = r.result; prev.hidden = false; sendPhoto.disabled = false; };
-      r.readAsDataURL(fl);
+    const file = q('input[type="file"]'), thumbs = q('.thumbs'), sendPhoto = q('.send-photo'), pcount = q('.pcount');
+    const showThumbs = () => {
+      thumbs.innerHTML = '';
+      s.photos.forEach(src => { const im = document.createElement('img'); im.src = src; im.alt = 'Selected photo'; thumbs.appendChild(im); });
+      const n = s.photos.length;
+      pcount.textContent = n ? `${n} photo${n > 1 ? 's' : ''}${n > 1 ? ' · slideshow' : ''}` : '';
+      sendPhoto.disabled = !n;
+    };
+    file.addEventListener('change', async () => {
+      const files = Array.from(file.files || []).slice(0, 10);
+      if (!files.length) return;
+      s.photos = (await Promise.all(files.map(shrink))).filter(Boolean);
+      showThumbs();
     });
+    q('.sample').addEventListener('click', () => { s.photos = samplePhotos().slice(); showThumbs(); });
     sendPhoto.addEventListener('click', () => {
-      if (!s.photo) return;
-      send(id, { img: s.photo, text: 'sent you a photo 📷' });
-      s.photo = null; prev.hidden = true; file.value = ''; sendPhoto.disabled = true;
+      if (!s.photos.length) return;
+      const n = s.photos.length;
+      send(id, { imgs: s.photos.slice(), trans: document.getElementById(`trans-${id}`).value, text: n > 1 ? `sent you ${n} photos 📷` : 'sent you a photo 📷' });
+      s.photos = []; file.value = ''; showThumbs();
     });
+    q('.slides-toggle').addEventListener('click', e => { e.stopPropagation(); setSlide(id, !s.slideOn); });
+    document.getElementById(`slides-${id}`).addEventListener('change', e => setSlide(id, e.target.checked));
+    q('.power').addEventListener('click', () => setScreen(id, !P[id].screen));
+    q('.off-layer').addEventListener('click', () => setScreen(id, true));
+    document.getElementById(`screen-${id}`).addEventListener('change', e => setScreen(id, e.target.checked));
     q('.keep').addEventListener('click', () => { if (s.msg) { s.msg.kept = !s.msg.kept; renderBubble(id); } });
     q('.b-veil').addEventListener('click', () => { if (s.msg) { s.msg.revealed = true; renderBubble(id); } });
     document.getElementById(`status-${id}`).addEventListener('change', e => { P[id].status = e.target.value; renderHead(other(id)); });
@@ -916,20 +1193,23 @@ button { cursor: pointer; }
         buzz(id, `☀️ Good morning, ${P[id].name}`);
         setTimeout(() => { beat(id); play(id, m); }, 500);
       }
+      if (!P[id].quiet) setTimeout(() => flush(id), 700);
     });
   });
 
   function setTab(id) {
     stage.dataset.active = id;
     document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === id)));
+    setTimeout(() => flush(id), 300);
   }
+  document.addEventListener('visibilitychange', () => IDS.forEach(flush));
   document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
 
   IDS.forEach(id => { renderHead(id); notify(id); });
   let last = performance.now() / 1000;
   function frame(ms) {
     const t = ms / 1000, dt = Math.min(0.1, t - last);
-    if (dt >= 1 / 32) { last = t; IDS.forEach(id => draw(id, t, reduced.matches ? dt * 0.4 : dt)); }
+    if (dt >= 1 / 32) { last = t; IDS.forEach(id => { const s = W[id]; if (P[id].screen && !(s.slideOn && s.slides.length)) draw(id, t, reduced.matches ? dt * 0.4 : dt); }); }
     requestAnimationFrame(frame);
   }
   IDS.forEach(id => draw(id, last, 0));

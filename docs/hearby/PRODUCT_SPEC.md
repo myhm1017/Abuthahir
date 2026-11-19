@@ -101,6 +101,28 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - Set the next date you'll be together.
 - The widget shows *"12 days until we're together ✈️"*. The characters get more excited as the day gets closer, and something special plays on the day.
 
+### 4.10a Widget states: small and expanded (v1)
+- **At rest** the widget is small and only plays the softly blurred, painted couple scene: no buttons.
+- **Tapping it expands** it to the full view with the message, partner info and all buttons. Tapping outside or ✕ shrinks it back.
+- **Partner teasing scenes** rotate with the sweet ones: the partner knocks on your screen, pokes your character's cheek, squishes their face against the glass, plays hide and seek from a bush, or blows bubbles at you. Each phone shows the *other* person teasing.
+
+### 4.10b Photo slideshow (v1)
+- Send one photo or **several photos from the gallery** (up to 10). With two or more, the partner's widget plays a **slideshow**.
+- The sender picks a transition, or a random mix: **fade in/out, blur in/out, swipe left/right/up/down, dip to white, dip to black, zoom**. A slow zoom drifts on each photo while it shows.
+- The partner can switch the widget between the slideshow and the couple scene (🎞️).
+
+### 4.10c Pop-up text (v1)
+- A text mode where the message **types out like a typewriter in huge letters** (about 3/4 of the widget's height) and slides across like a news ticker.
+- The background behind it is always **blurred**, so the text stands out.
+
+### 4.10d Flying kiss and heart (v1)
+- 💋 and ❤️ buttons in the expanded widget. The partner sees a kiss or heart **fly toward them, grow past the size of the widget and fade**.
+
+### 4.10e "Only when they're looking" rule (v1)
+- Pop-up text, flying kisses and hearts **only play while the partner is looking at their home screen**. They never play to a dark screen.
+- The heartbeat vibration still happens on arrival, so the partner feels it in their pocket. The visual waits and plays as soon as they unlock and look.
+- Several waiting surprises play one after another.
+
 ### 4.11 "In sync" moments (later)
 - If both partners send love within the same minute, a special animation plays: the characters run to each other and hug, with sparkles. It's rare, so it feels magical.
 
@@ -205,6 +227,9 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 | End-to-end encryption of everything personal | ✅ | Encrypted passphrase backup |
 | Discreet mode, app lock, content-free notifications | ✅ | |
 | 4x4 resizable, customizable widget | ✅ | More layouts and themes |
+| Small widget that expands on tap, partner teasing scenes | ✅ | More scenes |
+| Photo slideshow with transitions | ✅ (basic transitions first) | Blur, dip and zoom transitions |
+| Pop-up typewriter text, flying kiss and heart, shown only while looking | ✅ (needs device prototype) | |
 | Living chibi couple scenes + partner peek-in | ✅ | More scenes |
 | Photo (no gallery save by default), text, presets, emojis | ✅ | Voice notes, doodles |
 | 2-beat heartbeat vibration | ✅ | Wear OS |
@@ -259,6 +284,11 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - Widgets can only play **short flipbook-style loops**, not smooth free-form animation. The art style is designed around this.
 - Android launchers may throttle frequent widget updates, so animation and updates must stay lightweight.
 - **iOS (future):** custom vibration patterns aren't possible for push notifications while the app is closed. A heartbeat *sound* would stand in for the vibration there.
+- **Slideshow:** Android widgets support photo flipping with simple built-in transitions (fade, slide) through `AdapterViewFlipper`. Blur, dip-to-white/black and zoom transitions would need pre-rendered frames or the overlay approach below.
+- **Pop-ups and flying kisses:** a standard widget can't draw large free-form animations or tell whether someone is looking at the home screen. The planned approach:
+  - Detect "the person is looking" with the screen-on / user-unlocked system events (`ACTION_USER_PRESENT`).
+  - Play the animation in a short-lived, transparent **overlay positioned exactly over the widget** (needs the "display over other apps" permission, which Google Play reviews carefully), or else a brief full-screen moment when the app opens.
+  - This needs a prototype on real devices early, because it's the riskiest technical part of the app.
 
 ### Biggest cost: the art
 Scenes × animation frames × customization options multiply quickly. Layered sprites keep this manageable. We'll need either an illustrator or a carefully chosen asset pipeline.

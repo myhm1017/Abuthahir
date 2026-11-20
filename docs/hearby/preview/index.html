@@ -463,7 +463,7 @@ button { cursor: pointer; }
   <h2>Things to try</h2>
   <ul>
     <li>The small widget just plays the painted scene. Watch the partner tease you: knocking on your screen, poking your cheek, squishing their face against the glass, playing hide and seek, or blowing bubbles.</li>
-    <li><b>Tap the widget</b> to open it. The bigger view has the message and the buttons: 📷 photo, ✏️ text, 💬 preset and 💗 felt it.</li>
+    <li><b>Tap the widget</b> to open it. The bigger view has the message and the buttons: 📷 photo, 🖊️ text, 💬 preset and 💗 felt it.</li>
     <li>Send <b>"mwah 😘"</b>, <b>"sending a hug"</b> or <b>"good night 🌙"</b>. The animation changes with the meaning, and it's a little different every time.</li>
     <li>Watch the other phone do the <b>2-beat heartbeat</b>. On an Android phone, your device may actually vibrate.</li>
     <li>Turn on <b>Asleep</b> for Mia, then send from Leo. It arrives quietly and the scene turns to night. Turn Asleep off to feel the heartbeat.</li>
@@ -480,7 +480,7 @@ button { cursor: pointer; }
     <li><b>Repeating days:</b> special days can repeat every year, month, week or day, or happen just once. A monthly "Our monthversary" on the 9th is already in the list.</li>
     <li><b>Customize the characters:</b> under each phone, open "Customize … name and look" to rename them or change their style: hijab styles (classic, khimar, turban wrap, niqab), hair (buzz cut, quiff, man bun, wolf cut, braids, bun and more), 13 beard and moustache styles, tops, bottoms, dresses (abaya, gown, churidar, saree, burqa and more), shoes, skin tone, eye color, hair or hijab color, outfit, facial hair and glasses.</li>
     <li><b>Slideshow:</b> open the widget, tap 📷, pick a few photos (or "Use sample photos"), choose a transition and send. The other widget starts a slideshow. Tap 🎞️ to switch between the slideshow and the couple scene.</li>
-    <li><b>Pop-up text:</b> tap ✏️, choose <b>Pop-up ✨</b> and send. It types out in huge letters over a blurred background and slides across like a news ticker.</li>
+    <li><b>Pop-up text:</b> tap 🖊️, choose <b>Pop-up ✨</b> and send. It types out in huge letters over a blurred background and slides across like a news ticker.</li>
     <li><b>Flying kiss or heart:</b> tap 💋 or ❤️. It flies at the other person, grows to fill the widget and fades.</li>
     <li>Pop-ups, kisses and hearts only play while the person is looking. Turn off Mia's screen (the side button or the "Screen on" switch), send one from Leo, then turn the screen back on.</li>
   </ul>
@@ -514,7 +514,8 @@ button { cursor: pointer; }
     { key: 'park', name: 'Central Park', flag: '🇺🇸' }, { key: 'dubai', name: 'Dubai skyline', flag: '🇦🇪' },
     { key: 'paris', name: 'Paris, Eiffel Tower', flag: '🇫🇷' }, { key: 'taj', name: 'Taj Mahal gardens', flag: '🇮🇳' },
     { key: 'pyramids', name: 'Pyramids of Giza', flag: '🇪🇬' }, { key: 'goldengate', name: 'Golden Gate Bridge', flag: '🇺🇸' },
-    { key: 'cappadocia', name: 'Cappadocia balloons', flag: '🇹🇷' }, { key: 'fjord', name: 'Norwegian fjord', flag: '🇳🇴' }
+    { key: 'cappadocia', name: 'Cappadocia balloons', flag: '🇹🇷' }, { key: 'fjord', name: 'Norwegian fjord', flag: '🇳🇴' },
+    { key: 'makkah', name: 'Makkah, the Kaaba', flag: '🕋' }
   ];
   const PRESETS = ['thinking of you 🤍', 'miss you 🥺', 'mwah 😘', 'sending a hug 🤗', 'drink water, cutie 💧', 'proud of you ⭐', 'good morning ☀️', 'good night 🌙'];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -560,7 +561,7 @@ button { cursor: pointer; }
       <main class="app-body">
         <section class="tab" data-tab="us">
           <div class="us-scene"><canvas class="us-canvas" aria-label="Your couple scene"></canvas><div class="us-chips"><span class="chip us-partner"></span><span class="chip us-cd"></span></div></div>
-          <div class="card quick" aria-label="Send love"><button data-q="kiss" aria-label="Flying kiss">💋</button><button data-q="heart" aria-label="Flying heart">❤️</button><button data-q="text" aria-label="Message">✏️</button><button data-q="photo" aria-label="Photos">📷</button><button data-q="pop" aria-label="Pop-up text">✨</button></div>
+          <div class="card quick" aria-label="Send love"><button data-q="kiss" aria-label="Flying kiss">💋</button><button data-q="heart" aria-label="Flying heart">❤️</button><button data-q="text" aria-label="Message">🖊️</button><button data-q="photo" aria-label="Photos">📷</button><button data-q="pop" aria-label="Pop-up text">✨</button></div>
           <div class="card"><div class="card-h"><b>💭 How are you feeling?</b><em class="mood-mine"></em></div>
             <div class="moods">${MOODS.map(([e, l]) => `<button data-mood="${e}" aria-label="Feeling ${l}" title="${l}">${e}</button>`).join('')}</div>
             <p class="hint2 mood-partner"></p></div>
@@ -716,7 +717,7 @@ button { cursor: pointer; }
               </div>
               <div class="actions">
                 <button data-act="photo" aria-label="Send a photo" title="Photo">📷</button>
-                <button data-act="text" aria-label="Write a message" title="Text">✏️</button>
+                <button data-act="text" aria-label="Write a message" title="Text">🖊️</button>
                 <button data-act="preset" aria-label="Send a preset" title="Preset">💬</button>
                 <button data-act="kiss" aria-label="Send a flying kiss" title="Kiss">💋</button>
                 <button data-act="heart" aria-label="Send a flying heart" title="Heart">❤️</button>
@@ -919,7 +920,42 @@ button { cursor: pointer; }
     poly(c, [[x - H * 0.9, base], [x, base - H], [x + H * 0.2, base]], K('#e6bd7d'));
     poly(c, [[x + H * 0.2, base], [x, base - H], [x + H * 0.9, base]], K('#b98a52'));
   }
+  function tawafDots(c, s, K, t, front) {
+    const { w, h } = s, cx = w * 0.25, cy = h * 0.6, rx = w * 0.16, ry = h * 0.03;
+    for (let i = 0; i < 46; i++) {
+      const a = (i / 46) * TAU + t * 0.12, inFront = Math.sin(a) > 0;
+      if (inFront !== front) continue;
+      const x = cx + Math.cos(a) * (rx + (i % 3) * 3), y = cy + Math.sin(a) * (ry + (i % 3) * 1.2);
+      c.fillStyle = K(i % 4 === 0 ? '#2f2f36' : '#fbfaf6'); c.beginPath(); c.arc(x, y, 1.3, 0, TAU); c.fill();
+    }
+  }
   const PLACES = {
+    makkah: { tree: 'none', ground: 'marble', back(c, s, K, off, t, night) {
+      const { w, h } = s;
+      range(c, s, K, { base: h * 0.5, top: h * 0.3, vary: h * 0.06, n: 5, col: '#b7a084', snow: 0, k: 9 });
+      const tx = w * 0.8;
+      c.fillStyle = K('#cfc7b8'); c.fillRect(tx - w * 0.07, h * 0.33, w * 0.14, h * 0.19);
+      c.fillStyle = K('#ddd6c8'); c.fillRect(tx - w * 0.035, h * 0.13, w * 0.07, h * 0.22);
+      c.fillStyle = night ? '#fff6d2' : K('#f3e9c9'); c.beginPath(); c.arc(tx, h * 0.19, w * 0.024, 0, TAU); c.fill();
+      c.strokeStyle = night ? '#7fe0a8' : K('#2f7a4f'); c.lineWidth = 1.4; c.stroke();
+      c.fillStyle = K('#c9b98f'); c.fillRect(tx - 0.8, h * 0.04, 1.6, h * 0.09);
+      c.fillStyle = K('#e3c46a'); c.beginPath(); c.arc(tx, h * 0.04, 1.8, 0, TAU); c.fill();
+      c.fillStyle = K('#efe9de'); c.fillRect(0, h * 0.5, w, h * 0.09);
+      c.fillStyle = K('#cfc6b6'); for (let x = 3; x < w; x += 8) { c.beginPath(); c.arc(x + 2, h * 0.565, 2.2, Math.PI, 0); c.fill(); c.fillRect(x, h * 0.565, 4.4, h * 0.022); }
+      [0.05, 0.46, 0.62, 0.95].forEach(f => {
+        const mx = w * f; c.fillStyle = K('#f2ede4'); c.fillRect(mx - 1.6, h * 0.27, 3.2, h * 0.24);
+        c.fillStyle = K('#d8cfbf'); c.fillRect(mx - 2.2, h * 0.36, 4.4, 1.2); c.fillRect(mx - 2.2, h * 0.44, 4.4, 1.2);
+        c.fillStyle = K('#e3c46a'); c.beginPath(); c.arc(mx, h * 0.27, 1.6, Math.PI, 0); c.fill();
+      });
+      tawafDots(c, s, K, t, false);
+      const kx = w * 0.25, base = h * 0.605, kw = w * 0.12, kh = h * 0.15, sd = w * 0.035;
+      poly(c, [[kx + kw / 2, base], [kx + kw / 2 + sd, base - h * 0.012], [kx + kw / 2 + sd, base - kh - h * 0.012], [kx + kw / 2, base - kh]], K('#0b0b0d'));
+      c.fillStyle = K('#18181b'); c.fillRect(kx - kw / 2, base - kh, kw, kh);
+      c.fillStyle = K('#c9a54a'); c.fillRect(kx - kw / 2, base - kh * 0.74, kw, kh * 0.09);
+      poly(c, [[kx + kw / 2, base - kh * 0.74], [kx + kw / 2 + sd, base - kh * 0.74 - h * 0.012], [kx + kw / 2 + sd, base - kh * 0.65 - h * 0.012], [kx + kw / 2, base - kh * 0.65]], K('#a8893c'));
+      c.fillStyle = K('#e6c66a'); for (let i = 0; i < 9; i++) c.fillRect(kx - kw / 2 + 2 + i * (kw - 4) / 9, base - kh * 0.715, (kw - 4) / 18, kh * 0.03);
+      c.fillStyle = K('#c9a54a'); c.fillRect(kx + kw * 0.12, base - kh * 0.5, kw * 0.18, kh * 0.38);
+    }, front(c, s, K, off, t) { tawafDots(c, s, K, t, true); } },
     santorini: { tree: 'olive', back(c, s, K, off, t) {
       const { w, h } = s;
       water(c, s, K, h * 0.47, h, '#2f86c8', '#1f5f9a', t);
@@ -1096,7 +1132,8 @@ button { cursor: pointer; }
   function pal(s) {
     const pl = PLACES[s.place], se = SEAS[s.season];
     let grass = se.grass, sky = se.sky;
-    if (pl.ground === 'sand') grass = ['#f3dfb3', '#e8cc94', '#d9b77a'];
+    if (pl.ground === 'marble') grass = ['#f7f4ef', '#ede8df', '#ddd5c7'];
+    else if (pl.ground === 'sand') grass = ['#f3dfb3', '#e8cc94', '#d9b77a'];
     else if (pl.ground === 'desert') { grass = ['#e6ad72', '#d08e55', '#b8743f']; sky = [sky[0], sky[1], '#ffdcb0']; }
     else if (s.season === 'winter' && !pl.snowy) grass = ['#a9c08a', '#8fae74', '#7a9a62'];
     return { sky, grass, leaf: se.leaf, snow: s.season === 'winter' && !!pl.snowy, pl };
@@ -1170,6 +1207,7 @@ button { cursor: pointer; }
     if (place.front) place.front(c, s, K, off, t);
   }
   function paintGrass(c, s, night, off, t) {
+    if (PLACES[s.place].ground === 'marble') return;
     const { w } = s, K = tinter(night), se = s.season, sandy = !!PLACES[s.place].ground;
     c.lineCap = 'round';
     if (!sandy && !s.pal.snow) {
@@ -1190,6 +1228,7 @@ button { cursor: pointer; }
     }
   }
   function paintTree(c, s, x, night, t) {
+    if (s.treeKind === 'none') return;
     const { h } = s, u = h / 260, base = nearY(s, x, 0) + 2, K = tinter(night), L = s.pal.leaf, kind = s.treeKind, sway = Math.sin(t * 0.8) * 1.2;
     const blobs = (layers) => layers.forEach(([col, list], li) => {
       c.fillStyle = K(col); c.beginPath();
@@ -1240,6 +1279,7 @@ button { cursor: pointer; }
     }
   }
   function paintMotes(c, s, night, t, dt) {
+    if (s.place === 'makkah') return;
     const { w, h } = s;
     if (s.pal.snow) {
       if (!s.flakes) s.flakes = Array.from({ length: 45 }, () => ({ x: rand(), y: rand(), r: 0.6 + rand() * 1.3, v: 0.04 + rand() * 0.05, p: rand() * 6 }));
@@ -1295,7 +1335,7 @@ button { cursor: pointer; }
     // Garment layout: where the hem falls and how long the sleeves are.
     const garment = man ? p.top : p.dress;
     const LAYOUT = man
-      ? { shirt: ['hip', 'rolled'], fullsleeve: ['hip', 'full'], tshirt: ['hip', 'short'], jumper: ['hip', 'full'], hoodie: ['hip', 'full'], jacket: ['hip', 'full'], kurta: ['knee', 'full'], thobe: ['floor', 'full'] }
+      ? { ihram: ['knee', 'short'], shirt: ['hip', 'rolled'], fullsleeve: ['hip', 'full'], tshirt: ['hip', 'short'], jumper: ['hip', 'full'], hoodie: ['hip', 'full'], jacket: ['hip', 'full'], kurta: ['knee', 'full'], thobe: ['floor', 'full'] }
       : { abaya: ['floor', 'full'], gown: ['floor', 'full'], churidar: ['knee', 'full'], saree: ['floor', 'short'], burqa: ['floor', 'full'], jeans: ['hip', hj ? 'full' : 'short'], skirt: ['hip', hj ? 'full' : 'short'], jumper: ['knee', 'full'] };
     const [hemKind, sleeveKind] = LAYOUT[garment] || ['hip', 'full'];
     const sleeveCol = garment === 'jacket' || garment === 'saree' ? c2 : c1;
@@ -1303,7 +1343,8 @@ button { cursor: pointer; }
 
     // Legs
     let legCol, legW = 1.7, shortsTo = 0;
-    if (man) {
+    if (man && p.top === 'ihram') { legCol = p.skin; legW = 1.15; }
+    else if (man) {
       if (p.bottom === 'baggy') { legCol = '#5b7fb3'; legW = 2.3; }
       else if (p.bottom === 'joggers') { legCol = c2; legW = 1.6; }
       else if (p.bottom === 'shorts') { legCol = c2; legW = 2; shortsTo = 0.5; }
@@ -1378,7 +1419,12 @@ button { cursor: pointer; }
     // Garment details
     const crew = () => { c.strokeStyle = darken(c1, 0.22); c.lineWidth = 0.32 * u; c.beginPath(); c.arc(x, top + 0.1 * u, 0.9 * u, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke(); };
     const folds = () => { c.strokeStyle = 'rgba(0,0,0,.09)'; c.lineWidth = 0.3 * u; [-1, 1].forEach(sd => { c.beginPath(); c.moveTo(x + sd * 1.1 * u, hipY - 0.8 * u); c.quadraticCurveTo(x + sd * 1.7 * u, hipY + 1.5 * u, x + sd * 2.1 * u, hem - 0.4 * u); c.stroke(); }); };
-    if (garment === 'shirt') {
+    if (garment === 'ihram') {
+      c.fillStyle = p.skin; ell(x + fd * 1.45 * u, top + 1.1 * u, 0.95 * u, 0.85 * u);
+      c.strokeStyle = 'rgba(150,140,125,.45)'; c.lineWidth = 0.3 * u;
+      line(x - fd * 2 * u, top + 0.4 * u, x + fd * 2.2 * u, hipY - 0.2 * u);
+      line(x - 2.4 * u, hipY - 0.3 * u, x + 2.4 * u, hipY - 0.1 * u);
+    } else if (garment === 'shirt') {
       c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 0.35 * u;
       c.beginPath(); c.moveTo(x - 0.9 * u, top + 0.3 * u); c.lineTo(x, top + 1.4 * u); c.lineTo(x + 0.9 * u, top + 0.3 * u); c.stroke();
     } else if (['tshirt', 'fullsleeve', 'jeans', 'skirt'].includes(garment)) crew();
@@ -1666,10 +1712,14 @@ button { cursor: pointer; }
   function draw(id, t, dt, st) {
     const s = st || W[id];
     if (!s.w) { fit(s); if (!s.w) return; }
-    const c = s.ctx, me = P[id], pa = P[other(id)], { w, h } = s;
+    const pilgrim = p => (s.place !== 'makkah' ? p : p.type === 'man'
+      ? { ...p, top: 'ihram', bottom: 'ihram', shoes: 'sandals', outfit: '#fbfaf6', accent: '#fbfaf6' }
+      : { ...p, type: 'hijabi', dress: 'abaya', hijabStyle: p.hijabStyle === 'wrap' ? 'wrap' : 'classic', hijab: '#f7f5f0', outfit: '#f3f0e8', accent: '#e9e4da', shoes: 'sandals' });
+    const c = s.ctx, me = pilgrim(P[id]), pa = pilgrim(P[other(id)]), { w, h } = s;
     if (t - s.sceneStart > SCENE_LEN) { s.sceneIdx = (s.sceneIdx + 1) % SCENES.length; s.sceneStart = t; }
     let scene = SCENES[s.sceneIdx], prog = (t - s.sceneStart) / SCENE_LEN;
     if (s.override && t < s.overrideUntil) { scene = s.override; prog = (t - s.overrideStart) / (s.overrideUntil - s.overrideStart); } else s.override = null;
+    if (s.place === 'makkah' && !['walk', 'sit', 'together', 'peek', 'hug'].includes(scene)) scene = ['walk', 'sit', 'together', 'peek'][s.sceneIdx % 4];
     if ((me.quiet || pa.quiet) && scene !== 'hug') scene = 'sleep';
     const night = me.quiet;
     if (scene === 'walk') s.scroll += dt * 16;

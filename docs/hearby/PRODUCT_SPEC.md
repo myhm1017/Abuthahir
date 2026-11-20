@@ -157,6 +157,15 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - **Repeats:** each day can repeat every year, every month (for example a monthly "monthversary" on the 9th, the day you united), every week on a chosen weekday, every day, or just once. Monthly days can count months ("Happy 15th Monthversary").
 
 
+### 4.10g Changing scenery (v1)
+- The widget's background **changes every time the person looks at their screen**: a new place mixed with a season, so it feels different each time.
+- Places are inspired by famous real-world spots: Santorini cliffs, a Swiss Alps lake, Mount Fuji, the Grand Canyon, a Banff hiking trail, a Maldives beach, Skógafoss waterfall, a Kyoto garden, Central Park, the Dubai skyline, Paris and the Eiffel Tower, the Taj Mahal gardens, the Pyramids of Giza, the Golden Gate Bridge, Cappadocia's hot-air balloons, a Norwegian fjord, and **Makkah with the Kaaba** (Masjid al-Haram's white courtyard, minarets, the clock tower and pilgrims circling in tawaf). More places get added over time.
+- Seasons change the sky, ground, trees and weather: spring blossoms and petals, summer greens, autumn leaves falling, winter snow (only where it actually snows; beaches, deserts and Makkah stay snow-free).
+- **In Makkah, both characters wear pilgrim clothing automatically:** the man in white ihram (two unstitched cloths, one shoulder bare), the woman in a modest white abaya and hijab with her face uncovered, as in ihram. Only calm scenes play there (walking, sitting, standing together, a gentle wave), with no teasing animations, petals or fireflies.
+- A small "📍 Place · Season" label appears briefly when the scenery changes.
+- Each person can keep it random or fix a favorite place or season.
+
+### 4.11 "In sync" moments (later)
 - If both partners send love within the same minute, a special animation plays: the characters run to each other and hug, with sparkles. It's rare, so it feels magical.
 
 ### 4.12 Memory Jar (later)

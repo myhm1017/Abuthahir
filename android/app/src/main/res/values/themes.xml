@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg">#FFF6F0F7</color>
+    <color name="icon_bg">#FFFBD3E4</color>
+    <style name="Theme.Hearby" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:statusBarColor">#FFF6F0F7</item>
+        <item name="android:navigationBarColor">#FFF6F0F7</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:colorAccent">#FFDB4F84</item>
+    </style>
+</resources>

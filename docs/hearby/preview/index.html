@@ -219,7 +219,7 @@ button { cursor: pointer; }
 .app-back { border: 1px solid rgba(255, 255, 255, .7); background: rgba(255, 255, 255, .4); border-radius: 50%; width: 26px; height: 26px; font-size: 17px; font-weight: 800; line-height: 1; color: #4a3858; padding: 0; }
 .app-body { flex: 1; overflow-y: auto; padding: 4px 10px 10px; }
 .app-body .tab { display: grid; gap: 8px; align-content: start; }
-.app-nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; padding: 6px 8px 16px; background: rgba(255, 255, 255, .38); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid rgba(255, 255, 255, .65); }
+.app-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 6px 8px 16px; background: rgba(255, 255, 255, .38); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid rgba(255, 255, 255, .65); }
 .app-nav button { border: 0; background: transparent; display: grid; justify-items: center; font-size: 17px; gap: 1px; color: #6b5a7b; border-radius: 12px; padding: 3px 0; }
 .app-nav button span { font-size: 9.5px; font-weight: 800; }
 .app-nav button[aria-current="page"] { background: rgba(255, 255, 255, .6); color: #c43f76; }
@@ -471,10 +471,9 @@ button { cursor: pointer; }
     <li>Turn on <b>Discreet mode</b> to blur messages until you tap them.</li>
     <li><b>Special days:</b> open a widget and tap 📅. Birthdays, anniversaries and other moments are listed with a countdown. Add your own, and choose a celebration (confetti, balloons, fireworks, light show, drone show or everything). Mia's birthday is set for tomorrow, so Leo gets a private tease a few seconds after the page loads. Tap ⏰ to preview a day-before reminder or 🎉 to preview the celebration on both phones.</li>
     <li><b>Scenery:</b> every time someone looks at their screen (screen on, switching phones or coming back to the page), the widget moves to a new place and season: Santorini, the Swiss Alps, Mount Fuji, the Grand Canyon, a Banff trail, the Maldives, an Icelandic waterfall, Kyoto, Central Park, Dubai, Paris, the Taj Mahal, the Pyramids, the Golden Gate, Cappadocia and a Norwegian fjord, in spring, summer, autumn or winter. Pick a fixed place or season under each phone if you prefer.</li>
-    <li><b>Games in the app:</b> Color Match (match a color or number), Ludo, Snakes and Ladders, Four in a Row and tic-tac-toe all play across both phones, taking turns. Plus draw and guess, an emoji story and a shared garden.</li>
-    <li><b>Watch party, sleep together, date nights:</b> start a watch party (play, pause, reactions and chat sync on both phones), sleep together (both screens turn into the same starry sky, with optional rain, ocean or soft noise), and plan date nights with when, where, food, an activity and a movie.</li>
+    <li><b>Sleep together and date nights:</b> sleep together (both screens turn into the same starry sky, with optional rain, ocean or soft noise), and plan date nights with when, where, food, an activity and a movie.</li>
     <li><b>Albums and bucket list:</b> make albums from photos and play them as a slideshow, on your widget, or send them to your partner's widget. Bucket list places show as little scenery pictures in your dream season.</li>
-    <li><b>The full app:</b> tap the <b>💗 Hearby</b> icon on either home screen (or the partner's name in the open widget). Five tabs: <b>Home</b> (living scene, quick sending, mood check-in, today's question, next special day and date night, this week's love stats, and the distance and time between you), <b>Games</b> (every game on its own page), <b>Together</b> (watch party, sleep together, date night planner, dua list), <b>Memories</b> (Memory Jar, albums, timeline, "open when" letters, bucket list) and <b>Me</b> (your character, secret gift ideas, privacy, settings).</li>
+    <li><b>The full app:</b> tap the <b>💗 Hearby</b> icon on either home screen (or the partner's name in the open widget). Four tabs: <b>Home</b> (living scene, quick sending, mood check-in, today's question, next special day and date night, this week's love stats, and the distance and time between you), <b>Together</b> (sleep together, date night planner, dua list), <b>Memories</b> (Memory Jar, albums, timeline, "open when" letters, bucket list) and <b>Me</b> (your character, secret gift ideas, privacy, settings).</li>
     <li><b>Gentle reminders:</b> every now and then (about once a minute in this preview, a few times a day in the real app), each phone gets a soft nudge to message or check on the other, or to make dua for each other and for you both, such as "Take a moment to make dua for Mia and for you both 🤲". Choose love and dua, love and prayer, love only, or off under each phone, or tap "Show a reminder now".</li>
     <li><b>Meet-up countdown:</b> open a widget and tap the ✈️ chip to set or change the date, add a note, choose "We don't know the date yet" (shows "soon"), or hide the countdown. Both phones update.</li>
     <li><b>Teasing reminders:</b> the day before, the app only asks something cheeky like "What day is tomorrow 😉?" and leaves them to work it out. On the day, a clear notification says what day it is, and if nobody has sent a wish about 15 seconds after the celebration (hours later in the real app), it nudges them: "Have you wished Mia yet? 👀 Just checking…".</li>
@@ -581,15 +580,6 @@ button { cursor: pointer; }
 
         <section class="tab" data-tab="play" hidden>
 
-          <div class="card"><b>🍿 Watch party</b><p class="hint2">Pick something to watch. Play and pause stay in sync on both phones, with live reactions and chat.</p>
-            <div class="add-row"><input type="text" list="dl-movie-${id}" class="wp-title" id="wp-title-${id}" maxlength="60" placeholder="Movie, show or YouTube link" aria-label="What to watch">${dl('movie', DN.movies)}<button class="send wp-start">Start</button></div>
-            <div class="wp-screen"><div class="wp-title-on"></div><div class="wp-big"></div><div class="wp-time"></div><div class="prog"><i></i></div></div>
-            <div class="row wp-ctrls"><button class="mini2 wp-toggle">⏯ Play / pause</button><button class="mini2 wp-end">End party</button></div>
-            <div class="reacts">${['😂', '😍', '😮', '😭', '💗', '🍿'].map(e => `<button aria-label="React ${e}">${e}</button>`).join('')}</div>
-            <div class="wp-chat"></div>
-            <div class="add-row"><input type="text" class="wp-msg" id="wp-msg-${id}" maxlength="80" placeholder="Say something…" aria-label="Chat message"><button class="mini2 wp-send">Send</button></div>
-          </div>
-
           <div class="card"><b>🌙 Sleep together</b><p class="hint2">Both screens dim to the same starry sky with your characters asleep side by side. Heartbeats go quiet until morning.</p>
             <label class="set-row" for="sl-sound-${id}">Sound <select id="sl-sound-${id}" class="inline-sel sl-sound">${SOUNDS.map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}</select></label>
             <p class="hint2 sl-status"></p>
@@ -612,17 +602,6 @@ button { cursor: pointer; }
           <div class="card"><b>🤲 Our dua list</b><div class="duas"></div>
             <div class="add-row"><input type="text" class="dua-in" id="dua-in-${id}" maxlength="60" placeholder="Add something to pray for" aria-label="New dua"><button class="mini2 dua-add">Add</button></div>
           </div>
-        </section>
-
-        <section class="tab" data-tab="games" hidden>
-          <div class="card"><b>🎲 Games</b><p class="hint2">Play across both phones. Each move shows up on ${nm}'s phone.</p>
-            <div class="games">
-              <button data-game="cards">🃏<span>Color Match</span></button><button data-game="ludo">🎯<span>Ludo</span></button><button data-game="snakes">🐍<span>Snakes and Ladders</span></button><button data-game="four">🔴<span>Four in a Row</span></button>
-              <button data-game="ttt">❌<span>Tic-tac-toe</span></button><button data-game="draw">🎨<span>Draw and guess</span></button><button data-game="emoji">😄<span>Emoji story</span></button><button data-game="garden">🌱<span>Our garden</span></button>
-            </div>
-            <div class="game-area"></div>
-          </div>
-
         </section>
 
         <section class="tab" data-tab="mem" hidden>
@@ -673,7 +652,7 @@ button { cursor: pointer; }
         </section>
       </main>
       <div class="album-player" hidden><div class="ap-stage"></div><div class="ap-cap"></div><button class="ap-close" aria-label="Close slideshow">✕</button></div>
-      <nav class="app-nav" aria-label="App sections"><button data-tab="us" aria-current="page">🏡<span>Home</span></button><button data-tab="games">🎮<span>Games</span></button><button data-tab="play">💞<span>Together</span></button><button data-tab="mem">📖<span>Memories</span></button><button data-tab="me">⚙️<span>Me</span></button></nav>
+      <nav class="app-nav" aria-label="App sections"><button data-tab="us" aria-current="page">🏡<span>Home</span></button><button data-tab="play">💞<span>Together</span></button><button data-tab="mem">📖<span>Memories</span></button><button data-tab="me">⚙️<span>Me</span></button></nav>
     </div>
     <div class="sleep-layer" hidden><canvas class="sleep-canvas" aria-hidden="true"></canvas><div class="sleep-ui"><b class="sl-title">Sleeping together 💤</b><span class="sl-sub"></span><button class="mini2 sl-wake">☀️ Wake up</button></div></div>`;
   }
@@ -2776,7 +2755,7 @@ button { cursor: pointer; }
       const days = Math.round((new Date(d.when).setHours(0, 0, 0, 0) - today0()) / 86400000), i = APP.dates.indexOf(d);
       return `<div class="dn-item"><div class="card-h"><b>${d.kind === 'person' ? '💞' : '💻'} ${esc(fmtWhen(d.when))}</b><em>${days <= 0 ? 'today' : days === 1 ? 'tomorrow' : `in ${days} days`}</em></div>
         ${d.place ? `<span>📍 ${esc(d.place)}</span>` : ''}${d.food ? `<span>🍽️ ${esc(d.food)}</span>` : ''}${d.event ? `<span>🎟️ ${esc(d.event)}</span>` : ''}${d.movie ? `<span>🎬 ${esc(d.movie)}</span>` : ''}
-        <div class="row">${d.movie ? `<button class="mini2" data-dnwatch="${i}">🍿 Watch party</button>` : '<span></span>'}<button class="mini2" data-dndel="${i}" aria-label="Delete date">🗑️</button></div></div>`;
+        <div class="row"><span></span><button class="mini2" data-dndel="${i}" aria-label="Delete date">🗑️</button></div></div>`;
     }).join('') : '<p class="hint2">No dates planned yet. Plan one above or tap Surprise me.</p>';
   }
 
@@ -2876,7 +2855,7 @@ button { cursor: pointer; }
     if (tab === 'us' && s.appScene) s.appScene.w = 0;
     renderApp(id);
   }
-  function renderApp(id) { const s = W[id]; if (!s.appOpen) return; ({ us: renderUs, games: renderGame, play: renderPlay, mem: renderMem, me: renderMe })[s.appUI.tab](id); }
+  function renderApp(id) { const s = W[id]; if (!s.appOpen) return; ({ us: renderUs, play: renderPlay, mem: renderMem, me: renderMe })[s.appUI.tab](id); }
   const renderAppAll = () => IDS.forEach(renderApp);
   function syncAppSettings(id) {
     document.getElementById(`app-discreet-${id}`).checked = P[id].discreet;
@@ -2917,7 +2896,7 @@ button { cursor: pointer; }
   }
   function renderPlay(id) {
     const s = W[id], o = other(id);
-    renderWatch(id); renderDates(id);
+    renderDates(id);
     s.q('.sl-status').textContent = APP.sleep[id] ? "You're sleeping together 💤" : APP.sleep[o] ? `🌙 ${P[o].name} is asleep and waiting for you` : '';
     s.q('.sl-go').textContent = APP.sleep[o] && !APP.sleep[id] ? `🌙 Join ${P[o].name}` : '🌙 Sleep together';
     s.q('.duas').innerHTML = APP.duas.map((d, i) => `<label class="dua-row${d.done ? ' done' : ''}" for="dua-${id}-${i}"><input type="checkbox" id="dua-${id}-${i}" data-dua="${i}"${d.done ? ' checked' : ''}><span>${esc(d.t)}</span>${d.done ? '<em>answered, alhamdulillah 🤍</em>' : ''}</label>`).join('');
@@ -2978,37 +2957,6 @@ button { cursor: pointer; }
       const k = qKey(s.appUI.cat); APP.qa[k] = { ...(APP.qa[k] || {}), [id]: v }; saveApp();
       s.q('.q-ans').value = ''; renderAppAll(); toast(id, 'Answer sent 💬'); tellPartner(id, `💬 ${P[id].name} answered today's question. Answer yours to see it!`);
     });
-    on('.games', 'click', e => { const b = e.target.closest('button'); if (!b) return; s.appUI.game = s.appUI.game === b.dataset.game ? null : b.dataset.game; s.q('.game-area').innerHTML = ''; renderGame(id); });
-    on('.game-area', 'click', e => {
-      const b = e.target.closest('button'); if (!b || b.disabled) return; const d = b.dataset;
-      if (d.reset) resetGame(d.reset);
-      else if (d.cell !== undefined) { const g = G('ttt'); if (g.turn !== id || g.board[+d.cell] || tttWin()) return; g.board[+d.cell] = id; nextTurn(g, id); saveApp(); renderAppAll(); const w = tttWin(); tellPartner(id, w ? (w === 'draw' ? "Tic-tac-toe: it's a draw 🤝" : `Tic-tac-toe: ${P[w].name} wins! 🎉`) : `${P[id].name} played ${MARK[id]}. Your turn!`); }
-      else if (d.col4 !== undefined) {
-        const g = G('four'), c = +d.col4; if (g.turn !== id || fourWin()) return;
-        for (let r = 5; r >= 0; r--) if (!g.board[r * 7 + c]) { g.board[r * 7 + c] = id; break; }
-        nextTurn(g, id); saveApp(); renderAppAll(); const w = fourWin(); tellPartner(id, w ? (w === 'draw' ? "Four in a Row: it's a draw 🤝" : `Four in a Row: ${P[w].name} wins! 🎉`) : `${P[id].name} dropped a disc. Your turn!`);
-      }
-      else if (d.roll === 'snakes') snakesRoll(id);
-      else if (d.roll === 'ludo') ludoRoll(id);
-      else if (d.ludo !== undefined) ludoMove(id, +d.ludo);
-      else if (d.play !== undefined) cardsPlay(id, +d.play);
-      else if (d.pick) cardsPick(id, d.pick);
-      else if (d.cdraw) cardsDrawBtn(id);
-      else if (d.cpass) cardsPass(id);
-      else if (d.col) s.ddColor = d.col;
-      else if (b.classList.contains('dd-clear')) { const cv = s.q('.doodle'), c = cv.getContext('2d'); c.fillStyle = '#ffffff'; c.fillRect(0, 0, cv.width, cv.height); }
-      else if (b.classList.contains('dd-send')) { send(id, { img: s.q('.doodle').toDataURL('image/png'), text: 'drew you something 🎨 Guess what it is!' }); toast(id, `Drawing sent to ${P[o].name} 🎨`); }
-      else if (d.emo) { APP.story.push(d.emo); APP.story = APP.story.slice(-30); saveApp(); renderAppAll(); tellPartner(id, `😄 ${P[id].name} added ${d.emo} to your emoji story`); }
-      else if (b.classList.contains('st-reset')) { APP.story = ['🌙']; saveApp(); renderAppAll(); }
-      else if (b.classList.contains('gd-water')) { if (Date.now() - (s.lastWater || 0) < 1500) return; s.lastWater = Date.now(); growGarden(1); toast(id, 'Watered 💧'); }
-    });
-    on('.wp-start', 'click', () => wpStart(id, s.q('.wp-title').value));
-    on('.wp-toggle', 'click', () => wpToggle(id));
-    on('.wp-end', 'click', () => { APP.watch.status = 'idle'; saveApp(); renderAppAll(); tellPartner(id, `🍿 ${P[id].name} ended the watch party`); });
-    on('.reacts', 'click', e => { const b = e.target.closest('button'); if (!b) return; floatOn(id, b.textContent); floatOn(o, b.textContent); });
-    const sendChat = () => { const inp = s.q('.wp-msg'), v = inp.value.trim(); if (!v) return; APP.watch.chat.push({ from: id, text: v }); APP.watch.chat = APP.watch.chat.slice(-20); inp.value = ''; saveApp(); renderAppAll(); };
-    on('.wp-send', 'click', sendChat);
-    on('.wp-msg', 'keydown', e => { if (e.key === 'Enter') { e.preventDefault(); sendChat(); } });
     on('.sl-go', 'click', () => startSleep(id));
     s.q('.sl-wake').addEventListener('click', () => wakeUp(id));
     on('.dn-surprise', 'click', () => {
@@ -3026,7 +2974,6 @@ button { cursor: pointer; }
     on('.dn-list', 'click', e => {
       const b = e.target.closest('button'); if (!b) return;
       if (b.dataset.dndel !== undefined) { APP.dates.splice(+b.dataset.dndel, 1); saveApp(); renderAppAll(); }
-      else if (b.dataset.dnwatch !== undefined) { const d = APP.dates[+b.dataset.dnwatch]; s.q('.wp-title').value = d.movie; wpStart(id, d.movie); scrollApp(id, a.querySelector('.wp-screen')); }
     });
     on('.duas', 'change', e => { const i = e.target.dataset.dua; if (i === undefined) return; APP.duas[+i].done = e.target.checked; saveApp(); renderAppAll(); });
     on('.dua-add', 'click', () => { const inp = s.q('.dua-in'), v = inp.value.trim(); if (!v) return; APP.duas.push({ t: v, done: false }); inp.value = ''; saveApp(); renderAppAll(); tellPartner(id, `🤲 ${P[id].name} added to your dua list: "${v}"`); });
@@ -3091,7 +3038,6 @@ button { cursor: pointer; }
     mirror(`app-quiet-${id}`, `quiet-${id}`, 'checked');
     mirror(`app-nudges-${id}`, `nudges-${id}`, 'value');
   }
-  setInterval(() => IDS.forEach(id => { const s = W[id]; if (s.appOpen && s.appUI.tab === 'play' && APP.watch.status !== 'idle') renderWatch(id); }), 500);
 
   // ---------- Sending ----------
   function sendFly(from, kind) {

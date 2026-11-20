@@ -185,7 +185,7 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 
 ## 4b. The app (beyond the widget)
 
-Opening Hearby feels like the widget opened up: the same calm painted scenery, glassy cards and your two characters. Five tabs: Home, Games, Together, Memories and Me.
+Opening Hearby feels like the widget opened up: the same calm painted scenery, glassy cards and your two characters. Four tabs: Home, Together, Memories and Me.
 
 ### 🏡 Home (v1)
 - A large version of the living scene (today's place and season).
@@ -198,20 +198,10 @@ Opening Hearby feels like the widget opened up: the same calm painted scenery, g
 - **Between us:** the distance between your cities, the time difference and your partner's local time ("Different skies, same moon").
 - A small "moment for you" (a love nudge or a dua reminder).
 
-### 🎮 Games
-- Its own tab, separate from everything else (see the games list under Together below, which now lives here).
-
 ### 💞 Together
 - (Daily questions moved to Home.)
-- **Board and card games (later, shown in the Games tab), played turn by turn across both phones:**
-  - **Color Match:** an original match-the-color-or-number card game with skip, +2 and rainbow wild cards (same family of mechanics as popular shedding card games, under its own name).
-  - **Ludo** (2-player), **Snakes and Ladders**, **Four in a Row**, tic-tac-toe.
-  - Draw and guess (drawings land on the partner's widget), emoji story.
-  - **Our garden:** a shared plant that grows with every bit of love sent and never wilts.
-  - Ideas for later: carrom, chess, word games, a "how well do you know me" quiz.
-- **Watch party (later):** pick a movie, show or YouTube link; play and pause stay in sync on both phones, with floating reactions and a small chat. YouTube can be embedded and synced; for Netflix and other apps, Hearby syncs a "3, 2, 1, press play" start and the shared clock.
 - **Sleep together (later):** both screens dim to the same starry sky with the two characters asleep side by side, a "together for…" timer and optional sleep sounds (rain, ocean, soft noise). Heartbeats go quiet until either wakes up.
-- **Plan a date night (later):** when, virtual or in person, where to go, food to try, an event or activity, and a movie to watch, with suggestions and a "Surprise me" button. Both see the plan, get a reminder on the day, and can start a watch party for the chosen movie.
+- **Plan a date night (later):** when, virtual or in person, where to go, food to try, an event or activity, and a movie to watch, with suggestions and a "Surprise me" button. Both see the plan and get a reminder on the day.
 - **Our dua list:** things you're both praying for, ticked with "alhamdulillah" when answered.
 
 ### 📖 Memories (v1 core)
@@ -302,7 +292,7 @@ Opening Hearby feels like the widget opened up: the same calm painted scenery, g
 |---|---|---|
 | Pairing (link, QR, ID, code), 1 partner | ✅ | Family circles, other relationships |
 | App tabs: Home (questions, mood, weekly stats, distance), Memories (jar, timeline, open-when letters), Me | ✅ | |
-| Board and card games, our garden, watch party, sleep together, date night planner, albums, bucket list with scenery | | ✅ |
+| Sleep together, date night planner, albums, bucket list with scenery | | ✅ |
 | End-to-end encryption of everything personal | ✅ | Encrypted passphrase backup |
 | Discreet mode, app lock, content-free notifications | ✅ | |
 | 4x4 resizable, customizable widget | ✅ | More layouts and themes |

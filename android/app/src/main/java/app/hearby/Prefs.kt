@@ -44,6 +44,16 @@ class Prefs(ctx: Context) {
     var webDirty: Boolean get() = p.getBoolean("webDirty", false); set(v) = p.edit().putBoolean("webDirty", v).apply()
     /** When you last looked at a message (for the ♥ badge on the widget). */
     var seenAt: Long get() = l("seenAt"); set(v) = putL("seenAt", v)
+    // Presence: when we last heard from the partner's phone, and whether they're in Hearby.
+    var partnerSeenAt: Long get() = l("partnerSeenAt"); set(v) = putL("partnerSeenAt", v)
+    var partnerState: String get() = s("partnerState"); set(v) = put("partnerState", v)
+    var partnerStateAt: Long get() = l("partnerStateAt"); set(v) = putL("partnerStateAt", v)
+    var partnerShares: Boolean get() = p.getBoolean("partnerShares", true); set(v) = p.edit().putBoolean("partnerShares", v).apply()
+    /** Let the partner see when I'm in Hearby. */
+    var sharePresence: Boolean get() = p.getBoolean("sharePresence", true); set(v) = p.edit().putBoolean("sharePresence", v).apply()
+    var presenceSentAt: Long get() = l("presenceSentAt"); set(v) = putL("presenceSentAt", v)
+    var presenceSent: String get() = s("presenceSent"); set(v) = put("presenceSent", v)
+    var meOpenAt: Long get() = l("meOpenAt"); set(v) = putL("meOpenAt", v)
     var status: String get() = s("status", "starting"); set(v) = put("status", v)
 
     val deviceId: String
@@ -60,6 +70,7 @@ class Prefs(ctx: Context) {
 
     fun unpair() {
         p.edit().remove("code").remove("lastId").remove("lastKind").remove("lastText").remove("lastAt")
-            .remove("feltAt").remove("sentNote").remove("sentAt").remove("inbox").apply()
+            .remove("feltAt").remove("sentNote").remove("sentAt").remove("inbox")
+            .remove("partnerSeenAt").remove("partnerState").remove("partnerStateAt").apply()
     }
 }

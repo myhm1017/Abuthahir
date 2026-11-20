@@ -71,7 +71,9 @@ class HearbyWidget : AppWidgetProvider() {
             val now = System.currentTimeMillis()
             if (pr.paired) {
                 val partner = pr.partnerName.ifBlank { "Your person" }
-                v.setTextViewText(R.id.partner, "💗 $partner")
+                // 👀 while they're in Hearby right now.
+                val viewing = pr.partnerShares && pr.partnerState == "open" && now - pr.partnerStateAt < 100 * 1000L
+                v.setTextViewText(R.id.partner, if (viewing) "👀 $partner is here" else "💗 $partner")
                 // Like the preview: the latest message sits in a pill at the bottom; nothing new, just the scene.
                 val fresh = pr.lastKind.isNotEmpty() && now - pr.lastAt < 24 * 60 * 60 * 1000L
                 val felt = now - pr.feltAt < 10 * 60 * 1000L

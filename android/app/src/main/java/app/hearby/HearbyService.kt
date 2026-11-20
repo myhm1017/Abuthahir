@@ -17,6 +17,7 @@ import java.net.URL
 class HearbyService : Service() {
     @Volatile private var running = false
     private var worker: Thread? = null
+    private var pinger: Thread? = null
     @Volatile private var conn: HttpURLConnection? = null
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -32,6 +33,7 @@ class HearbyService : Service() {
         if (!running) {
             running = true
             worker = Thread({ loop() }, "hearby-relay").also { it.start() }
+            pinger = Thread({ heartbeatLoop() }, "hearby-presence").also { it.start() }
         }
         return START_STICKY
     }
@@ -94,12 +96,23 @@ class HearbyService : Service() {
             pr.status = s
             Inbox.refresh(this)
         }
+        // Let the partner's phone know this one is connected.
+        if (s == "connected") Presence.send(this, "alive")
+    }
+
+    /** Every 15 minutes, a quiet "still connected" signal. */
+    private fun heartbeatLoop() {
+        while (running) {
+            nap(15 * 60 * 1000L)
+            if (running && Prefs(this).status == "connected") Presence.send(this, "alive", force = true)
+        }
     }
 
     override fun onDestroy() {
         running = false
         conn?.disconnect()
         worker?.interrupt()
+        pinger?.interrupt()
         super.onDestroy()
     }
 

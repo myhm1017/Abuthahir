@@ -4168,6 +4168,53 @@ button { cursor: pointer; }
     renderLoc();
     setInterval(() => { if (me.appOpen && me.appUI.tab === 'me' && !loc.contains(document.activeElement)) renderLoc(); }, 60000);
 
+    // 💞 Pairing and presence: are both phones connected, and is your partner in Hearby right now?
+    const presence = () => { try { return JSON.parse(call('partnerStatus') || '{}'); } catch (e) { return {}; } };
+    const presInfo = () => {
+      const p = presence(), name = esc(P.mia.name), now = p.now || Date.now();
+      const mine = call('status') || 'starting';
+      if (!p.seenAt) return { cls: 'wait', pill: `⏳ Waiting for ${name} to connect`, line: `Not connected with ${name} yet. When ${name} opens Hearby (paired with the same code), you'll see it here.`, mine };
+      const viewing = p.share !== false && p.state === 'open' && now - p.stateAt < 100e3;
+      const online = now - p.seenAt < 35 * 60e3;
+      const ago = m => (m < 60 ? `${Math.max(1, Math.round(m))}m` : m < 1440 ? `${Math.round(m / 60)}h` : `${Math.round(m / 1440)}d`);
+      if (viewing) return { cls: 'here', pill: `💞 Paired · 👀 ${name} is in Hearby now`, line: `👀 ${name} is in Hearby right now.`, mine };
+      if (online) return { cls: 'on', pill: `💞 Paired · 🟢 ${name} is connected`, line: `🟢 ${name}'s phone is connected. Your love reaches them right away.`, mine };
+      return { cls: 'off', pill: `💞 Paired · ${name} was here ${ago((now - p.seenAt) / 60e3)} ago`, line: `⚪ ${name}'s phone was last connected ${ago((now - p.seenAt) / 60e3)} ago. Messages wait for them and arrive when they're back online.`, mine };
+    };
+    const presPill = document.createElement('button');
+    presPill.className = 'presence';
+    me.q('.app-top').after(presPill);
+    presPill.addEventListener('click', () => { setAppTab('leo', 'me'); setTimeout(() => scrollApp('leo', pairCard), 60); });
+    const pairCard = document.createElement('div');
+    pairCard.className = 'card pair-card';
+    meTab.insertBefore(pairCard, card);
+    const renderPresence = () => {
+      const i = presInfo(), name = esc(P.mia.name);
+      presPill.textContent = i.mine === 'offline' ? "🟠 You're offline · Hearby will reconnect" : i.pill;
+      presPill.dataset.state = i.mine === 'offline' ? 'off' : i.cls;
+      const dot = me.q('.pdot');
+      dot.classList.toggle('online', i.cls === 'on' || i.cls === 'here');
+      dot.classList.toggle('here', i.cls === 'here');
+      me.q('.ptime').textContent = i.cls === 'here' ? `👀 here · ${fmtTime(P.mia.tz)}` : fmtTime(P.mia.tz);
+      const share = call('sharePresence') !== false;
+      pairCard.innerHTML = `<b>💞 Pairing</b>
+        <div class="loc-row"><b>You</b><span>${i.mine === 'connected' ? '🟢 Connected' : i.mine === 'offline' ? '🟠 Offline' : '⚪ Connecting…'}</span></div>
+        <div class="loc-row"><b>${name}</b><span>${i.cls === 'here' ? '👀 In Hearby now' : i.cls === 'on' ? '🟢 Connected' : i.cls === 'off' ? '⚪ Away' : '⏳ Not connected yet'}</span></div>
+        <p class="hint2">${i.cls === 'wait' ? i.line : (i.cls === 'off' || i.mine !== 'connected' ? i.line : `✅ You're paired and both phones are connected. ${i.line}`)}</p>
+        <label class="set-row">Let ${name} see when I'm in Hearby <input type="checkbox" class="pres-share" ${share ? 'checked' : ''}></label>`;
+      pairCard.querySelector('.pres-share').addEventListener('change', e => { call('setSharePresence', e.target.checked); renderPresence(); });
+    };
+    const _renderHead = renderHead;
+    renderHead = id => { _renderHead(id); if (id === 'leo') renderPresence(); };
+    // Tell your partner you're here while Hearby is on screen, and that you've left when it closes.
+    const here = () => call('presence', 'open');
+    document.addEventListener('visibilitychange', () => call('presence', document.visibilityState === 'visible' ? 'open' : 'away'));
+    window.addEventListener('pagehide', () => call('presence', 'away'));
+    setInterval(() => { if (document.visibilityState === 'visible') here(); }, 60e3);
+    setInterval(renderPresence, 10e3);
+    here();
+    renderPresence();
+
     // Receiving: messages your partner sent, also the ones that arrived while the app was closed.
     let seen = +(localStorage.getItem('hearby-seen') || 0);
     const receive = (kind, text, d, at) => {
@@ -4198,7 +4245,7 @@ button { cursor: pointer; }
         incoming = true;
         try { receive(it.kind, it.text || '', d || {}, it.at || Date.now()); } finally { incoming = false; }
       });
-      renderStatus();
+      renderStatus(); renderPresence();
     };
 
     // The home-screen widget plays a short loop painted from the same scene: the couple in the current place.

@@ -28,6 +28,20 @@ object Inbox {
         val text = j.optString("text")
         val data = j.optString("data")
         val at = j.optLong("at", System.currentTimeMillis()).coerceAtMost(System.currentTimeMillis())
+        val now = System.currentTimeMillis()
+        // Anything from their phone means it's connected.
+        if (now - at < 10 * 60 * 1000L) pr.partnerSeenAt = maxOf(pr.partnerSeenAt, at)
+        if (kind == "presence") {
+            if (now - at < 5 * 60 * 1000L) {
+                val share = text != "hidden"
+                pr.partnerShares = share
+                if (text == "open" || text == "away" || text == "hidden") { pr.partnerState = text; pr.partnerStateAt = at }
+                // They just opened Hearby and I'm in it too: say hi back right away so we both see it.
+                if (text == "open" && now - pr.meOpenAt < 90 * 1000L) Presence.send(ctx, "open", force = false)
+            }
+            refresh(ctx)
+            return
+        }
         remember(pr, kind, text, data, at)
         when {
             kind == "felt" -> {

@@ -151,6 +151,20 @@ class HearbyBridge(private val host: BridgeHost) {
         return "ok"
     }
 
+    @JavascriptInterface fun presence(state: String) { if (state == "open" || state == "away") Presence.send(act, state) }
+    @JavascriptInterface fun sharePresence(): Boolean = pr.sharePresence
+    @JavascriptInterface
+    fun setSharePresence(on: Boolean) {
+        pr.sharePresence = on
+        Presence.send(act, if (on) "open" else "hidden", force = true)
+    }
+
+    @JavascriptInterface
+    fun partnerStatus(): String = JSONObject()
+        .put("seenAt", pr.partnerSeenAt).put("state", pr.partnerState).put("stateAt", pr.partnerStateAt)
+        .put("share", pr.partnerShares).put("now", System.currentTimeMillis())
+        .toString()
+
     @JavascriptInterface fun settings() = ui { host.openSettings() }
     @JavascriptInterface fun heartbeat() = ui { Notifier.vibrateNow(act) }
 

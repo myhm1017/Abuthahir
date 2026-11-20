@@ -104,6 +104,13 @@ html.native .loc-row span { color: var(--k-muted); font-weight: 700; text-align:
 html.native .loc-form { display: grid; gap: 6px; margin-top: 4px; }
 html.native .loc-form .send { justify-self: end; padding: 6px 14px; }
 html.native .loc-card .inline-sel { max-width: 150px; }
+html.native .presence { margin: -2px 12px 6px; justify-self: center; align-self: center; border: 1px solid rgba(var(--k-glass), .8); background: rgba(var(--k-glass), .55); color: var(--k-ink); border-radius: 999px; padding: 3px 11px; font-size: 10.5px; font-weight: 800; max-width: calc(100% - 24px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.native .presence[data-state="here"] { background: rgba(var(--k-tint), .7); }
+html.native .presence[data-state="wait"], html.native .presence[data-state="off"] { color: var(--k-muted); }
+html.native .pdot { background: #a9a3b3; }
+html.native .pdot.online { background: #5fcf8f; }
+html.native .pdot.here { background: #5fcf8f; box-shadow: 0 0 0 0 rgba(95, 207, 143, .7); animation: herePulse 1.6s ease-out infinite; }
+@keyframes herePulse { 70% { box-shadow: 0 0 0 6px rgba(95, 207, 143, 0); } 100% { box-shadow: 0 0 0 0 rgba(95, 207, 143, 0); } }
 html.native .dua-row > span, html.native .bk-row > span { flex: 1 1 0; min-width: 0; }
 /* The widget pop-up: only the expanded widget, over the blurred home screen. */
 html.native.widget-mode, html.native.widget-mode body, html.native.widget-mode .screen, html.native.widget-mode .phone { background: transparent !important; }

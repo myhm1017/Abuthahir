@@ -72,7 +72,7 @@ class WidgetPopupActivity : Activity() {
             setSupportZoom(false)
             textZoom = 100
             allowFileAccess = false
-            allowContentAccess = false
+            allowContentAccess = true // needed to read the photos you pick
         }
         wv.isVerticalScrollBarEnabled = false
         wv.addJavascriptInterface(HearbyBridge(host), "HearbyNative")

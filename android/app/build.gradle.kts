@@ -11,8 +11,8 @@ android {
         applicationId = "app.hearby"
         minSdk = 26
         targetSdk = 34
-        versionCode = 4
-        versionName = "0.4"
+        versionCode = 5
+        versionName = "0.5"
     }
 
     // A private signing key for sideloading between the two of you.

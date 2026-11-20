@@ -4157,6 +4157,34 @@ button { cursor: pointer; }
       if (document.visibilityState === 'visible') { setTimeout(captureFrames, WIDGET ? 1500 : 3000); window.hearbyPull(); }
     });
 
+    // Add your own photos straight to the Home slideshow (kept on this phone, in the "Our photos" album).
+    const phBox = me.q('.us-photos');
+    const phAdd = document.createElement('button');
+    phAdd.className = 'ph-add'; phAdd.textContent = '＋ Photos'; phAdd.setAttribute('aria-label', 'Add photos to the slideshow');
+    const phIn = document.createElement('input');
+    phIn.type = 'file'; phIn.accept = 'image/*'; phIn.multiple = true; phIn.hidden = true;
+    phBox.appendChild(phAdd); document.body.appendChild(phIn);
+    phAdd.addEventListener('pointerdown', e => e.stopPropagation());
+    phAdd.addEventListener('click', e => { e.stopPropagation(); phIn.click(); });
+    phIn.addEventListener('change', async () => {
+      const files = Array.from(phIn.files || []).slice(0, 12);
+      phIn.value = '';
+      if (!files.length) return;
+      toast('leo', 'Adding photos…');
+      const imgs = (await Promise.all(files.map(shrink))).filter(Boolean);
+      if (!imgs.length) { toast('leo', "Couldn't read those photos"); return; }
+      let al = APP.albums.find(a => a.name === 'Our photos');
+      if (!al) { al = { name: 'Our photos', photos: [] }; APP.albums.unshift(al); }
+      al.photos.unshift(...imgs);
+      try { localStorage.setItem('hearby-app2', JSON.stringify(APP)); } catch (e) {
+        al.photos.splice(0, imgs.length);
+        toast('leo', 'Phone storage for photos is full. Remove an album first.');
+        return;
+      }
+      saveApp(); renderAppAll();
+      toast('leo', `Added ${imgs.length} photo${imgs.length > 1 ? 's' : ''} to your slideshow 🖼️`);
+    });
+
     // Leftover preview wording.
     meTab.querySelectorAll('.hint2').forEach(el => { if (/under the phone/.test(el.textContent)) el.textContent = 'Scenery, status and your character are under "Change my look".'; });
 

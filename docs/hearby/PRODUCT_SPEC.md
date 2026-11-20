@@ -176,11 +176,6 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - Write a goodnight whenever you have a moment; it's delivered at **your partner's bedtime in their own time zone** (each person sets their bedtime in Me).
 - It arrives quietly, with no heartbeat, as a moonlit message on their widget. The sender gets a note once it's delivered.
 
-### 4.10j Same sky moments (later)
-- Home shows tonight's **moon phase** and the days until the next full moon, plus active **meteor showers** (Quadrantids, Lyrids, Eta Aquariids, Perseids, Orionids, Leonids, Geminids).
-- On full-moon and meteor-shower nights, both partners get a soft "look up together" notification, and shooting stars streak across night scenes on the widget.
-- A "🔭 Look up together" button tells your partner you're looking at the sky right now.
-
 ### 4.10k Trip mode (later)
 - Switches on by itself when the meet-up countdown reaches zero, or with "💞 We're together now".
 - The widget shows "💞 Day 3" instead of the countdown, distance features pause, gentle reminders change to "put the phone down and hold hands 💞", and photos you send collect into an automatic **trip album**.
@@ -341,7 +336,7 @@ Opening Hearby feels like the widget opened up: the same calm painted scenery, g
 | Tiny status on character | ✅ | |
 | Meet-up countdown | ✅ | |
 | Touch together, goodnight at their bedtime | ✅ | |
-| Same sky moments, trip mode | | ✅ |
+| Trip mode | | ✅ |
 | "In sync" moments | | ✅ |
 | Memory Jar | | ✅ |
 | Partner's weather | | ✅ |

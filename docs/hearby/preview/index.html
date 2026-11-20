@@ -498,7 +498,7 @@ button { cursor: pointer; }
     <li><b>Fun activities:</b> the scenery rotation also includes the two of you doing things together: a rollercoaster ride, a hot air balloon ride, a balloon photoshoot, skiing (in ski jackets), a carnival night, an evening stroll under streetlights, a rowing boat with swans, a ship's bow at sunset, floating lanterns and dancing in the rain under one umbrella. Pick one under Scenery → Fun activities to see it now.</li>
     <li><b>Festivals and occasions:</b> Japan's hanami blossom festival and summer fireworks, China's Lunar New Year and Mid-Autumn Festival, New York's New Year's Eve countdown, a European Christmas market, India's Diwali and Holi (in white clothes with colors flying), and Eid and Ramadan nights in the GCC. They come up more often during their real season, and Ramadan and Eid follow the Islamic calendar.</li>
     <li><b>Touch together:</b> press and hold a widget's scene. Your partner gets "reaching for your hand". If they press and hold theirs within a few seconds, both widgets glow, the characters hug, and both phones pulse together. With a mouse, hold Leo's widget, let go, then quickly hold Mia's.</li>
-    <li><b>Goodnight at their bedtime, same sky and trip mode:</b> in the app, schedule a goodnight that arrives quietly at your partner's bedtime (set bedtimes in Me), see tonight's moon phase and meteor showers on Home (tap "Look up together"), and turn on trip mode in Together when you meet.</li>
+    <li><b>Goodnight at their bedtime and trip mode:</b> in the app, schedule a goodnight that arrives quietly at your partner's bedtime (set bedtimes in Me), and turn on trip mode in Together when you meet.</li>
     <li><b>Swipe the scenery:</b> open a widget and swipe left or right across the scene to move between places, activities and festivals.</li>
     <li><b>Repeating days:</b> special days can repeat every year, month, week or day, or happen just once. A monthly "Our monthversary" on the 9th is already in the list.</li>
     <li><b>Customize the characters:</b> under each phone, open "Customize … name and look" to rename them or change their style: hijab styles (classic, khimar, turban wrap, niqab), hair (buzz cut, quiff, man bun, wolf cut, braids, bun and more), 13 beard and moustache styles, tops, bottoms, dresses (abaya, gown, churidar, saree, burqa and more), shoes, skin tone, eye color, hair or hijab color, outfit, facial hair and glasses.</li>
@@ -609,7 +609,6 @@ button { cursor: pointer; }
           <div class="card us-date"></div>
           <div class="card"><b>💞 This week</b><div class="stats"></div></div>
           <div class="card"><b>🌍 Between us</b><p class="hint2 dist"></p></div>
-          <div class="card"><b>🌌 Same sky tonight</b><p class="hint2 sky-info"></p><button class="mini2 sky-look">🔭 Look up together</button></div>
           <div class="card"><small>A moment for you</small><p class="hint2 us-moment"></p></div>
         </section>
 
@@ -1596,7 +1595,6 @@ button { cursor: pointer; }
       mg.addColorStop(0, 'rgba(255,240,200,.45)'); mg.addColorStop(1, 'rgba(255,240,200,0)');
       c.fillStyle = mg; c.fillRect(0, 0, w, h);
       c.fillStyle = '#fff3cf'; c.beginPath(); c.arc(mx, my, w * 0.045, 0, TAU); c.fill();
-      if (showerNow()) { const p = (t % 4) / 4; if (p < 0.14) { const q = p / 0.14, k = Math.floor(t / 4) % 3, x0 = w * (0.15 + k * 0.22), y0 = h * (0.06 + k * 0.03), x = x0 + q * w * 0.3, y = y0 + q * h * 0.14; const g = c.createLinearGradient(x - w * 0.12, y - h * 0.056, x, y); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(255,255,255,.95)'); c.strokeStyle = g; c.lineWidth = 1.4; c.beginPath(); c.moveTo(x - w * 0.12, y - h * 0.056); c.lineTo(x, y); c.stroke(); } }
     } else if (!PLACES[s.place].dusk) {
       const sg = c.createRadialGradient(w * 0.15, h * 0.08, 4, w * 0.15, h * 0.08, w * 0.6);
       sg.addColorStop(0, s.season === 'winter' ? 'rgba(255,250,240,.5)' : 'rgba(255,244,214,.75)'); sg.addColorStop(1, 'rgba(255,244,214,0)');
@@ -2744,7 +2742,7 @@ button { cursor: pointer; }
     const md = MEET.on ? meetDays() : null;
     if (md === 1 && !shown.has(`m1${k}`)) { shown.add(`m1${k}`); IDS.forEach(id => { banner(id, `${esc(pick(["Guess who you're seeing tomorrow? 😍", 'Pack your smile, tomorrow is the day ✈️', 'Last sleep before you meet 🥹']))}<small>Tomorrow you're together 💞</small>`); buzz(id, 'Tomorrow you finally meet 💞', 6000); }); }
     if (md === 0 && !shown.has(`m0${k}`)) { shown.add(`m0${k}`); IDS.forEach(id => { banner(id, `Today's the day you meet! 💞<small>${esc(MEET.note || 'Enjoy every second together')}</small>`); }); }
-    dateNightCheck(k); skyCheck(k);
+    dateNightCheck(k);
     if (md === 0 && !APP.trip.on && !shown.has(`trip${k}`)) { shown.add(`trip${k}`); startTrip(); }
     setRibbons();
   }
@@ -3380,29 +3378,6 @@ button { cursor: pointer; }
     s.q('.gn-list').innerHTML = mine.map(g => `<div class="gn-item"><span>🌙 "${esc(g.text)}"</span><em>arrives in ${hm(Math.max(1, Math.round((g.due - Date.now()) / 60000)))}</em><div class="row"><button class="mini2" data-gnnow="${g.i}">Deliver now (preview)</button><button class="mini2" data-gndel="${g.i}" aria-label="Cancel">✕</button></div></div>`).join('');
   }
 
-  // ---------- Same sky moments ----------
-  function moonInfo(d = new Date()) {
-    const syn = 29.530588853, ref = Date.UTC(2000, 0, 6, 18, 14), age = ((((d - ref) / 86400000) % syn) + syn) % syn;
-    const idx = Math.floor((age / syn) * 8 + 0.5) % 8;
-    const names = ['New moon', 'Waxing crescent', 'First quarter', 'Waxing gibbous', 'Full moon', 'Waning gibbous', 'Last quarter', 'Waning crescent'], emo = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
-    return { name: names[idx], emo: emo[idx], full: Math.abs(age - syn / 2) < 1.1, daysToFull: Math.round((((syn / 2 - age) % syn) + syn) % syn) };
-  }
-  const SHOWERS = [['Quadrantid', 101, 105], ['Lyrid', 416, 425], ['Eta Aquariid', 501, 510], ['Perseid', 809, 814], ['Orionid', 1018, 1024], ['Leonid', 1114, 1120], ['Geminid', 1210, 1216]];
-  function showerNow() { const d = new Date(), md = (d.getMonth() + 1) * 100 + d.getDate(), sh = SHOWERS.find(([, a, b]) => md >= a && md <= b); return sh ? sh[0] : null; }
-  function skyText() {
-    const m = moonInfo(), sh = showerNow();
-    let txt = m.full ? `${m.emo} <b>Full moon tonight.</b> Different cities, same moon. Look up at the same time.` : `${m.emo} ${m.name} tonight. Next full moon in ${m.daysToFull} day${m.daysToFull === 1 ? '' : 's'}.`;
-    if (sh) txt += `<br>☄️ <b>The ${sh} meteor shower is on.</b> If you both look up tonight, you might catch the same shooting star.`;
-    return txt;
-  }
-  function skyCheck(k) {
-    const m = moonInfo(), sh = showerNow();
-    if ((m.full || sh) && !shown.has(`sky${k}`)) {
-      shown.add(`sky${k}`);
-      setTimeout(() => IDS.forEach(i => banner(i, m.full ? `🌕 Full moon tonight<small>Look up together, wherever you are</small>` : `☄️ ${sh} meteor shower tonight<small>Look up together, you might share a shooting star</small>`)), 6000);
-    }
-  }
-
   // ---------- Trip mode ----------
   if (!APP.trip) APP.trip = { on: false, start: null, album: null };
   const tripDay = () => Math.floor((today0() - new Date(APP.trip.start + 'T00:00')) / 86400000) + 1;
@@ -3532,7 +3507,6 @@ button { cursor: pointer; }
     const tot = ['leo', 'mia'].reduce((n, pid) => n + Object.values(APP.stats[pid]).reduce((x, y) => x + y, 0), 0);
     s.q('.stats').innerHTML = row('You', APP.stats[id]) + row(pa.name, APP.stats[other(id)]) + `<p class="st-total">You've thought of each other ${tot} times this week 💞</p>`;
     s.q('.dist').innerHTML = APP.trip.on ? `💞 You're together right now · day ${tripDay()}<br>Distance features are paused. Enjoy every moment.` : distText(id);
-    s.q('.sky-info').innerHTML = skyText();
     s.q('.us-moment').textContent = s.appUI.moment;
   }
   function renderQuestion(id) {
@@ -3620,12 +3594,6 @@ button { cursor: pointer; }
       const b = e.target.closest('button'); if (!b) return;
       if (b.dataset.gnnow !== undefined) { const g = APP.goodnights.splice(+b.dataset.gnnow, 1)[0]; saveApp(); deliverGoodnight(g); renderAppAll(); }
       else if (b.dataset.gndel !== undefined) { APP.goodnights.splice(+b.dataset.gndel, 1); saveApp(); renderAppAll(); }
-    });
-    on('.sky-look', 'click', () => {
-      const m = moonInfo();
-      banner(o, `🔭 ${esc(P[id].name)} is looking at the sky right now<small>Look up too: ${m.emo} ${m.name}</small>`);
-      IDS.forEach(i => { if (!reduced.matches) twinkles(W[i].fx, ['✨', '🌙', '⭐'], 6); });
-      toast(id, `${P[o].name} will know you're looking up 🔭`);
     });
     document.getElementById(`app-bed-${id}`).addEventListener('change', e => { P[id].bedtime = e.target.value || '22:30'; renderAppAll(); });
     s.q('.sl-wake').addEventListener('click', () => wakeUp(id));

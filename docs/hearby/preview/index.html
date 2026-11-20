@@ -87,6 +87,9 @@ button { cursor: pointer; }
 .pill.show { transform: none; }
 .badge { position: absolute; top: 6px; right: 6px; z-index: 2; width: 18px; height: 18px; border-radius: 50%; background: #e2588a; color: #fff; font-size: 10px; display: grid; place-items: center; box-shadow: 0 2px 6px rgba(160, 40, 90, .4); animation: badgeBeat 1.8s ease-in-out infinite; }
 @keyframes badgeBeat { 0%, 60%, 100% { transform: scale(1) } 10% { transform: scale(1.25) } 20% { transform: scale(1) } 30% { transform: scale(1.3) } 42% { transform: scale(1) } }
+.sc-nav { position: absolute; top: 40%; z-index: 2; width: 24px; height: 24px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .55); background: rgba(255, 255, 255, .26); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #fff; font-size: 16px; font-weight: 800; line-height: 1; padding: 0; text-shadow: 0 1px 2px rgba(0, 0, 0, .4); }
+.sc-prev { left: 6px; } .sc-next { right: 6px; }
+.widget.open { touch-action: pan-y; }
 .close-w { width: 22px; height: 22px; border-radius: 50%; background: rgba(255, 255, 255, .26); backdrop-filter: blur(12px) saturate(1.5); -webkit-backdrop-filter: blur(12px) saturate(1.5); border: 1px solid rgba(255, 255, 255, .42); font-size: 10px; font-weight: 800; color: #4a3858; }
 .home { display: grid; grid-template-columns: 136px 1fr; gap: 12px; padding: 10px 14px 0; }
 .slot { height: 136px; }
@@ -487,6 +490,8 @@ button { cursor: pointer; }
     <li><b>Meet-up countdown:</b> open a widget and tap the ✈️ chip to set or change the date, add a note, choose "We don't know the date yet" (shows "soon"), or hide the countdown. Both phones update.</li>
     <li><b>Teasing reminders:</b> the day before, the app only asks something cheeky like "What day is tomorrow 😉?" and leaves them to work it out. On the day, a clear notification says what day it is, and if nobody has sent a wish about 15 seconds after the celebration (hours later in the real app), it nudges them: "Have you wished Mia yet? 👀 Just checking…".</li>
     <li><b>Fun activities:</b> the scenery rotation also includes the two of you doing things together: a rollercoaster ride, a hot air balloon ride, a balloon photoshoot, skiing (in ski jackets), a carnival night, an evening stroll under streetlights, a rowing boat with swans, a ship's bow at sunset, floating lanterns and dancing in the rain under one umbrella. Pick one under Scenery → Fun activities to see it now.</li>
+    <li><b>Festivals and occasions:</b> Japan's hanami blossom festival and summer fireworks, China's Lunar New Year and Mid-Autumn Festival, New York's New Year's Eve countdown, a European Christmas market, India's Diwali and Holi (in white clothes with colors flying), and Eid and Ramadan nights in the GCC. They come up more often during their real season, and Ramadan and Eid follow the Islamic calendar.</li>
+    <li><b>Swipe the scenery:</b> open a widget and swipe left or right across the scene (or tap ‹ ›) to move between places, activities and festivals.</li>
     <li><b>Repeating days:</b> special days can repeat every year, month, week or day, or happen just once. A monthly "Our monthversary" on the 9th is already in the list.</li>
     <li><b>Customize the characters:</b> under each phone, open "Customize … name and look" to rename them or change their style: hijab styles (classic, khimar, turban wrap, niqab), hair (buzz cut, quiff, man bun, wolf cut, braids, bun and more), 13 beard and moustache styles, tops, bottoms, dresses (abaya, gown, churidar, saree, burqa and more), shoes, skin tone, eye color, hair or hijab color, outfit, facial hair and glasses.</li>
     <li><b>Slideshow:</b> open the widget, tap 📷, pick a few photos (or "Use sample photos"), choose a transition and send. The other widget starts a slideshow. Tap 🎞️ to switch between the slideshow and the couple scene.</li>
@@ -530,7 +535,12 @@ button { cursor: pointer; }
     { key: 'balloonshoot', name: 'Balloon photoshoot', flag: '📸', act: true }, { key: 'ski', name: 'Skiing in the mountains', flag: '⛷️', act: true },
     { key: 'carnival', name: 'Carnival night', flag: '🎡', act: true }, { key: 'streetlights', name: 'Evening stroll', flag: '🌆', act: true },
     { key: 'boat', name: 'Boat on the lake', flag: '🚣', act: true }, { key: 'shipbow', name: "Ship's bow at sunset", flag: '🚢', act: true },
-    { key: 'lanterns', name: 'Floating lanterns', flag: '🏮', act: true }, { key: 'rain', name: 'Dancing in the rain', flag: '☔', act: true }
+    { key: 'lanterns', name: 'Floating lanterns', flag: '🏮', act: true }, { key: 'rain', name: 'Dancing in the rain', flag: '☔', act: true },
+    { key: 'hanami', name: 'Japan · Hanami blossom festival', flag: '🌸', act: true, fest: true }, { key: 'hanabi', name: 'Japan · Summer fireworks', flag: '🎆', act: true, fest: true },
+    { key: 'lunarny', name: 'China · Lunar New Year', flag: '🧧', act: true, fest: true }, { key: 'midautumn', name: 'China · Mid-Autumn Festival', flag: '🥮', act: true, fest: true },
+    { key: 'nyc', name: "New York · New Year's Eve", flag: '🗽', act: true, fest: true }, { key: 'xmasmarket', name: 'Europe · Christmas market', flag: '🎄', act: true, fest: true },
+    { key: 'diwali', name: 'India · Diwali', flag: '🪔', act: true, fest: true }, { key: 'holi', name: 'India · Holi', flag: '🎨', act: true, fest: true },
+    { key: 'eid', name: 'GCC · Eid nights', flag: '🌙', act: true, fest: true }, { key: 'ramadan', name: 'GCC · Ramadan nights', flag: '🏮', act: true, fest: true }
   ];
   const PRESETS = ['thinking of you 🤍', 'miss you 🥺', 'mwah 😘', 'sending a hug 🤗', 'drink water, cutie 💧', 'proud of you ⭐', 'good morning ☀️', 'good night 🌙'];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -668,7 +678,7 @@ button { cursor: pointer; }
         </section>
       </main>
       <div class="album-player" hidden><div class="ap-stage"></div><div class="ap-cap"></div><button class="ap-close" aria-label="Close slideshow">✕</button></div>
-      <nav class="app-nav" aria-label="App sections"><button data-tab="us" aria-current="page">🏡<span>Home</span></button><button data-tab="play">💞<span>Together</span></button><button data-tab="mem">📖<span>Memories</span></button><button data-tab="me">👤<span>Me</span></button></nav>
+      <nav class="app-nav" aria-label="App sections"><button data-tab="us" aria-current="page">🏡<span>Home</span></button><button data-tab="play">👥<span>Together</span></button><button data-tab="mem">📖<span>Memories</span></button><button data-tab="me">👤<span>Me</span></button></nav>
     </div>
     <div class="sleep-layer" hidden><canvas class="sleep-canvas" aria-hidden="true"></canvas><div class="sleep-ui"><b class="sl-title">Sleeping together 💤</b><span class="sl-sub"></span><button class="mini2 sl-wake">☀️ Wake up</button></div></div>`;
   }
@@ -720,6 +730,7 @@ button { cursor: pointer; }
             <div class="pill compact-only"></div>
             <span class="badge compact-only" hidden>♥</span>
             <button class="day-ribbon" hidden></button>
+            <button class="ui sc-nav sc-prev" aria-label="Previous scenery">‹</button><button class="ui sc-nav sc-next" aria-label="Next scenery">›</button>
             <div class="w-top ui">
               <div class="who"><span class="pdot"></span><b class="pname"></b><span class="ptime"></span></div>
               <div class="chips"><span class="chip status"></span><button class="chip chip-btn cd" title="Days until you meet: tap to change"></button><button class="chip chip-btn days-btn" aria-label="Special days" title="Special days">📅</button><button class="chip chip-btn slides-toggle" hidden aria-pressed="false" aria-label="Slideshow">🎞️</button><button class="close-w" aria-label="Close">✕</button></div>
@@ -808,7 +819,7 @@ button { cursor: pointer; }
         <label for="discreet-${id}">Discreet mode <input type="checkbox" id="discreet-${id}"></label>
         <label for="screen-${id}">Screen on <input type="checkbox" id="screen-${id}" checked></label>
         <label for="slides-${id}">Slideshow in widget <input type="checkbox" id="slides-${id}" disabled></label>
-        <label for="scenery-${id}">Scenery <select id="scenery-${id}"><option value="random">🎲 New place every look</option><optgroup label="Places">${PLACE_META.filter(m => !m.act).map(m => `<option value="${m.key}">${m.flag} ${m.name}</option>`).join('')}</optgroup><optgroup label="Fun activities">${PLACE_META.filter(m => m.act).map(m => `<option value="${m.key}">${m.flag} ${m.name}</option>`).join('')}</optgroup></select></label>
+        <label for="scenery-${id}">Scenery <select id="scenery-${id}"><option value="random">🎲 New place every look</option><optgroup label="Places">${PLACE_META.filter(m => !m.act).map(m => `<option value="${m.key}">${m.flag} ${m.name}</option>`).join('')}</optgroup><optgroup label="Fun activities">${PLACE_META.filter(m => m.act && !m.fest).map(m => `<option value="${m.key}">${m.flag} ${m.name}</option>`).join('')}</optgroup><optgroup label="Festivals and occasions">${PLACE_META.filter(m => m.fest).map(m => `<option value="${m.key}">${m.flag} ${m.name}</option>`).join('')}</optgroup></select></label>
         <label for="seasonPref-${id}">Season <select id="seasonPref-${id}"><option value="random">🎲 Any season</option><option value="spring">🌸 Spring</option><option value="summer">☀️ Summer</option><option value="autumn">🍂 Autumn</option><option value="winter">❄️ Winter</option></select></label>
         <label for="nudges-${id}">Reminders <select id="nudges-${id}"><option value="dua">💌 Love and 🤲 dua</option><option value="pray">💌 Love and 🙏 prayer</option><option value="love">💌 Love only</option><option value="off">Off</option></select></label>
         <button class="mini try-nudge">Show a reminder now</button>
@@ -969,6 +980,56 @@ button { cursor: pointer; }
     c.strokeStyle = K('#2f2a3a'); c.lineWidth = 1.6; c.beginPath(); c.moveTo(x, base); c.lineTo(x, ly); c.quadraticCurveTo(x, ly - 4, lx, ly - 3); c.stroke();
     c.fillStyle = '#ffe2a0'; c.beginPath(); c.arc(lx, ly + 1, 2, 0, TAU); c.fill();
   }
+  function couple(c, s, E, o = {}) {
+    const { w } = s, U = E.U, gy = x => nearY(s, x, 0) + 3, xa = w * (o.xa || 0.44), xb = w * (o.xb || 0.56), hand = { x: (xa + xb) / 2, y: gy(xa) - 6.6 * U };
+    const k = kid(c, s, xa, gy(xa), E.me, { face: 1, blink: E.blinkMe, holdSide: 1, handTo: hand, happy: o.happy }, E.t);
+    kid(c, s, xb, gy(xb), E.pa, { face: -1, blink: E.blinkPa, holdSide: -1, handTo: hand, happy: true }, E.t);
+    return k;
+  }
+  function fireworksSL(c, s, t, n, palette) {
+    const { w, h } = s; c.save(); c.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < n; i++) {
+      const per = 2.4, k = Math.floor((t + i * 0.63) / per), p = ((t + i * 0.63) % per) / per;
+      const cx = w * (0.15 + ((i * 0.37 + k * 0.29) % 0.7)), cy = h * (0.1 + (i % 3) * 0.08), col = palette[i % palette.length];
+      if (p < 0.18) { const y = h * 0.62 - (h * 0.62 - cy) * (p / 0.18); c.fillStyle = 'rgba(255,240,200,.9)'; c.beginPath(); c.arc(cx, y, 1.2, 0, TAU); c.fill(); }
+      else { const q = (p - 0.18) / 0.82, r = (6 + 22 * q) * (h / 136), a = 1 - q; for (let j = 0; j < 24; j++) { const an = (j / 24) * TAU; c.fillStyle = `rgba(${col},${a})`; c.beginPath(); c.arc(cx + Math.cos(an) * r, cy + Math.sin(an) * r + q * q * 8, 1.2, 0, TAU); c.fill(); } }
+    }
+    c.restore();
+  }
+  function lanternString(c, w, y0, sag, cols, t, tassel) {
+    c.strokeStyle = 'rgba(60,30,30,.6)'; c.lineWidth = 0.6; c.beginPath(); c.moveTo(-4, y0); c.quadraticCurveTo(w / 2, y0 + sag * 2, w + 4, y0); c.stroke();
+    for (let i = 1; i < 8; i++) {
+      const f = i / 8, x = w * f, y = y0 + 4 * sag * f * (1 - f) + 4 + Math.sin(t * 1.5 + i) * 0.8, r = 3.4;
+      const g = c.createRadialGradient(x, y, 0, x, y, r * 3); g.addColorStop(0, 'rgba(255,170,90,.4)'); g.addColorStop(1, 'rgba(255,170,90,0)'); c.fillStyle = g; c.fillRect(x - r * 3, y - r * 3, r * 6, r * 6);
+      c.fillStyle = cols[i % cols.length]; c.beginPath(); c.ellipse(x, y, r, r * 1.2, 0, 0, TAU); c.fill();
+      c.fillStyle = '#e3b341'; c.fillRect(x - 1.6, y - r * 1.25, 3.2, 1.2); c.fillRect(x - 1.6, y + r * 1.1, 3.2, 1.2);
+      if (tassel) { c.strokeStyle = '#e3b341'; c.lineWidth = 0.7; c.beginPath(); c.moveTo(x, y + r * 1.3); c.lineTo(x, y + r * 2.2); c.stroke(); }
+    }
+  }
+  function crescent(c, x, y, r) {
+    c.fillStyle = '#fff1c4'; c.beginPath(); c.arc(x, y, r, Math.PI * 0.5, Math.PI * 1.5, false); c.arc(x + r * 0.42, y, r * 0.86, Math.PI * 1.5, Math.PI * 0.5, true); c.closePath(); c.fill();
+  }
+  function fanous(c, x, y, sz, t) {
+    c.strokeStyle = 'rgba(230,200,140,.7)'; c.lineWidth = 0.6; c.beginPath(); c.moveTo(x, 0); c.lineTo(x, y - sz * 0.6); c.stroke();
+    const g = c.createRadialGradient(x, y, 0, x, y, sz * 2.4); g.addColorStop(0, `rgba(255,190,90,${0.45 + 0.15 * Math.sin(t * 2)})`); g.addColorStop(1, 'rgba(255,190,90,0)'); c.fillStyle = g; c.fillRect(x - sz * 2.4, y - sz * 2.4, sz * 4.8, sz * 4.8);
+    poly(c, [[x - sz * 0.25, y - sz * 0.6], [x + sz * 0.25, y - sz * 0.6], [x + sz * 0.45, y - sz * 0.2], [x + sz * 0.35, y + sz * 0.5], [x - sz * 0.35, y + sz * 0.5], [x - sz * 0.45, y - sz * 0.2]], '#c9962f');
+    c.fillStyle = '#ffd98a'; c.fillRect(x - sz * 0.22, y - sz * 0.3, sz * 0.44, sz * 0.62);
+    c.strokeStyle = '#8a6420'; c.lineWidth = 0.5; c.beginPath(); c.moveTo(x, y - sz * 0.3); c.lineTo(x, y + sz * 0.32); c.stroke();
+    poly(c, [[x - sz * 0.3, y - sz * 0.6], [x, y - sz * 0.95], [x + sz * 0.3, y - sz * 0.6]], '#a87a24');
+  }
+  function mosque(c, K, x, base, H, col) {
+    c.fillStyle = K(col);
+    c.fillRect(x - H * 0.5, base - H * 0.35, H, H * 0.35);
+    c.beginPath(); c.arc(x, base - H * 0.35, H * 0.26, Math.PI, 0); c.fill(); c.fillRect(x - 0.7, base - H * 0.72, 1.4, H * 0.12);
+    [-1, 1].forEach(sd => { c.beginPath(); c.arc(x + sd * H * 0.3, base - H * 0.35, H * 0.1, Math.PI, 0); c.fill(); c.fillRect(x + sd * H * 0.62 - H * 0.03, base - H * 0.85, H * 0.06, H * 0.85); c.beginPath(); c.arc(x + sd * H * 0.62, base - H * 0.85, H * 0.04, Math.PI, 0); c.fill(); });
+    c.fillStyle = 'rgba(255,214,140,.7)'; for (let i = -2; i <= 2; i++) c.fillRect(x + i * H * 0.16 - H * 0.03, base - H * 0.2, H * 0.06, H * 0.1);
+  }
+  function diya(c, x, y, t) {
+    const fl = 0.8 + 0.2 * Math.sin(t * 7);
+    const g = c.createRadialGradient(x, y - 3, 0, x, y - 3, 7); g.addColorStop(0, `rgba(255,190,80,${0.6 * fl})`); g.addColorStop(1, 'rgba(255,190,80,0)'); c.fillStyle = g; c.fillRect(x - 7, y - 10, 14, 14);
+    c.fillStyle = '#c0602a'; c.beginPath(); c.ellipse(x, y, 2.6, 1.2, 0, 0, Math.PI); c.fill();
+    c.fillStyle = '#ffd23f'; c.beginPath(); c.ellipse(x, y - 2 * fl, 0.9, 1.8 * fl, 0, 0, TAU); c.fill();
+  }
   function tawafDots(c, s, K, t, front) {
     const { w, h } = s, cx = w * 0.25, cy = h * 0.6, rx = w * 0.16, ry = h * 0.03;
     for (let i = 0; i < 46; i++) {
@@ -979,6 +1040,123 @@ button { cursor: pointer; }
     }
   }
   const PLACES = {
+    // ---- Festivals and special occasions around the world ----
+    hanami: { act: true, fest: true, fixedSeason: 'spring', tree: 'leafy', back(c, s, K, off, t) {
+        const { w, h } = s;
+        farHills(c, s, K, 0, '#a9cdb5', '#8fbca0', 0.5);
+        const tx = w * 0.16, b = h * 0.6; c.fillStyle = K('#d2402f'); c.fillRect(tx - w * 0.07, b - h * 0.2, w * 0.014, h * 0.2); c.fillRect(tx + w * 0.056, b - h * 0.2, w * 0.014, h * 0.2);
+        c.fillRect(tx - w * 0.085, b - h * 0.21, w * 0.17, h * 0.018); c.fillRect(tx - w * 0.07, b - h * 0.17, w * 0.14, h * 0.012); c.fillStyle = K('#2f2a2a'); c.fillRect(tx - w * 0.09, b - h * 0.225, w * 0.18, h * 0.012);
+        for (let i = 0; i < 9; i++) { const x = w * (0.3 + i * 0.09), y = h * (0.42 + (i % 2) * 0.03); c.fillStyle = K('#6b4a3c'); c.fillRect(x - 1, y, 2, h * 0.16); c.fillStyle = K(i % 2 ? '#ffc3d8' : '#ffd6e6'); [[0, 0, 0.07], [-0.05, 0.02, 0.05], [0.05, 0.02, 0.05], [0, -0.04, 0.05]].forEach(([dx, dy, r]) => { c.beginPath(); c.arc(x + dx * w, y + dy * h, r * w, 0, TAU); c.fill(); }); }
+      },
+      stage(c, s, K, E) {
+        const { w, h } = s, U = E.U, t = E.t, gy = x => nearY(s, x, 0) + 3;
+        lanternString(c, w, h * 0.07, h * 0.05, ['#e8443a', '#fbf3e6'], t);
+        c.fillStyle = K('#d64545'); c.fillRect(w * 0.34, gy(w * 0.5) - 1.5 * U, w * 0.34, 3.5 * U); c.fillStyle = 'rgba(255,255,255,.6)'; for (let i = 0; i < 8; i++) c.fillRect(w * 0.34 + i * w * 0.0425, gy(w * 0.5) - 1.5 * U, w * 0.02, 3.5 * U);
+        kid(c, s, w * 0.44, gy(w * 0.44), E.me, { sit: true, face: 1, blink: E.blinkMe }, t);
+        kid(c, s, w * 0.58, gy(w * 0.58), E.pa, { sit: true, face: -1, happy: true }, t);
+        for (let i = 0; i < 22; i++) { const x = ((sr(s, i) * w + t * (8 + i % 5)) % (w + 10)) - 5, y = ((sr(s, i + 9) * h + t * (10 + i % 7)) % (h * 0.9)); c.save(); c.translate(x, y); c.rotate(t * 2 + i); c.fillStyle = 'rgba(255,190,214,.9)'; c.beginPath(); c.ellipse(0, 0, 2, 1.1, 0, 0, TAU); c.fill(); c.restore(); }
+      } },
+    hanabi: { act: true, fest: true, alwaysNight: true, fixedSeason: 'summer', tree: 'leafy', back(c, s, K, off, t, night) {
+        const { w, h } = s; skyline(c, s, K, true, h * 0.52, h * 0.05, h * 0.16, '#202640', 71);
+        c.fillStyle = K('#2b2f4a'); c.fillRect(0, h * 0.5, w, h * 0.02); for (let x = 0; x < w; x += w / 6) { c.beginPath(); c.arc(x + w / 12, h * 0.52, w / 12, Math.PI, 0); c.lineWidth = 1.2; c.strokeStyle = K('#2b2f4a'); c.stroke(); }
+        water(c, s, K, h * 0.53, h, '#26305e', '#141a3a', t);
+      },
+      stage(c, s, K, E) { fireworksSL(c, s, E.t, 5, ['255,120,170', '255,214,110', '140,210,255', '180,255,170']); couple(c, s, E, { happy: true }); } },
+    lunarny: { act: true, fest: true, dusk: true, sky: ['#5a1b2e', '#c2413a', '#f4a25a'], ground: 'plaza', tree: 'leafy', back(c, s, K) {
+        const { w, h } = s; skyline(c, s, K, true, h * 0.56, h * 0.06, h * 0.18, '#4a1d2a', 81);
+        const gx = w * 0.5, b = h * 0.58; c.fillStyle = K('#c0302a'); [-0.2, -0.07, 0.07, 0.2].forEach(f => c.fillRect(gx + f * w - 2, b - h * 0.24, 4, h * 0.24));
+        poly(c, [[gx - w * 0.3, b - h * 0.24], [gx - w * 0.24, b - h * 0.3], [gx + w * 0.24, b - h * 0.3], [gx + w * 0.3, b - h * 0.24]], K('#2f6b4a'));
+        c.fillStyle = K('#e3b341'); c.fillRect(gx - w * 0.06, b - h * 0.22, w * 0.12, h * 0.04);
+      },
+      stage(c, s, K, E) {
+        const { w, h } = s, t = E.t; lanternString(c, w, h * 0.06, h * 0.06, ['#e8443a', '#d6332b'], t, true); lanternString(c, w, h * 0.18, h * 0.03, ['#e8443a'], t + 1, true);
+        c.save(); c.globalCompositeOperation = 'lighter'; for (let i = 0; i < 30; i++) { const x = w * (0.08 + sr(s, i) * 0.84), y = h * 0.62 - ((t * 40 + i * 13) % (h * 0.2)); c.fillStyle = i % 2 ? 'rgba(255,90,60,.9)' : 'rgba(255,210,90,.9)'; c.fillRect(x, y, 1.4, 1.4); } c.restore();
+        couple(c, s, E, { happy: true });
+      } },
+    midautumn: { act: true, fest: true, alwaysNight: true, fixedSeason: 'autumn', tree: 'leafy', back(c, s, K, off, t) {
+        const { w, h } = s, mx = w * 0.62, my = h * 0.26, r = h * 0.17;
+        const g = c.createRadialGradient(mx, my, r * 0.8, mx, my, r * 2.2); g.addColorStop(0, 'rgba(255,230,160,.4)'); g.addColorStop(1, 'rgba(255,230,160,0)'); c.fillStyle = g; c.fillRect(0, 0, w, h);
+        c.fillStyle = '#ffe9a8'; c.beginPath(); c.arc(mx, my, r, 0, TAU); c.fill(); c.fillStyle = 'rgba(220,190,120,.35)'; [[-0.3, -0.2, 0.18], [0.25, 0.1, 0.14], [-0.05, 0.35, 0.1]].forEach(([dx, dy, rr]) => { c.beginPath(); c.arc(mx + dx * r, my + dy * r, rr * r, 0, TAU); c.fill(); });
+        pagoda(c, K, w * 0.2, h * 0.56, h * 0.3); water(c, s, K, h * 0.56, h, '#2c3a6e', '#1a2148', t);
+      },
+      stage(c, s, K, E) {
+        const { w, h } = s, t = E.t;
+        for (let i = 0; i < 7; i++) { const x = w * (0.08 + i * 0.14) + Math.sin(t * 0.6 + i) * 3, y = h * (0.12 + (i % 3) * 0.07) + Math.sin(t + i) * 2, r = h * 0.03; const g = c.createRadialGradient(x, y, 0, x, y, r * 3); g.addColorStop(0, 'rgba(255,170,80,.5)'); g.addColorStop(1, 'rgba(255,170,80,0)'); c.fillStyle = g; c.fillRect(x - r * 3, y - r * 3, r * 6, r * 6); c.fillStyle = '#ff9a4a'; c.beginPath(); c.ellipse(x, y, r, r * 0.85, 0, 0, TAU); c.fill(); c.fillStyle = '#e3b341'; c.fillRect(x - r * 0.4, y - r * 1.05, r * 0.8, r * 0.25); }
+        couple(c, s, E, { happy: true });
+      } },
+    nyc: { act: true, fest: true, alwaysNight: true, snowy: true, fixedSeason: 'winter', tree: 'leafy', ground: 'road', back(c, s, K, off, t) {
+        const { w, h } = s, neon = ['#ff4f9a', '#3fd0ff', '#ffd23f', '#8b5bff', '#3fff9b'];
+        skyline(c, s, K, true, h * 0.6, h * 0.25, h * 0.5, '#1c1f36', 91);
+        for (let i = 0; i < 9; i++) { const x = w * (0.04 + i * 0.11), y = h * (0.24 + (i % 3) * 0.1), on = 0.6 + 0.4 * Math.sin(t * 3 + i); c.globalAlpha = on; c.fillStyle = neon[i % 5]; c.fillRect(x, y, w * 0.08, h * 0.06); c.globalAlpha = 1; }
+        const tx = w * 0.5; c.fillStyle = K('#2a2d48'); c.fillRect(tx - w * 0.05, h * 0.1, w * 0.1, h * 0.5);
+        const cyc = (t % 12) / 12, by = h * (0.04 + Math.min(1, cyc / 0.8) * 0.06);
+        c.fillStyle = 'rgba(255,255,255,.95)'; c.fillRect(tx - 0.6, h * 0.02, 1.2, h * 0.09);
+        const g = c.createRadialGradient(tx, by, 0, tx, by, h * 0.05); g.addColorStop(0, 'rgba(200,230,255,1)'); g.addColorStop(1, 'rgba(120,160,255,0)'); c.fillStyle = g; c.beginPath(); c.arc(tx, by, h * 0.05, 0, TAU); c.fill();
+      },
+      stage(c, s, K, E) {
+        const { w, h } = s, t = E.t, U = E.U, cyc = (t % 12) / 12;
+        if (cyc > 0.8) { label(c, 'Happy New Year! 🎉', w * 0.5, h * 0.2, U * 3); for (let i = 0; i < 50; i++) { const x = (sr(s, i) * w + Math.sin(t * 2 + i) * 6), y = ((sr(s, i + 50) * h * 0.4) + (cyc - 0.8) * h * 3) % h; c.fillStyle = ['#ff6fa8', '#ffd166', '#7ad7f0', '#b388ff', '#7ee0a1'][i % 5]; c.fillRect(x, y, 2, 3); } }
+        else label(c, `${Math.max(1, Math.ceil((0.8 - cyc) * 12))}`, w * 0.5, h * 0.2, U * 3, 0.85);
+        couple(c, s, E, { happy: cyc > 0.8 });
+      } },
+    xmasmarket: { act: true, fest: true, dusk: true, sky: ['#1d2550', '#46407a', '#9a7fb0'], snowy: true, fixedSeason: 'winter', tree: 'pine', back(c, s, K, off, t) {
+        const { w, h } = s, cx = w * 0.28;
+        c.fillStyle = K('#2c2a48'); c.fillRect(cx - w * 0.08, h * 0.28, w * 0.16, h * 0.3); [-0.06, 0.06].forEach(f => poly(c, [[cx + f * w - w * 0.025, h * 0.28], [cx + f * w, h * 0.08], [cx + f * w + w * 0.025, h * 0.28]], K('#2c2a48'))); c.fillStyle = 'rgba(255,214,140,.6)'; c.beginPath(); c.arc(cx, h * 0.38, w * 0.025, 0, TAU); c.fill();
+        for (let i = 0; i < 4; i++) { const x = w * (0.04 + i * 0.16), b = h * 0.6; c.fillStyle = K('#7a5034'); c.fillRect(x, b - h * 0.1, w * 0.13, h * 0.1); poly(c, [[x - w * 0.01, b - h * 0.1], [x + w * 0.065, b - h * 0.16], [x + w * 0.14, b - h * 0.1]], K('#f4f8fc')); c.fillStyle = 'rgba(255,200,120,.85)'; c.fillRect(x + w * 0.015, b - h * 0.075, w * 0.1, h * 0.035); }
+        const tx = w * 0.8, b = h * 0.6; [[0.12, 0], [0.1, 0.08], [0.07, 0.15]].forEach(([hw, up]) => poly(c, [[tx - hw * w, b - up * h], [tx, b - (up + 0.14) * h], [tx + hw * w, b - up * h]], K('#2f6b47')));
+        for (let i = 0; i < 12; i++) { const a = sr(s, i), y = b - a * h * 0.26, x = tx + (sr(s, i + 20) - 0.5) * (1 - a) * w * 0.2; c.fillStyle = ['#ff5a5a', '#ffd166', '#7ad7f0'][i % 3]; c.globalAlpha = 0.6 + 0.4 * Math.sin(t * 3 + i); c.beginPath(); c.arc(x, y, 1.4, 0, TAU); c.fill(); c.globalAlpha = 1; }
+        c.fillStyle = '#ffd84a'; c.beginPath(); c.arc(tx, b - h * 0.29, 2.4, 0, TAU); c.fill();
+      },
+      stage(c, s, K, E) { stringLights(c, s.w, s.h * 0.06, s.h * 0.05, E.t); couple(c, s, E, { happy: true }); } },
+    diwali: { act: true, fest: true, alwaysNight: true, ground: 'plaza', tree: 'leafy', back(c, s, K, off, t) {
+        const { w, h } = s, b = h * 0.6;
+        c.fillStyle = K('#3a2a4a'); c.fillRect(w * 0.06, b - h * 0.26, w * 0.88, h * 0.26);
+        c.fillStyle = K('#24182f'); for (let i = 0; i < 6; i++) { const x = w * (0.12 + i * 0.14); c.beginPath(); c.moveTo(x, b); c.lineTo(x, b - h * 0.1); c.quadraticCurveTo(x + w * 0.04, b - h * 0.16, x + w * 0.08, b - h * 0.1); c.lineTo(x + w * 0.08, b); c.fill(); }
+        for (let i = 0; i < 24; i++) { const x = w * (0.07 + i * 0.037), y = b - h * 0.26 + Math.sin(i * 0.6) * 2 + 4; c.fillStyle = i % 2 ? '#ff9a2a' : '#ffd23f'; c.beginPath(); c.arc(x, y, 1.6, 0, TAU); c.fill(); }
+        for (let i = 0; i < 16; i++) diya(c, w * (0.08 + i * 0.056), b - h * 0.26 - 2, t + i);
+      },
+      stage(c, s, K, E) {
+        const { w, h } = s, t = E.t, cx = w * 0.5, cy = nearY(s, cx, 0) + h * 0.12;
+        ['#e8443a', '#ffb703', '#2fa66a', '#3a7bd5', '#ff6fa8'].forEach((col, i) => { c.fillStyle = col; c.beginPath(); c.ellipse(cx, cy, w * (0.2 - i * 0.035), h * (0.05 - i * 0.009), 0, 0, TAU); c.fill(); });
+        for (let i = 0; i < 10; i++) diya(c, w * (0.05 + i * 0.1), nearY(s, w * 0.5, 0) + h * 0.03, t + i * 2);
+        fireworksSL(c, s, t, 3, ['255,190,80', '255,120,170', '255,240,200']);
+        couple(c, s, E, { happy: true });
+      } },
+    holi: { act: true, fest: true, fixedSeason: 'spring', tree: 'leafy', back(c, s, K) {
+        const { w, h } = s, b = h * 0.58;
+        [[0.2, 0.18, '#f2d6c4'], [0.5, 0.26, '#f6e2d0'], [0.8, 0.16, '#efd2bf']].forEach(([f, ht, col]) => { c.fillStyle = K(col); c.fillRect(w * f - w * 0.12, b - h * ht, w * 0.24, h * ht); c.beginPath(); c.arc(w * f, b - h * ht, w * 0.07, Math.PI, 0); c.fill(); });
+      },
+      stage(c, s, K, E) {
+        const { w, h } = s, t = E.t, cols = ['255,80,150', '255,210,60', '70,200,120', '70,140,255', '180,90,255', '255,140,60'];
+        for (let i = 0; i < 6; i++) { const p = ((t * 0.5 + i * 0.37) % 1.6) / 1.6, x = w * (0.12 + ((i * 0.31) % 0.8)), y = h * (0.25 + (i % 3) * 0.12), r = h * (0.05 + p * 0.22), a = Math.max(0, 0.55 * (1 - p)); const g = c.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, `rgba(${cols[i]},${a})`); g.addColorStop(1, `rgba(${cols[i]},0)`); c.fillStyle = g; c.fillRect(x - r, y - r, r * 2, r * 2); }
+        couple(c, s, E, { happy: true });
+        for (let i = 0; i < 26; i++) { const x = w * (0.38 + sr(s, i) * 0.26), y = h * (0.36 + sr(s, i + 30) * 0.24); c.fillStyle = `rgba(${cols[i % 6]},.8)`; c.beginPath(); c.arc(x, y, 0.9, 0, TAU); c.fill(); }
+      } },
+    eid: { act: true, fest: true, alwaysNight: true, tree: 'palm', back(c, s, K, off, t) {
+        const { w, h } = s; crescent(c, w * 0.8, h * 0.16, h * 0.07);
+        skyline(c, s, K, true, h * 0.6, h * 0.08, h * 0.22, '#1d2445', 101);
+        mosque(c, K, w * 0.36, h * 0.6, h * 0.34, '#28305a');
+      },
+      stage(c, s, K, E) {
+        const { w, h } = s, t = E.t, U = E.U;
+        for (let i = 0; i < 5; i++) fanous(c, w * (0.1 + i * 0.2), h * (0.05 + (i % 2) * 0.05), h * 0.05, t + i);
+        fireworksSL(c, s, t, 4, ['255,214,110', '255,255,255', '130,230,190']);
+        label(c, 'Eid Mubarak 🌙', w * 0.5, h * 0.3, U * 2.8, 0.9);
+        couple(c, s, E, { happy: true });
+      } },
+    ramadan: { act: true, fest: true, dusk: true, sky: ['#141a3f', '#2f2a66', '#6a4c8f'], ground: 'plaza', tree: 'palm', back(c, s, K, off, t) {
+        const { w, h } = s; crescent(c, w * 0.2, h * 0.17, h * 0.06);
+        for (let i = 0; i < 18; i++) { const x = (i * 97.3 % 1) * w, y = ((i * 0.618) % 1) * h * 0.3; c.fillStyle = `rgba(255,248,220,${0.4 + 0.5 * Math.abs(Math.sin(t + i))})`; c.fillRect(x, y, 1.2, 1.2); }
+        mosque(c, K, w * 0.68, h * 0.6, h * 0.3, '#2a2552');
+        c.fillStyle = K('#3a3060'); c.fillRect(0, h * 0.5, w * 0.45, h * 0.1); c.fillStyle = 'rgba(255,200,120,.7)'; for (let i = 0; i < 5; i++) c.fillRect(w * (0.03 + i * 0.085), h * 0.53, w * 0.04, h * 0.04);
+      },
+      stage(c, s, K, E) {
+        const { w, h } = s, t = E.t;
+        c.strokeStyle = 'rgba(255,230,170,.5)'; c.lineWidth = 0.6; c.beginPath(); c.moveTo(0, h * 0.08); c.quadraticCurveTo(w * 0.5, h * 0.2, w, h * 0.08); c.stroke();
+        for (let i = 1; i < 10; i++) { const f = i / 10, x = w * f, y = h * 0.08 + 4 * (h * 0.06) * f * (1 - f); if (i % 2) crescent(c, x, y + 4, 3, true); else { c.fillStyle = '#ffe6a0'; c.beginPath(); c.arc(x, y + 4, 1.6, 0, TAU); c.fill(); } }
+        fanous(c, w * 0.12, h * 0.26, h * 0.06, t); fanous(c, w * 0.88, h * 0.26, h * 0.06, t + 2);
+        couple(c, s, E, { happy: true });
+      } },
     // ---- Fun activities: the couple doing something together ----
     coaster: { act: true, tree: 'leafy', back(c, s, K, off, t) { const { w, h } = s; farHills(c, s, K, 0, s.pal.grass[0], s.pal.grass[1], 0.5); ferris(c, K, w * 0.82, h * 0.3, h * 0.17, t, false); },
       stage(c, s, K, E) {
@@ -1357,15 +1535,27 @@ button { cursor: pointer; }
     let grass = se.grass, sky = se.sky;
     if (pl.ground === 'marble') grass = ['#f7f4ef', '#ede8df', '#ddd5c7'];
     else if (pl.ground === 'road') grass = ['#6b6475', '#57505f', '#463f4e'];
+    else if (pl.ground === 'plaza') grass = ['#b98f73', '#a37a60', '#8a654f'];
     else if (pl.ground === 'sand') grass = ['#f3dfb3', '#e8cc94', '#d9b77a'];
     else if (pl.ground === 'desert') { grass = ['#e6ad72', '#d08e55', '#b8743f']; sky = [sky[0], sky[1], '#ffdcb0']; }
     else if (s.season === 'winter' && !pl.snowy) grass = ['#a9c08a', '#8fae74', '#7a9a62'];
     if (pl.sky) sky = pl.sky;
     return { sky, grass, leaf: se.leaf, snow: s.season === 'winter' && !!pl.snowy, pl };
   }
-  function newPlace(id, announce) {
-    const s = W[id], pref = P[id].scenery || 'random', spref = P[id].seasonPref || 'random';
-    s.place = pref === 'random' ? pick(PLACE_META.map(m => m.key).filter(k => k !== s.place)) : pref;
+  function festivalsNow() {
+    const d = new Date(), md = (d.getMonth() + 1) * 100 + d.getDate(), inR = (a, b) => (a <= b ? md >= a && md <= b : md >= a || md <= b), on = [];
+    if (inR(320, 415)) on.push('hanami'); if (inR(715, 831)) on.push('hanabi'); if (inR(120, 220)) on.push('lunarny'); if (inR(905, 1005)) on.push('midautumn');
+    if (inR(1226, 102)) on.push('nyc'); if (inR(1125, 1231)) on.push('xmasmarket'); if (inR(1015, 1115)) on.push('diwali'); if (inR(301, 325)) on.push('holi');
+    try {
+      const parts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', { month: 'numeric', day: 'numeric' }).formatToParts(d);
+      const hm = +parts.find(x => x.type === 'month').value, hd = +parts.find(x => x.type === 'day').value;
+      if (hm === 9) on.push('ramadan'); if ((hm === 10 && hd <= 3) || (hm === 12 && hd >= 9 && hd <= 13)) on.push('eid');
+    } catch (e) { /* Islamic calendar not available in this browser */ }
+    return on;
+  }
+  function newPlace(id, announce, forceKey) {
+    const s = W[id], pref = P[id].scenery || 'random', spref = P[id].seasonPref || 'random', live = festivalsNow();
+    s.place = forceKey || (pref !== 'random' ? pref : live.length && rand() < 0.5 ? pick(live) : pick(PLACE_META.map(m => m.key).filter(k => k !== s.place)));
     s.season = PLACES[s.place].fixedSeason || (spref === 'random' ? pick(['spring', 'summer', 'autumn', 'winter']) : spref);
     s.seed = rand() * 1000;
     s.pal = pal(s);
@@ -1433,7 +1623,7 @@ button { cursor: pointer; }
     if (place.front) place.front(c, s, K, off, t);
   }
   function paintGrass(c, s, night, off, t) {
-    if (['marble', 'road'].includes(PLACES[s.place].ground)) return;
+    if (['marble', 'road', 'plaza'].includes(PLACES[s.place].ground)) return;
     const { w } = s, K = tinter(night), se = s.season, sandy = !!PLACES[s.place].ground;
     c.lineCap = 'round';
     if (!sandy && !s.pal.snow) {
@@ -1945,7 +2135,7 @@ button { cursor: pointer; }
     const pilgrim = p => (s.place !== 'makkah' ? p : p.type === 'man'
       ? { ...p, top: 'ihram', bottom: 'ihram', shoes: 'sandals', outfit: '#fbfaf6', accent: '#fbfaf6' }
       : { ...p, type: 'hijabi', dress: 'abaya', hijabStyle: p.hijabStyle === 'wrap' ? 'wrap' : 'classic', hijab: '#f7f5f0', outfit: '#f3f0e8', accent: '#e9e4da', shoes: 'sandals' });
-    const dressFor = p => (s.place === 'ski' ? (p.type === 'man' ? { ...p, top: 'jacket', bottom: 'joggers', shoes: 'boots', outfit: '#d9534f', accent: '#2f3a5a' } : { ...p, dress: 'jumper', shoes: 'boots', outfit: '#3a7bd5', accent: '#2f2a3a' }) : pilgrim(p));
+    const dressFor = p => (s.place === 'holi' ? (p.type === 'man' ? { ...p, top: 'kurta', outfit: '#fbfaf6' } : { ...p, dress: 'churidar', outfit: '#fbfaf6', accent: '#ff6fa8' }) : s.place === 'ski' ? (p.type === 'man' ? { ...p, top: 'jacket', bottom: 'joggers', shoes: 'boots', outfit: '#d9534f', accent: '#2f3a5a' } : { ...p, dress: 'jumper', shoes: 'boots', outfit: '#3a7bd5', accent: '#2f2a3a' }) : pilgrim(p));
     const c = s.ctx, me = dressFor(P[id]), pa = dressFor(P[other(id)]), { w, h } = s;
     if (t - s.sceneStart > SCENE_LEN) { s.sceneIdx = (s.sceneIdx + 1) % SCENES.length; s.sceneStart = t; }
     let scene = SCENES[s.sceneIdx], prog = (t - s.sceneStart) / SCENE_LEN;
@@ -3572,6 +3762,24 @@ button { cursor: pointer; }
 
   IDS.forEach(wireApp);
   IDS.forEach(wirePhotos);
+  function placeStep(id, dir) {
+    const s = W[id], keys = PLACE_META.map(m => m.key), i = keys.indexOf(s.place), next = keys[(i + dir + keys.length) % keys.length], cv = s.canvas;
+    if (reduced.matches) { newPlace(id, true, next); return; }
+    cv.style.transition = 'transform .18s ease-in, opacity .18s'; cv.style.transform = `translateX(${-dir * 35}%)`; cv.style.opacity = '0';
+    setTimeout(() => {
+      newPlace(id, true, next); cv.style.transition = 'none'; cv.style.transform = `translateX(${dir * 35}%)`;
+      requestAnimationFrame(() => requestAnimationFrame(() => { cv.style.transition = 'transform .3s cubic-bezier(.2,.8,.2,1), opacity .3s'; cv.style.transform = 'none'; cv.style.opacity = '1'; }));
+    }, 180);
+  }
+  IDS.forEach(id => {
+    const s = W[id], wd = s.widget, cv = s.canvas;
+    s.q('.sc-prev').addEventListener('click', e => { e.stopPropagation(); placeStep(id, -1); });
+    s.q('.sc-next').addEventListener('click', e => { e.stopPropagation(); placeStep(id, 1); });
+    wd.addEventListener('pointerdown', e => { if (!s.open || e.target.closest('.w-top, .w-bottom, button, .pop, .fly, .celebrate')) return; s.sw = { x0: e.clientX, dx: 0 }; wd.setPointerCapture(e.pointerId); cv.style.transition = 'none'; });
+    wd.addEventListener('pointermove', e => { if (!s.sw) return; s.sw.dx = e.clientX - s.sw.x0; cv.style.transform = `translateX(${s.sw.dx * 0.6}px)`; });
+    const end = () => { if (!s.sw) return; const dx = s.sw.dx; s.sw = null; if (Math.abs(dx) > 40) placeStep(id, dx < 0 ? 1 : -1); else { cv.style.transition = 'transform .2s'; cv.style.transform = 'none'; } };
+    wd.addEventListener('pointerup', end); wd.addEventListener('pointercancel', end);
+  });
   IDS.forEach(id => newPlace(id, false));
   IDS.forEach(id => { renderHead(id); notify(id); });
   renderDays(); setRibbons();

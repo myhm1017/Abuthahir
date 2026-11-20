@@ -163,6 +163,8 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - Seasons change the sky, ground, trees and weather: spring blossoms and petals, summer greens, autumn leaves falling, winter snow (only where it actually snows; beaches, deserts and Makkah stay snow-free).
 - **In Makkah, both characters wear pilgrim clothing automatically:** the man in white ihram (two unstitched cloths, one shoulder bare), the woman in a modest white abaya and hijab with her face uncovered, as in ihram. Only calm scenes play there (walking, sitting, standing together, a gentle wave), with no teasing animations, petals or fireflies.
 - **Fun activities** mix into the rotation too, with the couple doing something together: a rollercoaster ride (arms up, "wheee!"), riding in a hot air balloon, a photoshoot facing each other in front of the balloons (with a camera flash), skiing down a snowy mountain in ski gear, a carnival night with a Ferris wheel and string lights, an evening stroll under streetlights, a rowing boat with swans, a ship's bow at sunset ("Titanic" style), releasing floating lanterns, and dancing in the rain under one umbrella. Romantic movie moments are homages, never copies, and always stay wholesome and modest.
+- **Festivals and special occasions:** Japan (hanami blossom festival, summer fireworks), China (Lunar New Year, Mid-Autumn Festival), New York (New Year's Eve countdown and ball drop), Europe (Christmas market), India (Diwali, Holi with white clothes and flying colors), and the GCC (Eid nights, Ramadan nights). Each appears **more often during its real season**; Ramadan and Eid follow the Islamic (Umm al-Qura) calendar. More regions and occasions get added over time.
+- **Swipeable scenery:** in the expanded widget, swipe left or right across the scene (or tap the ‹ › arrows) to move through all places, activities and festivals.
 - A small "📍 Place · Season" label appears briefly when the scenery changes.
 - Each person can keep it random or fix a favorite place or season.
 
@@ -208,7 +210,7 @@ Opening Hearby feels like the widget opened up: the same calm painted scenery, g
 - **Between us:** the distance between your cities, the time difference and your partner's local time ("Different skies, same moon").
 - A small "moment for you" (a love nudge or a dua reminder).
 
-### 💞 Together
+### 👥 Together
 - (Daily questions moved to Home.)
 - **Sleep together (later):** both screens dim to the same starry sky with the two characters asleep side by side, a "together for…" timer and optional sleep sounds (rain, ocean, soft noise). Heartbeats go quiet until either wakes up.
 - **Plan a date night (later):** when, virtual or in person, where to go, food to try, an event or activity, and a movie to watch, with suggestions and a "Surprise me" button. Both see the plan and get a reminder on the day.

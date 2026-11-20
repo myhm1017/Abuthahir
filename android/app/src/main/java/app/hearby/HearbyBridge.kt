@@ -1,6 +1,11 @@
 package app.hearby
 
+import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
+import android.os.Build
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Intent
@@ -113,6 +118,35 @@ class HearbyBridge(private val host: BridgeHost) {
     fun openApp() = ui {
         act.startActivity(Intent(act, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP))
         if (host.mode == "widget") act.finish()
+    }
+
+    /**
+     * "Use my location for distance": a rough position (city level), sent back to the page.
+     * Returns "asking" while Android asks for permission, "off" if location is off, otherwise "ok".
+     */
+    @JavascriptInterface
+    fun locate(): String {
+        if (act.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ui { act.requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 21) }
+            return "asking"
+        }
+        val lm = act.getSystemService(LocationManager::class.java)
+        if (!lm.isLocationEnabled) return "off"
+        val deliver = { l: Location? ->
+            val js = if (l == null) "window.hearbyLocated && window.hearbyLocated(null, null)"
+            else "window.hearbyLocated && window.hearbyLocated(${"%.2f".format(java.util.Locale.US, l.latitude)}, ${"%.2f".format(java.util.Locale.US, l.longitude)})"
+            ui { host.web?.evaluateJavascript(js, null) }
+        }
+        try {
+            val last = listOf(LocationManager.NETWORK_PROVIDER, LocationManager.PASSIVE_PROVIDER, LocationManager.GPS_PROVIDER)
+                .mapNotNull { p -> try { lm.getLastKnownLocation(p) } catch (e: Exception) { null } }
+                .maxByOrNull { it.time }
+            if (last != null && System.currentTimeMillis() - last.time < 6 * 60 * 60 * 1000L) { deliver(last); return "ok" }
+            if (Build.VERSION.SDK_INT >= 30 && lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                lm.getCurrentLocation(LocationManager.NETWORK_PROVIDER, null, act.mainExecutor) { deliver(it ?: last) }
+            } else deliver(last)
+        } catch (e: SecurityException) { deliver(null) }
+        return "ok"
     }
 
     @JavascriptInterface fun settings() = ui { host.openSettings() }

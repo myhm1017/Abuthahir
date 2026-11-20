@@ -99,6 +99,11 @@ html.native .actions .felt { background: rgba(var(--k-tint), .62); }
 html.native .pill { background: rgba(var(--k-glass), .6); }
 html.native .pop { background: rgba(46, 22, 64, .55); }
 html.native .ph-add { position: absolute; right: 8px; bottom: 8px; z-index: 3; border: 1px solid rgba(255, 255, 255, .7); background: rgba(255, 255, 255, .78); color: #33263f; border-radius: 999px; padding: 3px 9px; font-size: 10.5px; font-weight: 800; }
+html.native .loc-row { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; font-size: 12px; margin-top: 4px; }
+html.native .loc-row span { color: var(--k-muted); font-weight: 700; text-align: right; }
+html.native .loc-form { display: grid; gap: 6px; margin-top: 4px; }
+html.native .loc-form .send { justify-self: end; padding: 6px 14px; }
+html.native .loc-card .inline-sel { max-width: 150px; }
 html.native .dua-row > span, html.native .bk-row > span { flex: 1 1 0; min-width: 0; }
 /* The widget pop-up: only the expanded widget, over the blurred home screen. */
 html.native.widget-mode, html.native.widget-mode body, html.native.widget-mode .screen, html.native.widget-mode .phone { background: transparent !important; }

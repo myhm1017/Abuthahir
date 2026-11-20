@@ -547,6 +547,15 @@ button { cursor: pointer; }
     const paSaved = read('hearby-look-partner');
     P.leo = build('leo', NCFG.myLook, read('hearby-look-me'), NCFG.myName, myTz);
     P.mia = build('mia', NCFG.partnerLook, paSaved, NCFG.partnerName, (paSaved && paSaved.tz) || myTz);
+    // Locations: yours (time zone follows the phone unless you picked one) and your partner's.
+    const locMe = read('hearby-loc-me');
+    if (locMe) {
+      P.leo.tz = locMe.auto !== false ? myTz : (locMe.tz || myTz);
+      P.leo.city = locMe.city || city(P.leo.tz);
+      if (locMe.geo) P.leo.geo = locMe.geo;
+    }
+    if (paSaved) { if (paSaved.city) P.mia.city = paSaved.city; if (paSaved.geo) P.mia.geo = paSaved.geo; }
+    P.leo.deviceTz = myTz;
     const root = document.documentElement;
     root.classList.add('native');
     root.dataset.hue = NCFG.hue || 'pink';
@@ -3355,7 +3364,7 @@ button { cursor: pointer; }
   const CITY_GEO = { London: [51.5074, -0.1278], Toronto: [43.6532, -79.3832] };
   function tzOffsetMin(tz) { const d = new Date(); return (new Date(d.toLocaleString('en-US', { timeZone: tz })) - new Date(d.toLocaleString('en-US', { timeZone: 'UTC' }))) / 60000; }
   function distText(id) {
-    const me = P[id], pa = P[other(id)], a = CITY_GEO[me.city], b = CITY_GEO[pa.city];
+    const me = P[id], pa = P[other(id)], a = me.geo || CITY_GEO[me.city], b = pa.geo || CITY_GEO[pa.city];
     let km = '';
     if (a && b) {
       const R = 6371, rad = x => x * Math.PI / 180, dLat = rad(b[0] - a[0]), dLon = rad(b[1] - a[1]);
@@ -4034,7 +4043,7 @@ button { cursor: pointer; }
 
     // Your character: saved on this phone and shared so your partner sees the real you.
     const LOOK_OF = { man: 'man', hijabi: 'hijab', woman: 'woman' };
-    const lookOf = p => { const o = { ...p }; ['id', 'name', 'quiet', 'discreet', 'screen', 'city'].forEach(k => delete o[k]); return o; };
+    const lookOf = p => { const o = { ...p }; ['id', 'name', 'quiet', 'discreet', 'screen', 'deviceTz', 'manualLoc'].forEach(k => delete o[k]); return o; };
     let lookT = 0;
     const pushLook = () => {
       clearTimeout(lookT);
@@ -4046,13 +4055,17 @@ button { cursor: pointer; }
       }, 1200);
     };
     const applyLook = d => {
-      Object.assign(P.mia, d, { id: 'mia', name: P.mia.name, city: String(d.tz || P.mia.tz).split('/').pop().replace(/_/g, ' ') });
-      try { localStorage.setItem('hearby-look-partner', JSON.stringify(lookOf(P.mia))); } catch (e) { /* storage full */ }
+      // A location you set for your partner stays until they share their own.
+      const keep = P.mia.manualLoc && !d.locSet ? { tz: P.mia.tz, city: P.mia.city, geo: P.mia.geo, manualLoc: true } : { manualLoc: false };
+      Object.assign(P.mia, d, { id: 'mia', name: P.mia.name, city: d.city || String(d.tz || P.mia.tz).split('/').pop().replace(/_/g, ' ') }, keep);
+      try { localStorage.setItem('hearby-look-partner', JSON.stringify({ ...lookOf(P.mia), manualLoc: !!P.mia.manualLoc })); } catch (e) { /* storage full */ }
       call('setPartnerLook', LOOK_OF[P.mia.type] || 'hijab');
+      if (window.hearbyRenderLoc) window.hearbyRenderLoc();
       IDS.forEach(renderHead); renderAppAll();
     };
     me.root.querySelector('.avatar').addEventListener('change', pushLook);
     document.getElementById('status-leo').addEventListener('change', pushLook);
+    document.getElementById('app-bed-leo').addEventListener('change', pushLook);
     const _rename = rename;
     rename = (id, value) => { _rename(id, value); if (id === 'leo' && value.trim()) call('setNames', P.leo.name, P.mia.name); };
 
@@ -4090,6 +4103,70 @@ button { cursor: pointer; }
       card.querySelector('.n-status').innerHTML = st === 'connected' ? `🟢 Connected. Heartbeats from ${name} will reach you.` : st === 'offline' ? '🟠 Offline. Hearby reconnects when you\'re back online.' : '⚪ Connecting…';
       card.querySelector('[data-n="battery"]').hidden = call('batteryOk') === true;
     };
+
+    // 📍 Our locations: where each of you is, so every time in the app is right.
+    const ZONES = (() => { try { return Intl.supportedValuesOf('timeZone'); } catch (e) { return [P.leo.deviceTz, 'UTC']; } })();
+    const gmt = tz => { const m = tzOffsetMin(tz), h = Math.trunc(m / 60), mm = Math.abs(m % 60); return `GMT${m >= 0 ? '+' : '-'}${Math.abs(h)}${mm ? ':' + String(mm).padStart(2, '0') : ''}`; };
+    const zoneName = tz => String(tz).split('/').slice(1).join(' · ').replace(/_/g, ' ') || tz;
+    const zoneOpts = sel => ZONES.map(z => `<option value="${z}"${z === sel ? ' selected' : ''}>${esc(zoneName(z))} (${gmt(z)})</option>`).join('');
+    const loc = document.createElement('div');
+    loc.className = 'card loc-card';
+    meTab.insertBefore(loc, card.nextSibling);
+    const saveMe = (city, tz, auto, geo) => {
+      P.leo.tz = auto ? P.leo.deviceTz : tz;
+      P.leo.city = city.trim().slice(0, 30) || zoneName(P.leo.tz);
+      if (geo !== undefined) P.leo.geo = geo;
+      P.leo.locSet = true;
+      try { localStorage.setItem('hearby-loc-me', JSON.stringify({ city: P.leo.city, tz: P.leo.tz, auto, geo: P.leo.geo || null })); } catch (e) { /* storage full */ }
+      pushLook(); IDS.forEach(renderHead); renderAppAll(); renderLoc();
+    };
+    const savePartner = (city, tz) => {
+      P.mia.tz = tz; P.mia.city = city.trim().slice(0, 30) || zoneName(tz); P.mia.manualLoc = true;
+      try { localStorage.setItem('hearby-look-partner', JSON.stringify({ ...lookOf(P.mia), manualLoc: true })); } catch (e) { /* storage full */ }
+      IDS.forEach(renderHead); renderAppAll(); renderLoc();
+    };
+    const renderLoc = () => {
+      const lm = (() => { try { return JSON.parse(localStorage.getItem('hearby-loc-me')) || {}; } catch (e) { return {}; } })();
+      const auto = lm.auto !== false, pn = esc(P.mia.name);
+      const shared = P.mia.locSet && !P.mia.manualLoc;
+      loc.innerHTML = `<b>📍 Our locations</b>
+        <p class="hint2">Every time in Hearby (their clock, bedtimes, goodnights, the distance between you) follows these.</p>
+        <div class="loc-row"><b>You</b><span>${esc(P.leo.city)} · ${fmtTime(P.leo.tz)}${P.leo.geo ? ' · 📍' : ''}</span></div>
+        <div class="loc-form loc-me">
+          <input type="text" class="loc-city" maxlength="30" placeholder="Your city" value="${esc(lm.city || P.leo.city)}" aria-label="Your city">
+          <label class="set-row">Time zone <select class="inline-sel loc-tz" ${auto ? 'disabled' : ''}>${zoneOpts(P.leo.tz)}</select></label>
+          <label class="set-row">Follow my phone's time zone <input type="checkbox" class="loc-auto" ${auto ? 'checked' : ''}></label>
+          <div class="n-btns"><button class="mini2 loc-geo">📍 Use my location for distance</button><button class="send loc-save">Save</button></div>
+          ${P.leo.geo ? '<button class="link loc-nogeo">Stop sharing my location</button>' : ''}
+        </div>
+        <div class="loc-row"><b>${pn}</b><span>${esc(P.mia.city)} · ${fmtTime(P.mia.tz)}${P.mia.geo ? ' · 📍' : ''}</span></div>
+        <p class="hint2">${shared ? `Shared by ${pn} from their phone.` : `Using ${pn}'s phone time zone. ${pn} can add their city in Me → Our locations, or you can set it for now.`}</p>
+        <details class="loc-pa"><summary class="link">Set ${pn}'s location</summary>
+          <div class="loc-form">
+            <input type="text" class="loc-pcity" maxlength="30" placeholder="${pn}'s city" value="${esc(P.mia.city)}" aria-label="${pn}'s city">
+            <label class="set-row">Time zone <select class="inline-sel loc-ptz">${zoneOpts(P.mia.tz)}</select></label>
+            <button class="send loc-psave">Save for ${pn}</button>
+          </div></details>
+        <p class="hint2">🔒 Only ${pn} can see this. Locations are end-to-end encrypted, and "Use my location" is rounded to about 10 km.</p>`;
+      const q = sel => loc.querySelector(sel);
+      q('.loc-auto').addEventListener('change', e => { q('.loc-tz').disabled = e.target.checked; if (e.target.checked) q('.loc-tz').value = P.leo.deviceTz; });
+      q('.loc-save').addEventListener('click', () => { saveMe(q('.loc-city').value, q('.loc-tz').value, q('.loc-auto').checked); toast('leo', 'Location saved 📍'); });
+      q('.loc-geo').addEventListener('click', () => {
+        const r = call('locate');
+        toast('leo', r === 'asking' ? 'Allow location for Hearby, then tap again' : r === 'off' ? 'Turn on location in your phone settings first' : 'Finding you…');
+      });
+      const ng = q('.loc-nogeo'); if (ng) ng.addEventListener('click', () => saveMe(q('.loc-city').value, q('.loc-tz').value, q('.loc-auto').checked, null));
+      q('.loc-psave').addEventListener('click', () => { savePartner(q('.loc-pcity').value, q('.loc-ptz').value); toast('leo', `Saved ${P.mia.name}'s location 📍`); });
+    };
+    window.hearbyRenderLoc = renderLoc;
+    window.hearbyLocated = (lat, lon) => {
+      if (typeof lat !== 'number' || typeof lon !== 'number') { toast('leo', "Couldn't find your location"); return; }
+      const lm = (() => { try { return JSON.parse(localStorage.getItem('hearby-loc-me')) || {}; } catch (e) { return {}; } })();
+      saveMe(lm.city || P.leo.city, P.leo.tz, lm.auto !== false, [Math.round(lat * 10) / 10, Math.round(lon * 10) / 10]);
+      toast('leo', 'Location added 📍');
+    };
+    renderLoc();
+    setInterval(() => { if (me.appOpen && me.appUI.tab === 'me' && !loc.contains(document.activeElement)) renderLoc(); }, 60000);
 
     // Receiving: messages your partner sent, also the ones that arrived while the app was closed.
     let seen = +(localStorage.getItem('hearby-seen') || 0);

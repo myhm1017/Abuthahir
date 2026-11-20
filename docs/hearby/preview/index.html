@@ -87,8 +87,6 @@ button { cursor: pointer; }
 .pill.show { transform: none; }
 .badge { position: absolute; top: 6px; right: 6px; z-index: 2; width: 18px; height: 18px; border-radius: 50%; background: #e2588a; color: #fff; font-size: 10px; display: grid; place-items: center; box-shadow: 0 2px 6px rgba(160, 40, 90, .4); animation: badgeBeat 1.8s ease-in-out infinite; }
 @keyframes badgeBeat { 0%, 60%, 100% { transform: scale(1) } 10% { transform: scale(1.25) } 20% { transform: scale(1) } 30% { transform: scale(1.3) } 42% { transform: scale(1) } }
-.sc-nav { position: absolute; top: 40%; z-index: 2; width: 24px; height: 24px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .55); background: rgba(255, 255, 255, .26); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #fff; font-size: 16px; font-weight: 800; line-height: 1; padding: 0; text-shadow: 0 1px 2px rgba(0, 0, 0, .4); }
-.sc-prev { left: 6px; } .sc-next { right: 6px; }
 .widget.open { touch-action: pan-y; }
 .close-w { width: 22px; height: 22px; border-radius: 50%; background: rgba(255, 255, 255, .26); backdrop-filter: blur(12px) saturate(1.5); -webkit-backdrop-filter: blur(12px) saturate(1.5); border: 1px solid rgba(255, 255, 255, .42); font-size: 10px; font-weight: 800; color: #4a3858; }
 .home { display: grid; grid-template-columns: 136px 1fr; gap: 12px; padding: 10px 14px 0; }
@@ -491,7 +489,7 @@ button { cursor: pointer; }
     <li><b>Teasing reminders:</b> the day before, the app only asks something cheeky like "What day is tomorrow 😉?" and leaves them to work it out. On the day, a clear notification says what day it is, and if nobody has sent a wish about 15 seconds after the celebration (hours later in the real app), it nudges them: "Have you wished Mia yet? 👀 Just checking…".</li>
     <li><b>Fun activities:</b> the scenery rotation also includes the two of you doing things together: a rollercoaster ride, a hot air balloon ride, a balloon photoshoot, skiing (in ski jackets), a carnival night, an evening stroll under streetlights, a rowing boat with swans, a ship's bow at sunset, floating lanterns and dancing in the rain under one umbrella. Pick one under Scenery → Fun activities to see it now.</li>
     <li><b>Festivals and occasions:</b> Japan's hanami blossom festival and summer fireworks, China's Lunar New Year and Mid-Autumn Festival, New York's New Year's Eve countdown, a European Christmas market, India's Diwali and Holi (in white clothes with colors flying), and Eid and Ramadan nights in the GCC. They come up more often during their real season, and Ramadan and Eid follow the Islamic calendar.</li>
-    <li><b>Swipe the scenery:</b> open a widget and swipe left or right across the scene (or tap ‹ ›) to move between places, activities and festivals.</li>
+    <li><b>Swipe the scenery:</b> open a widget and swipe left or right across the scene to move between places, activities and festivals.</li>
     <li><b>Repeating days:</b> special days can repeat every year, month, week or day, or happen just once. A monthly "Our monthversary" on the 9th is already in the list.</li>
     <li><b>Customize the characters:</b> under each phone, open "Customize … name and look" to rename them or change their style: hijab styles (classic, khimar, turban wrap, niqab), hair (buzz cut, quiff, man bun, wolf cut, braids, bun and more), 13 beard and moustache styles, tops, bottoms, dresses (abaya, gown, churidar, saree, burqa and more), shoes, skin tone, eye color, hair or hijab color, outfit, facial hair and glasses.</li>
     <li><b>Slideshow:</b> open the widget, tap 📷, pick a few photos (or "Use sample photos"), choose a transition and send. The other widget starts a slideshow. Tap 🎞️ to switch between the slideshow and the couple scene.</li>
@@ -730,7 +728,6 @@ button { cursor: pointer; }
             <div class="pill compact-only"></div>
             <span class="badge compact-only" hidden>♥</span>
             <button class="day-ribbon" hidden></button>
-            <button class="ui sc-nav sc-prev" aria-label="Previous scenery">‹</button><button class="ui sc-nav sc-next" aria-label="Next scenery">›</button>
             <div class="w-top ui">
               <div class="who"><span class="pdot"></span><b class="pname"></b><span class="ptime"></span></div>
               <div class="chips"><span class="chip status"></span><button class="chip chip-btn cd" title="Days until you meet: tap to change"></button><button class="chip chip-btn days-btn" aria-label="Special days" title="Special days">📅</button><button class="chip chip-btn slides-toggle" hidden aria-pressed="false" aria-label="Slideshow">🎞️</button><button class="close-w" aria-label="Close">✕</button></div>
@@ -3773,8 +3770,6 @@ button { cursor: pointer; }
   }
   IDS.forEach(id => {
     const s = W[id], wd = s.widget, cv = s.canvas;
-    s.q('.sc-prev').addEventListener('click', e => { e.stopPropagation(); placeStep(id, -1); });
-    s.q('.sc-next').addEventListener('click', e => { e.stopPropagation(); placeStep(id, 1); });
     wd.addEventListener('pointerdown', e => { if (!s.open || e.target.closest('.w-top, .w-bottom, button, .pop, .fly, .celebrate')) return; s.sw = { x0: e.clientX, dx: 0 }; wd.setPointerCapture(e.pointerId); cv.style.transition = 'none'; });
     wd.addEventListener('pointermove', e => { if (!s.sw) return; s.sw.dx = e.clientX - s.sw.x0; cv.style.transform = `translateX(${s.sw.dx * 0.6}px)`; });
     const end = () => { if (!s.sw) return; const dx = s.sw.dx; s.sw = null; if (Math.abs(dx) > 40) placeStep(id, dx < 0 ? 1 : -1); else { cv.style.transition = 'transform .2s'; cv.style.transform = 'none'; } };

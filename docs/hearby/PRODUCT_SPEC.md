@@ -168,6 +168,24 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 - A small "📍 Place · Season" label appears briefly when the scenery changes.
 - Each person can keep it random or fix a favorite place or season.
 
+### 4.10h Touch together (v1)
+- Press and hold your widget: your partner gets a gentle "🤲 Leo is reaching for your hand".
+- If they press and hold theirs while you're holding (or within a few seconds), both widgets glow, the characters hug, and **both phones pulse together** in a soft heartbeat rhythm for as long as you're both touching. Like holding hands across the distance.
+
+### 4.10i Goodnight at their bedtime (v1)
+- Write a goodnight whenever you have a moment; it's delivered at **your partner's bedtime in their own time zone** (each person sets their bedtime in Me).
+- It arrives quietly, with no heartbeat, as a moonlit message on their widget. The sender gets a note once it's delivered.
+
+### 4.10j Same sky moments (later)
+- Home shows tonight's **moon phase** and the days until the next full moon, plus active **meteor showers** (Quadrantids, Lyrids, Eta Aquariids, Perseids, Orionids, Leonids, Geminids).
+- On full-moon and meteor-shower nights, both partners get a soft "look up together" notification, and shooting stars streak across night scenes on the widget.
+- A "🔭 Look up together" button tells your partner you're looking at the sky right now.
+
+### 4.10k Trip mode (later)
+- Switches on by itself when the meet-up countdown reaches zero, or with "💞 We're together now".
+- The widget shows "💞 Day 3" instead of the countdown, distance features pause, gentle reminders change to "put the phone down and hold hands 💞", and photos you send collect into an automatic **trip album**.
+- Ending the trip saves "Together for 5 days 💞" to the timeline and invites you to set the next meet-up.
+
 ### 4.11 "In sync" moments (later)
 - If both partners send love within the same minute, a special animation plays: the characters run to each other and hug, with sparkles. It's rare, so it feels magical.
 
@@ -322,6 +340,8 @@ Opening Hearby feels like the widget opened up: the same calm painted scenery, g
 | Time zones + sleep-aware delivery | ✅ | |
 | Tiny status on character | ✅ | |
 | Meet-up countdown | ✅ | |
+| Touch together, goodnight at their bedtime | ✅ | |
+| Same sky moments, trip mode | | ✅ |
 | "In sync" moments | | ✅ |
 | Memory Jar | | ✅ |
 | Partner's weather | | ✅ |

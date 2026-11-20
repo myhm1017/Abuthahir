@@ -34,7 +34,6 @@
             android:name=".WidgetPopupActivity"
             android:exported="false"
             android:excludeFromRecents="true"
-            android:launchMode="singleTask"
             android:taskAffinity="app.hearby.widget"
             android:theme="@style/Theme.Hearby.Popup"
             android:windowSoftInputMode="adjustResize" />

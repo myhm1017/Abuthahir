@@ -10,7 +10,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import android.webkit.ValueCallback
@@ -36,7 +35,12 @@ class WidgetPopupActivity : Activity() {
         override val top: Float
             get() {
                 val b = intent.sourceBounds ?: return 0.12f
-                return b.top.toFloat() / resources.displayMetrics.heightPixels.coerceAtLeast(1)
+                // Where the widget sits, measured inside this window (which starts below the status bar).
+                val loc = IntArray(2)
+                val wv = this@WidgetPopupActivity.web
+                wv?.getLocationOnScreen(loc)
+                val h = (wv?.height ?: 0).takeIf { it > 0 } ?: resources.displayMetrics.heightPixels
+                return (b.top - loc[1]).toFloat() / h.coerceAtLeast(1)
             }
         override fun openSettings() {
             startActivity(Intent(this@WidgetPopupActivity, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
@@ -59,8 +63,6 @@ class WidgetPopupActivity : Activity() {
             finish()
             return
         }
-        // Draw edge to edge, so the widget opens exactly where it sits on the home screen.
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         val wv = WebView(this)
         wv.setBackgroundColor(Color.TRANSPARENT)
         wv.alpha = 0f
@@ -103,8 +105,10 @@ class WidgetPopupActivity : Activity() {
         val wv = web ?: return
         if (wv.alpha > 0f || closing) return
         val b = intent.sourceBounds
-        wv.pivotX = b?.exactCenterX() ?: (wv.width / 2f)
-        wv.pivotY = (b?.top?.toFloat() ?: 0f)
+        val loc = IntArray(2)
+        wv.getLocationOnScreen(loc)
+        wv.pivotX = (b?.exactCenterX() ?: (wv.width / 2f + loc[0])) - loc[0]
+        wv.pivotY = (b?.top?.toFloat() ?: loc[1].toFloat()) - loc[1]
         wv.scaleX = 0.6f
         wv.scaleY = 0.6f
         wv.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(340).setInterpolator(OvershootInterpolator(0.9f)).start()
@@ -142,10 +146,10 @@ class WidgetPopupActivity : Activity() {
         try { unregisterReceiver(refresh) } catch (e: Exception) { /* not registered */ }
     }
 
-    override fun onStop() {
-        super.onStop()
-        // Leaving for the home screen or another app closes the pop-up, like a real widget.
-        if (fileCallback == null && !isFinishing) finish()
+    // Pressing Home or switching apps closes the pop-up, like a real widget (but not while choosing photos).
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if (fileCallback == null) finish()
     }
 
     override fun onDestroy() {

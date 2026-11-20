@@ -47,6 +47,7 @@ class HearbyBridge(private val host: BridgeHost) {
         .put("myLook", pr.myLook).put("partnerLook", pr.partnerLook)
         .put("hue", Palette.hue(pr)).put("dark", Palette.isDark(act, pr))
         .put("widgetAspect", pr.widgetAspect.toDouble())
+        .put("frameScene", if (host.mode == "widget" && Frames.count(act) > 0) pr.frameScene else "")
         .toString()
 
     @JavascriptInterface
@@ -94,6 +95,7 @@ class HearbyBridge(private val host: BridgeHost) {
     // The widget's animation loop, painted by the design.
     @JavascriptInterface fun framesBegin(): Boolean = Frames.begin(act)
     @JavascriptInterface fun frame(i: Int, dataUrl: String) = Frames.put(act, i, dataUrl)
+    @JavascriptInterface fun framesScene(json: String) { if (json.length < 400) pr.frameScene = json }
     @JavascriptInterface fun framesDone(n: Int, ms: Int) = Frames.done(act, n, ms)
 
     /** Kept for older pages: a single still picture of the scene. */

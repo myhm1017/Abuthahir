@@ -35,6 +35,8 @@ class Prefs(ctx: Context) {
     var inbox: String get() = s("inbox", "[]"); set(v) = put("inbox", v)
     var frameCount: Long get() = l("frameCount"); set(v) = putL("frameCount", v)
     var frameMs: Long get() = l("frameMs"); set(v) = putL("frameMs", v)
+    /** Which place and season the frames show, so the expanded widget opens on the same one. */
+    var frameScene: String get() = s("frameScene"); set(v) = put("frameScene", v)
     var frameVer: Long get() = l("frameVer"); set(v) = putL("frameVer", v)
     /** Width / height of the home-screen widget, so the frames are painted the right shape. */
     var widgetAspect: Float get() = p.getFloat("widgetAspect", 1f); set(v) = p.edit().putFloat("widgetAspect", v).apply()

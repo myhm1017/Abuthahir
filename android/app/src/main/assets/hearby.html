@@ -3617,7 +3617,7 @@ html.native[data-theme="dark"] .scene-label { background: rgba(var(--k-glass), .
     const mine = qa[id], theirs = qa[o], on = esc(P[o].name);
     s.q('.q-ans').hidden = !!mine; s.q('.q-send').hidden = !!mine;
     s.q('.q-partner').innerHTML = mine
-      ? `<b>You:</b> ${esc(mine)}<br>${theirs ? `<b>${on}:</b> ${esc(theirs)}` : `⏳ Waiting for ${on} to answer. Try answering on ${on}'s phone too.`}`
+      ? `<b>You:</b> ${esc(mine)}<br>${theirs ? `<b>${on}:</b> ${esc(theirs)}` : `⏳ Waiting for ${on} to answer.`}`
       : theirs ? `🔒 ${on} answered. Answer to unlock it.` : "🔒 Answers unlock once you've both replied.";
   }
   function renderPlay(id) {
@@ -3974,7 +3974,7 @@ html.native[data-theme="dark"] .scene-label { background: rgba(var(--k-glass), .
     newPlace(id, true);
     setTimeout(() => flush(id), 300);
   }
-  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') IDS.forEach(id => newPlace(id, true)); IDS.forEach(flush); });
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && !(NATIVE && NCFG.mode === 'widget')) IDS.forEach(id => newPlace(id, true)); IDS.forEach(flush); });
   document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
 
   IDS.forEach(wireApp);
@@ -4250,14 +4250,15 @@ html.native[data-theme="dark"] .scene-label { background: rgba(var(--k-glass), .
     };
 
     // The home-screen widget plays a short loop painted from the same scene: the couple in the current place.
-    const LOOP_SCENES = ['together', 'sit', 'bubbles', 'poke', 'knock', 'peek', 'squish', 'walk'];
+    // Calm moments that repeat smoothly in a short loop.
+    const LOOP_SCENES = ['together', 'sit', 'bubbles'];
     let capturing = false;
     const captureFrames = async () => {
       if (capturing || !me.place) return;
       capturing = true;
       try {
         const aspect = Math.min(1.6, Math.max(0.6, +NCFG.widgetAspect || 1));
-        const cw = 240, ch = Math.round(cw / aspect), k = 2, N = 16, STEP = 0.25;
+        const cw = 200, ch = Math.round(cw / aspect), k = 2, N = 24, STEP = 0.125;
         const off = document.createElement('canvas');
         off.width = cw * k; off.height = ch * k;
         const octx = off.getContext('2d');
@@ -4273,13 +4274,14 @@ html.native[data-theme="dark"] .scene-label { background: rgba(var(--k-glass), .
           octx.clearRect(0, 0, cw, ch);
           draw('leo', t0 + i * STEP, STEP, st);
           call('frame', i, off.toDataURL('image/jpeg', 0.86));
-          await new Promise(res => setTimeout(res, 40));
+          await new Promise(res => setTimeout(res, 30));
         }
+        call('framesScene', JSON.stringify({ place: me.place, season: me.season, seed: me.seed }));
         call('framesDone', N, Math.round(STEP * 1000));
       } catch (e) { /* keep the old frames */ } finally { capturing = false; }
     };
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') { setTimeout(captureFrames, WIDGET ? 1500 : 3000); window.hearbyPull(); }
+      if (document.visibilityState === 'visible') { if (!WIDGET) setTimeout(captureFrames, 3000); window.hearbyPull(); }
     });
 
     // Add your own photos straight to the Home slideshow (kept on this phone, in the "Our photos" album).
@@ -4314,7 +4316,19 @@ html.native[data-theme="dark"] .scene-label { background: rgba(var(--k-glass), .
     meTab.querySelectorAll('.hint2').forEach(el => { if (/under the phone/.test(el.textContent)) el.textContent = 'Scenery, status and your character are under "Change my look".'; });
 
     if (WIDGET) {
-      // Open right where the home-screen widget is, like the preview's widget growing in place.
+      // Open right where the home-screen widget is, on the same place it shows, like the preview's widget growing.
+      try {
+        const fs = NCFG.frameScene ? JSON.parse(NCFG.frameScene) : null;
+        if (fs && PLACES[fs.place]) {
+          newPlace('leo', false, fs.place);
+          if (fs.season && !PLACES[fs.place].fixedSeason) me.season = fs.season;
+          if (typeof fs.seed === 'number') me.seed = fs.seed;
+          me.pal = pal(me);
+          const base = PLACES[me.place].tree;
+          me.treeKind = base === 'leafy' && me.pal.snow ? 'bare' : base;
+          me.flakes = null;
+        }
+      } catch (e) { /* new place */ }
       openW('leo');
       const top = Math.max(0, Math.min(1, +NCFG.top || 0));
       requestAnimationFrame(() => {
@@ -4323,7 +4337,10 @@ html.native[data-theme="dark"] .scene-label { background: rgba(var(--k-glass), .
         requestAnimationFrame(() => call('ready'));
       });
       setTimeout(window.hearbyPull, 300);
-      setTimeout(captureFrames, 1500);
+      if (!NCFG.frameScene) setTimeout(captureFrames, 1500);
+      // Swiping to another place updates the small widget too.
+      const _step = placeStep; let stepT = 0;
+      placeStep = (id, dir) => { _step(id, dir); clearTimeout(stepT); stepT = setTimeout(captureFrames, 1200); };
     } else {
       // Start on the app, then catch up on anything that arrived.
       openW('leo');

@@ -197,7 +197,7 @@ Hearby is a **very low-effort way to tell your person "I'm thinking of you,"** a
 Opening Hearby feels like the widget opened up: the same calm painted scenery, glassy cards and your two characters. Four tabs: Home, Together, Memories and Me.
 
 ### 🏡 Home (v1)
-- A large version of the living scene (today's place and season).
+- **Our photos:** a large slideshow of your photos (from your albums and photos you've sent each other) that moves on its own every few seconds and can also be swiped, stepped with arrows, or jumped to with dots.
 - Partner's time, mood and status, and the meet-up countdown.
 - A quick-send bar: 💋 kiss, ❤️ heart, ✏️ message, 📷 photos, ✨ pop-up.
 - **Mood check-in:** tap how you feel (happy, loved, sleepy, a bit down, stressed, unwell, excited, grateful); your partner sees it and gets a gentle heads-up.

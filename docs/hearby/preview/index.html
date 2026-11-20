@@ -240,7 +240,16 @@ button { cursor: pointer; }
 .mini2 { border: 1px solid rgba(255, 255, 255, .75); background: rgba(255, 255, 255, .5); border-radius: 10px; padding: 4px 9px; font-size: 11px; font-weight: 800; color: #4a3858; }
 .link { border: 0; background: none; color: #c43f76; font-weight: 800; font-size: 11.5px; justify-self: start; padding: 0; cursor: pointer; }
 .us-scene { position: relative; border-radius: 18px; overflow: hidden; height: 186px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .55); background: #bfe0f2; }
-.us-canvas { width: 100%; height: 100%; display: block; }
+.us-photos { touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; background: #1d1530; }
+.us-photos:active { cursor: grabbing; }
+.ph-track { display: flex; height: 100%; will-change: transform; }
+.ph-slide { flex: 0 0 100%; height: 100%; }
+.ph-slide img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.ph-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 26px; height: 26px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .6); background: rgba(255, 255, 255, .28); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); color: #fff; font-size: 17px; font-weight: 800; line-height: 1; padding: 0; text-shadow: 0 1px 2px rgba(0, 0, 0, .45); }
+.ph-nav.prev { left: 6px; } .ph-nav.next { right: 6px; }
+.ph-dots { position: absolute; bottom: 7px; left: 0; right: 0; display: flex; justify-content: center; gap: 4px; }
+.ph-dots button { width: 6px; height: 6px; border-radius: 99px; border: 0; padding: 0; background: rgba(255, 255, 255, .55); transition: width .3s; }
+.ph-dots button[aria-current="true"] { width: 16px; background: #fff; }
 .us-chips { position: absolute; top: 6px; left: 6px; right: 6px; display: flex; justify-content: space-between; gap: 4px; }
 .quick { grid-template-columns: repeat(5, 1fr); }
 .quick button { border: 1px solid rgba(255, 255, 255, .65); background: rgba(255, 255, 255, .38); border-radius: 12px; height: 34px; font-size: 16px; }
@@ -473,7 +482,7 @@ button { cursor: pointer; }
     <li><b>Scenery:</b> every time someone looks at their screen (screen on, switching phones or coming back to the page), the widget moves to a new place and season: Santorini, the Swiss Alps, Mount Fuji, the Grand Canyon, a Banff trail, the Maldives, an Icelandic waterfall, Kyoto, Central Park, Dubai, Paris, the Taj Mahal, the Pyramids, the Golden Gate, Cappadocia and a Norwegian fjord, in spring, summer, autumn or winter. Pick a fixed place or season under each phone if you prefer.</li>
     <li><b>Sleep together and date nights:</b> sleep together (both screens turn into the same starry sky, with optional rain, ocean or soft noise), and plan date nights with when, where, food, an activity and a movie.</li>
     <li><b>Albums and bucket list:</b> make albums from photos and play them as a slideshow, on your widget, or send them to your partner's widget. Bucket list places show as little scenery pictures in your dream season.</li>
-    <li><b>The full app:</b> tap the <b>💗 Hearby</b> icon on either home screen (or the partner's name in the open widget). Four tabs: <b>Home</b> (living scene, quick sending, mood check-in, today's question, next special day and date night, this week's love stats, and the distance and time between you), <b>Together</b> (sleep together, date night planner, dua list), <b>Memories</b> (Memory Jar, albums, timeline, "open when" letters, bucket list) and <b>Me</b> (your character, secret gift ideas, privacy, settings).</li>
+    <li><b>The full app:</b> tap the <b>💗 Hearby</b> icon on either home screen (or the partner's name in the open widget). Four tabs: <b>Home</b> (a swipeable, auto-playing slideshow of your photos, quick sending, mood check-in, today's question, next special day and date night, this week's love stats, and the distance and time between you), <b>Together</b> (sleep together, date night planner, dua list), <b>Memories</b> (Memory Jar, albums, timeline, "open when" letters, bucket list) and <b>Me</b> (your character, secret gift ideas, privacy, settings).</li>
     <li><b>Gentle reminders:</b> every now and then (about once a minute in this preview, a few times a day in the real app), each phone gets a soft nudge to message or check on the other, or to make dua for each other and for you both, such as "Take a moment to make dua for Mia and for you both 🤲". Choose love and dua, love and prayer, love only, or off under each phone, or tap "Show a reminder now".</li>
     <li><b>Meet-up countdown:</b> open a widget and tap the ✈️ chip to set or change the date, add a note, choose "We don't know the date yet" (shows "soon"), or hide the countdown. Both phones update.</li>
     <li><b>Teasing reminders:</b> the day before, the app only asks something cheeky like "What day is tomorrow 😉?" and leaves them to work it out. On the day, a clear notification says what day it is, and if nobody has sent a wish about 15 seconds after the celebration (hours later in the real app), it nudges them: "Have you wished Mia yet? 👀 Just checking…".</li>
@@ -560,7 +569,7 @@ button { cursor: pointer; }
       <header class="app-top"><button class="app-back" aria-label="Close the app">‹</button><b>hearby<span>♥</span></b><span title="End-to-end encrypted">🔒</span></header>
       <main class="app-body">
         <section class="tab" data-tab="us">
-          <div class="us-scene"><canvas class="us-canvas" aria-label="Your couple scene"></canvas><div class="us-chips"><span class="chip us-partner"></span><span class="chip us-cd"></span></div></div>
+          <div class="us-scene us-photos" tabindex="0" aria-roledescription="carousel" aria-label="Our photos: swipe or use the arrows"><div class="ph-track"></div><button class="ph-nav prev" aria-label="Previous photo">‹</button><button class="ph-nav next" aria-label="Next photo">›</button><div class="ph-dots"></div><div class="us-chips"><span class="chip us-partner"></span><span class="chip us-cd"></span></div></div>
           <div class="card quick" aria-label="Send love"><button data-q="kiss" aria-label="Flying kiss">💋</button><button data-q="heart" aria-label="Flying heart">❤️</button><button data-q="text" aria-label="Message">🖊️</button><button data-q="photo" aria-label="Photos">📷</button><button data-q="pop" aria-label="Pop-up text">✨</button></div>
           <div class="card"><div class="card-h"><b>💭 How are you feeling?</b><em class="mood-mine"></em></div>
             <div class="moods">${MOODS.map(([e, l]) => `<button data-mood="${e}" aria-label="Feeling ${l}" title="${l}">${e}</button>`).join('')}</div>
@@ -2893,7 +2902,7 @@ button { cursor: pointer; }
     s.appOpen = true; s.q('.happ').hidden = false;
     s.appUI = s.appUI || { tab: 'us', cat: QCATS[dayIdx() % QCATS.length][0], game: null };
     s.appUI.moment = gentleLine(id).line;
-    s.appScene = makeScene(s.q('.us-canvas'), s);
+    s.appScene = null;
     syncAppSettings(id); setAppTab(id, s.appUI.tab);
   }
   function closeApp(id) { const s = W[id]; closeAlbum(id); s.appOpen = false; s.q('.happ').hidden = true; setTimeout(() => flush(id), 300); }
@@ -2912,8 +2921,52 @@ button { cursor: pointer; }
     document.getElementById(`app-quiet-${id}`).checked = P[id].quiet;
     document.getElementById(`app-nudges-${id}`).value = P[id].nudges || 'dua';
   }
+  // ---------- Home photo slideshow: automatic and swipeable ----------
+  function homePhotos(id) {
+    const seen = new Set(), out = [], add = src => { if (src && !seen.has(src)) { seen.add(src); out.push(src); } };
+    (W[id].slides || []).forEach(add);
+    APP.albums.forEach(al => al.photos.forEach(r => add(resolvePhoto(r))));
+    if (!out.length) samplePhotos().forEach(add);
+    return out.slice(0, 12);
+  }
+  function phGo(id, i, anim = true) {
+    const s = W[id], n = s.ph.n; if (!n) return;
+    s.ph.i = (i + n) % n;
+    const tr = s.q('.ph-track');
+    tr.style.transition = anim && !reduced.matches ? 'transform .45s cubic-bezier(.2,.8,.2,1)' : 'none';
+    tr.style.transform = `translateX(${-s.ph.i * 100}%)`;
+    s.q('.ph-dots').querySelectorAll('button').forEach((b, k) => b.setAttribute('aria-current', String(k === s.ph.i)));
+  }
+  function phAuto(id) {
+    const s = W[id]; clearInterval(s.ph.timer);
+    s.ph.timer = setInterval(() => { if (s.appOpen && s.appUI.tab === 'us' && !s.ph.drag && !reduced.matches) phGo(id, s.ph.i + 1); }, 4000);
+  }
+  function renderHomePhotos(id) {
+    const s = W[id], photos = homePhotos(id), key = photos.length + ':' + photos.map(x => x.length + x.slice(-16)).join('|');
+    s.ph = s.ph || { i: 0 };
+    if (s.ph.key !== key) {
+      s.ph.key = key; s.ph.n = photos.length; s.ph.i = Math.min(s.ph.i, photos.length - 1);
+      s.q('.ph-track').innerHTML = photos.map((src, i) => `<div class="ph-slide"><img src="${src}" alt="Our photo ${i + 1} of ${photos.length}" draggable="false"></div>`).join('');
+      s.q('.ph-dots').innerHTML = photos.map((_, i) => `<button data-dot="${i}" aria-label="Go to photo ${i + 1}"></button>`).join('');
+      phGo(id, s.ph.i, false);
+    }
+    phAuto(id);
+  }
+  function wirePhotos(id) {
+    const s = W[id], box = s.q('.us-photos'), track = s.q('.ph-track');
+    s.ph = s.ph || { i: 0 };
+    box.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; s.ph.drag = { x0: e.clientX, w: box.clientWidth, dx: 0 }; box.setPointerCapture(e.pointerId); track.style.transition = 'none'; });
+    box.addEventListener('pointermove', e => { const d = s.ph.drag; if (!d) return; d.dx = e.clientX - d.x0; track.style.transform = `translateX(calc(${-s.ph.i * 100}% + ${d.dx}px))`; });
+    const end = () => { const d = s.ph.drag; if (!d) return; s.ph.drag = null; const th = d.w * 0.18; phGo(id, d.dx < -th ? s.ph.i + 1 : d.dx > th ? s.ph.i - 1 : s.ph.i); phAuto(id); };
+    box.addEventListener('pointerup', end); box.addEventListener('pointercancel', end);
+    s.q('.ph-nav.prev').addEventListener('click', () => { phGo(id, s.ph.i - 1); phAuto(id); });
+    s.q('.ph-nav.next').addEventListener('click', () => { phGo(id, s.ph.i + 1); phAuto(id); });
+    s.q('.ph-dots').addEventListener('click', e => { const b = e.target.closest('button[data-dot]'); if (b) { phGo(id, +b.dataset.dot); phAuto(id); } });
+    box.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') { phGo(id, s.ph.i - 1); phAuto(id); } if (e.key === 'ArrowRight') { phGo(id, s.ph.i + 1); phAuto(id); } });
+  }
   function renderUs(id) {
     const s = W[id], pa = P[other(id)];
+    renderHomePhotos(id);
     s.q('.us-partner').textContent = `${pa.quiet ? '😴' : (APP.mood[other(id)] || {}).e || STATUSES[pa.status]} ${pa.name} · ${fmtTime(pa.tz)}`;
     const md = meetDays(), cd = s.q('.us-cd');
     cd.hidden = !MEET.on; cd.textContent = md === null ? '✈️ soon' : md === 0 ? '💞 today!' : md < 0 ? '✈️ ?' : `✈️ ${md} days`;
@@ -3288,6 +3341,7 @@ button { cursor: pointer; }
   document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
 
   IDS.forEach(wireApp);
+  IDS.forEach(wirePhotos);
   IDS.forEach(id => newPlace(id, false));
   IDS.forEach(id => { renderHead(id); notify(id); });
   renderDays(); setRibbons();
@@ -3297,7 +3351,7 @@ button { cursor: pointer; }
   let last = performance.now() / 1000;
   function frame(ms) {
     const t = ms / 1000, dt = Math.min(0.1, t - last);
-    if (dt >= 1 / 32) { last = t; IDS.forEach(id => { const s = W[id]; if (P[id].screen && !(s.slideOn && s.slides.length)) draw(id, t, reduced.matches ? dt * 0.4 : dt); if (s.appOpen && P[id].screen) { if (s.appUI.tab === 'us') draw(id, t, dt, s.appScene); else if (s.appUI.tab === 'me') drawMe(id, t); } if (APP.sleep[id]) drawSleep(id, t); }); }
+    if (dt >= 1 / 32) { last = t; IDS.forEach(id => { const s = W[id]; if (P[id].screen && !(s.slideOn && s.slides.length)) draw(id, t, reduced.matches ? dt * 0.4 : dt); if (s.appOpen && P[id].screen) { if (s.appUI.tab === 'us' && s.appScene) draw(id, t, dt, s.appScene); else if (s.appUI.tab === 'me') drawMe(id, t); } if (APP.sleep[id]) drawSleep(id, t); }); }
     requestAnimationFrame(frame);
   }
   IDS.forEach(id => draw(id, last, 0));

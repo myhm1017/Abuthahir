@@ -3045,7 +3045,9 @@ button { cursor: pointer; }
   const GARDEN = [[0, '🌱', 'Seedling'], [4, '🌿', 'Sprout'], [10, '🪴', 'Little plant'], [18, '🌷', 'First flower'], [30, '🌸', 'Blooming'], [45, '🌳', 'Our love tree']];
   const SEASON_EMO = { spring: '🌸', summer: '☀️', autumn: '🍂', winter: '❄️' };
   const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-  const resolvePhoto = ref => (String(ref).startsWith('sample:') ? samplePhotos()[+String(ref).slice(7)] : ref);
+  // Shared photos live on each phone as files at https://hearby.photos/<id>.jpg; the bump reloads ones that just arrived.
+  let PHOTO_BUMP = 0;
+  const resolvePhoto = ref => (String(ref).startsWith('sample:') ? samplePhotos()[+String(ref).slice(7)] : String(ref).startsWith('https://hearby.photos/') ? `${ref}?b=${PHOTO_BUMP}` : ref);
 
   // ---------- Two-player games ----------
   const PCOL = { leo: '#e5484d', mia: '#2fa66a' };
@@ -4027,7 +4029,7 @@ button { cursor: pointer; }
     // Secret gift ideas, albums and games stay on your phone.
     const swap = o => JSON.parse(JSON.stringify(o).replace(/"(leo|mia)"/g, (m, w) => (w === 'leo' ? '"mia"' : '"leo"')));
     const PER_PERSON = ['mood', 'sleep'];
-    const SHARED = ['duas', 'letters', 'bucket', 'dates', 'goodnights', 'trip'];
+    const SHARED = ['duas', 'letters', 'bucket', 'dates', 'goodnights', 'trip', 'albums'];
     const snapshot = () => {
       const o = { days: DAYS, meet: MEET, qa: {} };
       PER_PERSON.forEach(k => { if (APP[k]) o[k] = { leo: APP[k].leo }; });
@@ -4045,8 +4047,21 @@ button { cursor: pointer; }
         nsend('sync', '', JSON.parse(j));
       }, 1500);
     };
+    // Albums are shared: every new photo is saved as a file and sent (encrypted) to your partner's phone.
+    const PHOTO_URL = 'https://hearby.photos/';
+    const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    const sharePhotos = () => {
+      (APP.albums || []).forEach(al => {
+        al.photos = al.photos.map(ref => {
+          if (!String(ref).startsWith('data:image')) return ref;
+          const pid = newId();
+          return call('photoAdd', pid, al.name, ref) === true ? `${PHOTO_URL}${pid}.jpg` : ref;
+        });
+      });
+    };
     const _set = store.set;
     store.set = (k, v) => {
+      if (k === 'hearby-app2') sharePhotos();
       _set.call(store, k, v);
       if (WIDGET && touched) call('dirty');
       if (!merging && (k === 'hearby-app2' || k === 'hearby-days' || k === 'hearby-meet')) pushSync();
@@ -4155,24 +4170,25 @@ button { cursor: pointer; }
       const auto = lm.auto !== false, pn = esc(P.mia.name);
       const shared = P.mia.locSet && !P.mia.manualLoc;
       loc.innerHTML = `<b>📍 Our locations</b>
-        <p class="hint2">Every time in Hearby (their clock, bedtimes, goodnights, the distance between you) follows these.</p>
+        <p class="hint2">Clocks, bedtimes and the distance between you follow these.</p>
         <div class="loc-row"><b>You</b><span>${esc(P.leo.city)} · ${fmtTime(P.leo.tz)}${P.leo.geo ? ' · 📍' : ''}</span></div>
+        <details class="loc-me-d"><summary class="link">Edit my location</summary>
         <div class="loc-form loc-me">
           <input type="text" class="loc-city" maxlength="30" placeholder="Your city" value="${esc(lm.city || P.leo.city)}" aria-label="Your city">
           <label class="set-row">Time zone <select class="inline-sel loc-tz" ${auto ? 'disabled' : ''}>${zoneOpts(P.leo.tz)}</select></label>
           <label class="set-row">Follow my phone's time zone <input type="checkbox" class="loc-auto" ${auto ? 'checked' : ''}></label>
           <div class="n-btns"><button class="mini2 loc-geo">📍 Use my location for distance</button><button class="send loc-save">Save</button></div>
           ${P.leo.geo ? '<button class="link loc-nogeo">Stop sharing my location</button>' : ''}
-        </div>
+        </div></details>
         <div class="loc-row"><b>${pn}</b><span>${esc(P.mia.city)} · ${fmtTime(P.mia.tz)}${P.mia.geo ? ' · 📍' : ''}</span></div>
-        <p class="hint2">${shared ? `Shared by ${pn} from their phone.` : `Using ${pn}'s phone time zone. ${pn} can add their city in Me → Our locations, or you can set it for now.`}</p>
+        ${shared ? '' : `<p class="hint2">Using ${pn}'s phone time zone until ${pn} adds their city.</p>`}
         <details class="loc-pa"><summary class="link">Set ${pn}'s location</summary>
           <div class="loc-form">
             <input type="text" class="loc-pcity" maxlength="30" placeholder="${pn}'s city" value="${esc(P.mia.city)}" aria-label="${pn}'s city">
             <label class="set-row">Time zone <select class="inline-sel loc-ptz">${zoneOpts(P.mia.tz)}</select></label>
             <button class="send loc-psave">Save for ${pn}</button>
           </div></details>
-        <p class="hint2">🔒 Only ${pn} can see this. Locations are end-to-end encrypted, and "Use my location" is rounded to about 10 km.</p>`;
+        `;
       const q = sel => loc.querySelector(sel);
       q('.loc-auto').addEventListener('change', e => { q('.loc-tz').disabled = e.target.checked; if (e.target.checked) q('.loc-tz').value = P.leo.deviceTz; });
       q('.loc-save').addEventListener('click', () => { saveMe(q('.loc-city').value, q('.loc-tz').value, q('.loc-auto').checked); toast('leo', 'Location saved 📍'); });
@@ -4225,8 +4241,9 @@ button { cursor: pointer; }
       pairCard.innerHTML = `<b>💞 Pairing</b>
         <div class="loc-row"><b>You</b><span>${i.mine === 'connected' ? '🟢 Connected' : i.mine === 'offline' ? '🟠 Offline' : '⚪ Connecting…'}</span></div>
         <div class="loc-row"><b>${name}</b><span>${i.cls === 'here' ? '👀 In Hearby now' : i.cls === 'on' ? '🟢 Connected' : i.cls === 'off' ? '⚪ Away' : '⏳ Not connected yet'}</span></div>
-        <p class="hint2">${i.cls === 'wait' ? i.line : (i.cls === 'off' || i.mine !== 'connected' ? i.line : `✅ You're paired and both phones are connected. ${i.line}`)}</p>
-        <label class="set-row">Let ${name} see when I'm in Hearby <input type="checkbox" class="pres-share" ${share ? 'checked' : ''}></label>`;
+        ${i.cls === 'wait' || i.cls === 'off' ? `<p class="hint2">${i.line}</p>` : ''}
+        <label class="set-row">Let ${name} see when I'm in Hearby <input type="checkbox" class="pres-share" ${share ? 'checked' : ''}></label>
+        <p class="hint2">🔒 End-to-end encrypted · safety code <b>${esc(call('safety') || '')}</b> (the same on both phones)</p>`;
       pairCard.querySelector('.pres-share').addEventListener('change', e => { call('setSharePresence', e.target.checked); renderPresence(); });
     };
     const _renderHead = renderHead;
@@ -4239,6 +4256,13 @@ button { cursor: pointer; }
     setInterval(renderPresence, 10e3);
     here();
     renderPresence();
+
+    // A shared photo that hasn't arrived yet: ask your partner's phone to send it again.
+    document.addEventListener('error', e => {
+      const el = e.target;
+      if (el && el.tagName === 'IMG' && String(el.src).startsWith(PHOTO_URL)) call('photoMissing', el.src.slice(PHOTO_URL.length).split('.')[0]);
+    }, true);
+    setInterval(() => { PHOTO_BUMP++; if (me.appOpen && (me.appUI.tab === 'us' || me.appUI.tab === 'mem')) renderAppAll(); }, 90e3);
 
     // Touch together across both phones: holding sends "reaching" every few seconds until you let go.
     let reachT = 0;
@@ -4256,6 +4280,17 @@ button { cursor: pointer; }
     const receive = (kind, text, d, at) => {
       if (kind === 'look') { applyLook(d); return; }
       if (kind === 'sync') { mergeSync(d); return; }
+      if (kind === 'photo') {
+        if (d.id && d.album) {
+          const ref = `${PHOTO_URL}${d.id}.jpg`;
+          let al = APP.albums.find(a => a.name === d.album);
+          if (!al) { al = { name: d.album, photos: [] }; APP.albums.unshift(al); }
+          if (!al.photos.includes(ref)) al.photos.unshift(ref);
+          merging = true; try { saveApp(); lastSync = JSON.stringify(snapshot()); } finally { merging = false; }
+        }
+        PHOTO_BUMP++; renderAppAll();
+        return;
+      }
       if (kind === 'touch') {
         if (Math.abs(Date.now() - at) > 60e3) return;
         const wasConn = touching();
@@ -4358,6 +4393,30 @@ button { cursor: pointer; }
       toast('leo', `Added ${imgs.length} photo${imgs.length > 1 ? 's' : ''} to your slideshow 🖼️`);
     });
 
+    // A simpler Me page: you, pairing, locations, a few settings, gift ideas.
+    {
+      const cards = [...meTab.children];
+      const find = txt => cards.find(c => c.classList.contains('card') && (c.querySelector('b') || {}).textContent && c.querySelector('b').textContent.includes(txt));
+      const privacy = find('Privacy'), settings = find('Settings'), gifts = find('Secret gift');
+      card.hidden = true;
+      if (privacy && settings) {
+        const disc = privacy.querySelector('label[for="app-discreet-leo"]');
+        if (disc) settings.appendChild(disc);
+        privacy.hidden = true;
+      }
+      if (settings) {
+        settings.querySelectorAll('label[for="app-nudges-leo"], .hint2').forEach(el => { el.hidden = true; });
+        const acts = document.createElement('div');
+        acts.className = 'n-btns';
+        acts.innerHTML = `<button class="mini2" data-n="settings">✏️ Names &amp; colours</button><button class="mini2" data-n="pinWidget">➕ Add the widget</button><button class="mini2" data-n="battery" hidden>🔋 Keep connected</button>`;
+        acts.addEventListener('click', e => { const b = e.target.closest('button[data-n]'); if (b) call(b.dataset.n); });
+        settings.appendChild(acts);
+        const bat = () => { acts.querySelector('[data-n="battery"]').hidden = call('batteryOk') === true; };
+        bat(); setInterval(bat, 15e3);
+      }
+      [pairCard, loc, settings, gifts].filter(Boolean).forEach(el => meTab.appendChild(el));
+    }
+
     // Leftover preview wording.
     meTab.querySelectorAll('.hint2').forEach(el => { if (/under the phone/.test(el.textContent)) el.textContent = 'Scenery, status and your character are under "Change my look".'; });
 
@@ -4395,6 +4454,7 @@ button { cursor: pointer; }
       setTimeout(captureFrames, 3000);
     }
     pushLook();
+    if ((APP.albums || []).some(al => al.photos.some(ref => String(ref).startsWith('data:image')))) saveApp();
     setInterval(renderStatus, 15000);
   })();
   let last = performance.now() / 1000;

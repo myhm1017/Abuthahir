@@ -124,6 +124,7 @@ class MainActivity : Activity() {
         wv.webViewClient = object : WebViewClient() {
             // Everything is inside the app; never open other pages.
             override fun shouldOverrideUrlLoading(view: WebView, request: android.webkit.WebResourceRequest) = true
+            override fun shouldInterceptRequest(view: WebView, request: android.webkit.WebResourceRequest) = PhotoStore.intercept(applicationContext, request)
         }
         wv.webChromeClient = object : WebChromeClient() {
             override fun onShowFileChooser(view: WebView, cb: ValueCallback<Array<Uri>>, params: FileChooserParams): Boolean {

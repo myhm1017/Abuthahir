@@ -31,6 +31,22 @@ object Inbox {
         val now = System.currentTimeMillis()
         // Anything from their phone means it's connected.
         if (now - at < 10 * 60 * 1000L) pr.partnerSeenAt = maxOf(pr.partnerSeenAt, at)
+        if (kind == "photoReq") {
+            try { PhotoStore.resend(ctx, JSONObject(data).optString("id")) } catch (e: Exception) { /* bad request */ }
+            return
+        }
+        if (kind == "photo") {
+            // A shared album photo: keep the file, and tell the app which album it belongs to (without the picture).
+            try {
+                val o = JSONObject(data)
+                val pid = o.optString("id")
+                if (PhotoStore.save(ctx, pid, o.optString("src"))) {
+                    remember(pr, "photo", text, JSONObject().put("id", pid).put("album", o.optString("album")).toString(), at)
+                }
+            } catch (e: Exception) { /* bad photo */ }
+            refresh(ctx)
+            return
+        }
         if (kind == "presence") {
             if (now - at < 5 * 60 * 1000L) {
                 val share = text != "hidden"

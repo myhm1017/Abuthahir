@@ -151,6 +151,9 @@ class HearbyBridge(private val host: BridgeHost) {
         return "ok"
     }
 
+    @JavascriptInterface fun photoAdd(id: String, album: String, dataUrl: String): Boolean = PhotoStore.add(act, id, album, dataUrl)
+    @JavascriptInterface fun photoMissing(id: String) = PhotoStore.missing(act, id)
+
     @JavascriptInterface fun presence(state: String) { if (state == "open" || state == "away") Presence.send(act, state) }
     @JavascriptInterface fun sharePresence(): Boolean = pr.sharePresence
     @JavascriptInterface

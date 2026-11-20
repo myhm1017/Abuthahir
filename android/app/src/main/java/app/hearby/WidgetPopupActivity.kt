@@ -80,6 +80,7 @@ class WidgetPopupActivity : Activity() {
         wv.addJavascriptInterface(HearbyBridge(host), "HearbyNative")
         wv.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) = true
+            override fun shouldInterceptRequest(view: WebView, request: android.webkit.WebResourceRequest) = PhotoStore.intercept(applicationContext, request)
         }
         wv.webChromeClient = object : WebChromeClient() {
             override fun onShowFileChooser(view: WebView, cb: ValueCallback<Array<Uri>>, params: FileChooserParams): Boolean {

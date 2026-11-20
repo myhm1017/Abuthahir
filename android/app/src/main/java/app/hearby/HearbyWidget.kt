@@ -7,11 +7,13 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.RemoteViews
+import java.util.Calendar
 import kotlin.math.max
 import kotlin.math.min
 
-/** The 4x4 home-screen widget: your couple scene, the latest love, and one-tap buttons. */
+/** The 4x4 home-screen widget: the moving couple scene and the latest love. Tap it to expand. */
 class HearbyWidget : AppWidgetProvider() {
     override fun onUpdate(ctx: Context, mgr: AppWidgetManager, ids: IntArray) {
         ids.forEach { update(ctx, mgr, it) }
@@ -30,12 +32,6 @@ class HearbyWidget : AppWidgetProvider() {
             mgr.getAppWidgetIds(ComponentName(ctx, HearbyWidget::class.java)).forEach { update(ctx, mgr, it) }
         }
 
-        private fun action(ctx: Context, kind: String, req: Int): PendingIntent = PendingIntent.getBroadcast(
-            ctx, req,
-            Intent(ctx, WidgetActionReceiver::class.java).putExtra(WidgetActionReceiver.EXTRA_KIND, kind),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
         fun update(ctx: Context, mgr: AppWidgetManager, id: Int) {
             val pr = Prefs(ctx)
             val v = RemoteViews(ctx.packageName, R.layout.widget_hearby)
@@ -43,34 +39,65 @@ class HearbyWidget : AppWidgetProvider() {
             val opts = mgr.getAppWidgetOptions(id)
             val wDp = max(140, opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, 250))
             val hDp = max(140, opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 250))
-            val d = ctx.resources.displayMetrics.density
-            val scale = min(1f, 640f / (max(wDp, hDp) * d))
-            val bw = (wDp * d * scale).toInt().coerceAtLeast(200)
-            val bh = (hDp * d * scale).toInt().coerceAtLeast(200)
-            v.setImageViewBitmap(R.id.scene, SceneRenderer.render(ctx, bw, bh))
+            pr.widgetAspect = wDp.toFloat() / hDp
 
-            if (pr.paired) {
-                val partner = pr.partnerName.ifBlank { "Your person" }
-                val when_ = if (pr.lastKind.isNotEmpty() && System.currentTimeMillis() - pr.lastAt < 24 * 60 * 60 * 1000L) " · ${Inbox.ago(pr.lastAt)}" else ""
-                v.setTextViewText(R.id.partner, "💗 $partner$when_")
-                v.setTextViewText(R.id.message, Inbox.line(ctx))
+            // The moving scene: a short loop the app painted. Before that, a still picture.
+            val n = Frames.count(ctx)
+            if (n > 0) {
+                v.removeAllViews(R.id.flipper)
+                for (i in 0 until n) {
+                    val f = RemoteViews(ctx.packageName, R.layout.widget_frame)
+                    f.setImageViewUri(R.id.frame_img, Frames.uri(ctx, i))
+                    v.addView(R.id.flipper, f)
+                }
+                v.setInt(R.id.flipper, "setFlipInterval", pr.frameMs.toInt().coerceIn(80, 1000))
+                v.setViewVisibility(R.id.flipper, View.VISIBLE)
+                v.setViewVisibility(R.id.scene, View.GONE)
+                // Painted earlier in the day? Tint it so night still looks like night.
+                val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+                val made = Calendar.getInstance().apply { timeInMillis = pr.frameVer }.get(Calendar.HOUR_OF_DAY)
+                val mode = { h: Int -> when (h) { in 6..16 -> 0; in 17..19 -> 1; else -> 2 } }
+                val tint = if (mode(hour) == mode(made)) 0 else when (mode(hour)) { 2 -> 0x6E141B46; 1 -> 0x38E8707A; else -> 0 }
+                v.setInt(R.id.tint, "setBackgroundColor", tint)
             } else {
-                v.setTextViewText(R.id.partner, "💗 Hearby")
-                v.setTextViewText(R.id.message, "Open Hearby to pair with your person")
+                val d = ctx.resources.displayMetrics.density
+                val scale = min(1f, 640f / (max(wDp, hDp) * d))
+                v.setImageViewBitmap(R.id.scene, SceneRenderer.render(ctx, (wDp * d * scale).toInt().coerceAtLeast(200), (hDp * d * scale).toInt().coerceAtLeast(200)))
+                v.setViewVisibility(R.id.scene, View.VISIBLE)
+                v.setViewVisibility(R.id.flipper, View.GONE)
+                v.setInt(R.id.tint, "setBackgroundColor", 0)
             }
 
+            val now = System.currentTimeMillis()
+            if (pr.paired) {
+                val partner = pr.partnerName.ifBlank { "Your person" }
+                v.setTextViewText(R.id.partner, "💗 $partner")
+                // Like the preview: the latest message sits in a pill at the bottom; nothing new, just the scene.
+                val fresh = pr.lastKind.isNotEmpty() && now - pr.lastAt < 24 * 60 * 60 * 1000L
+                val felt = now - pr.feltAt < 10 * 60 * 1000L
+                val text = when {
+                    felt -> "💗 $partner felt it"
+                    fresh && pr.lastKind == "text" -> "$partner: ${pr.lastText}"
+                    fresh -> Inbox.line(ctx)
+                    else -> ""
+                }
+                v.setTextViewText(R.id.message, text)
+                v.setViewVisibility(R.id.message, if (text.isEmpty()) View.GONE else View.VISIBLE)
+                v.setViewVisibility(R.id.badge, if (fresh && pr.lastAt > pr.seenAt) View.VISIBLE else View.GONE)
+            } else {
+                v.setTextViewText(R.id.partner, "💗 Hearby")
+                v.setTextViewText(R.id.message, "Tap to pair with your person")
+                v.setViewVisibility(R.id.message, View.VISIBLE)
+                v.setViewVisibility(R.id.badge, View.GONE)
+            }
+
+            // Tapping anywhere opens the expanded widget over the home screen.
             val open = PendingIntent.getActivity(
-                ctx, 0,
-                Intent(ctx, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                ctx, 1,
+                Intent(ctx, WidgetPopupActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION),
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
-            v.setOnClickPendingIntent(R.id.scene, open)
-            v.setOnClickPendingIntent(R.id.message, open)
-            v.setOnClickPendingIntent(R.id.partner, open)
-            v.setOnClickPendingIntent(R.id.btn_kiss, action(ctx, "kiss", 11))
-            v.setOnClickPendingIntent(R.id.btn_heart, action(ctx, "heart", 12))
-            v.setOnClickPendingIntent(R.id.btn_hug, action(ctx, "hug", 13))
-            v.setOnClickPendingIntent(R.id.btn_felt, action(ctx, "felt", 14))
+            v.setOnClickPendingIntent(android.R.id.background, open)
             mgr.updateAppWidget(id, v)
         }
     }

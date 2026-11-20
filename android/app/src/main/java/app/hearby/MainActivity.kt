@@ -81,6 +81,8 @@ class MainActivity : Activity() {
         val f = IntentFilter(Inbox.ACTION_REFRESH)
         if (Build.VERSION.SDK_INT >= 33) registerReceiver(refresh, f, Context.RECEIVER_NOT_EXPORTED) else registerReceiver(refresh, f)
         web?.onResume()
+        // Something changed in the widget pop-up: reload so the app shows it.
+        if (web != null && pr.webDirty) { pr.webDirty = false; web?.reload() }
         if (pr.paired) {
             HearbyService.start(this)
             if (web != null) pull() else renderMain()
@@ -118,7 +120,7 @@ class MainActivity : Activity() {
             allowContentAccess = false
         }
         wv.isVerticalScrollBarEnabled = false
-        wv.addJavascriptInterface(Bridge(), "HearbyNative")
+        wv.addJavascriptInterface(HearbyBridge(host), "HearbyNative")
         wv.webViewClient = object : WebViewClient() {
             // Everything is inside the app; never open other pages.
             override fun shouldOverrideUrlLoading(view: WebView, request: android.webkit.WebResourceRequest) = true
@@ -158,81 +160,16 @@ class MainActivity : Activity() {
 
     private fun js(code: String) = runOnUiThread { web?.evaluateJavascript(code, null) }
 
-    /** What the app screen can ask the phone to do. Runs on a background thread, so UI work is posted. */
-    inner class Bridge {
-        @JavascriptInterface
-        fun config(): String = org.json.JSONObject()
-            .put("myName", pr.myName).put("partnerName", pr.partnerName)
-            .put("myLook", pr.myLook).put("partnerLook", pr.partnerLook)
-            .put("hue", Palette.hue(pr)).put("dark", Palette.isDark(this@MainActivity, pr))
-            .toString()
-
-        @JavascriptInterface
-        fun send(kind: String, text: String, data: String) {
-            if (kind !in setOf("text", "kiss", "heart", "hug", "photos", "felt", "sync", "look")) return
-            Relay.send(this@MainActivity, kind, text, data) { ok ->
-                if (!ok && kind != "sync" && kind != "look") toast("Couldn't send. Check your internet and try again.")
-            }
+    private val host = object : BridgeHost {
+        override val activity get() = this@MainActivity
+        override val mode = "app"
+        override val web get() = this@MainActivity.web
+        override fun openSettings() = this@MainActivity.openSettings()
+        override fun themeChanged() {
+            pal = Palette.of(this@MainActivity)
+            applyWindowColors()
+            this@MainActivity.web?.setBackgroundColor(pal.bg)
         }
-
-        @JavascriptInterface fun inbox(): String = pr.inbox
-        @JavascriptInterface fun status(): String = pr.status
-        @JavascriptInterface fun batteryOk(): Boolean = getSystemService(PowerManager::class.java).isIgnoringBatteryOptimizations(packageName)
-
-        /** A number both phones show; if they match, nobody else is in the middle. */
-        @JavascriptInterface
-        fun safety(): String {
-            val h = MessageDigest.getInstance("SHA-256").digest(("hearby-safety:" + HearbyCrypto.normalize(pr.code)).toByteArray())
-            val d = h.take(12).joinToString("") { ((it.toInt() and 0xFF) % 10).toString() }
-            return d.chunked(4).joinToString(" ")
-        }
-
-        @JavascriptInterface
-        fun setMyLook(look: String) {
-            if (look !in setOf("man", "hijab", "woman") || look == pr.myLook) return
-            pr.myLook = look
-            Inbox.refresh(this@MainActivity)
-            runOnUiThread {
-                pal = Palette.of(this@MainActivity)
-                applyWindowColors()
-                web?.setBackgroundColor(pal.bg)
-                web?.evaluateJavascript("document.documentElement.dataset.hue='${Palette.hue(pr)}'", null)
-            }
-        }
-
-        @JavascriptInterface
-        fun setPartnerLook(look: String) {
-            if (look in setOf("man", "hijab", "woman") && look != pr.partnerLook) { pr.partnerLook = look; Inbox.refresh(this@MainActivity) }
-        }
-
-        @JavascriptInterface
-        fun setNames(my: String, partner: String) {
-            if (my.isNotBlank()) pr.myName = my.trim().take(20)
-            if (partner.isNotBlank()) pr.partnerName = partner.trim().take(20)
-            Inbox.refresh(this@MainActivity)
-        }
-
-        /** The painted scene, so the home-screen widget shows the same place. */
-        @JavascriptInterface
-        fun saveScene(dataUrl: String) {
-            val comma = dataUrl.indexOf(',')
-            if (!dataUrl.startsWith("data:image/png") || comma < 0) return
-            Thread {
-                try {
-                    val bytes = Base64.decode(dataUrl.substring(comma + 1), Base64.DEFAULT)
-                    val f = SceneRenderer.sceneFile(this@MainActivity)
-                    val tmp = File(f.path + ".tmp")
-                    tmp.writeBytes(bytes)
-                    tmp.renameTo(f)
-                    HearbyWidget.updateAll(applicationContext)
-                } catch (e: Exception) { /* keep the old picture */ }
-            }.start()
-        }
-
-        @JavascriptInterface fun settings() = runOnUiThread { openSettings() }
-        @JavascriptInterface fun pinWidget() = runOnUiThread { this@MainActivity.pinWidget() }
-        @JavascriptInterface fun battery() = runOnUiThread { askBattery() }
-        @JavascriptInterface fun heartbeat() = runOnUiThread { Notifier.vibrateNow(this@MainActivity) }
     }
 
     @Suppress("DEPRECATION")

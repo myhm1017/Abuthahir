@@ -33,6 +33,15 @@ class Prefs(ctx: Context) {
     var sentAt: Long get() = l("sentAt"); set(v) = putL("sentAt", v)
     /** Recent messages for the app screen, as a JSON array (newest last). */
     var inbox: String get() = s("inbox", "[]"); set(v) = put("inbox", v)
+    var frameCount: Long get() = l("frameCount"); set(v) = putL("frameCount", v)
+    var frameMs: Long get() = l("frameMs"); set(v) = putL("frameMs", v)
+    var frameVer: Long get() = l("frameVer"); set(v) = putL("frameVer", v)
+    /** Width / height of the home-screen widget, so the frames are painted the right shape. */
+    var widgetAspect: Float get() = p.getFloat("widgetAspect", 1f); set(v) = p.edit().putFloat("widgetAspect", v).apply()
+    /** The widget pop-up changed something; the app screen reloads to pick it up. */
+    var webDirty: Boolean get() = p.getBoolean("webDirty", false); set(v) = p.edit().putBoolean("webDirty", v).apply()
+    /** When you last looked at a message (for the ♥ badge on the widget). */
+    var seenAt: Long get() = l("seenAt"); set(v) = putL("seenAt", v)
     var status: String get() = s("status", "starting"); set(v) = put("status", v)
 
     val deviceId: String

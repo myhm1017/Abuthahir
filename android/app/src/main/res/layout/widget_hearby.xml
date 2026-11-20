@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- The compact 4x4 widget, as in the preview: the moving painted scene with a name pill and the latest message.
+     Tapping it opens the expanded widget (WidgetPopupActivity). -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root"
+    android:id="@android:id/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_bg"
@@ -12,6 +14,20 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/scene_desc"
         android:scaleType="centerCrop" />
+
+    <ViewFlipper
+        android:id="@+id/flipper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:autoStart="true"
+        android:flipInterval="250"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/tint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000" />
 
     <TextView
         android:id="@+id/partner"
@@ -28,76 +44,34 @@
         android:textSize="13sp"
         android:textStyle="bold" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/badge"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="10dp"
+        android:background="@drawable/badge"
+        android:gravity="center"
+        android:text="♥"
+        android:textColor="#FFFFFFFF"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:orientation="vertical"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/glass"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:paddingStart="10dp"
-            android:paddingTop="6dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="6dp"
-            android:textColor="#FF23182C"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="6dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/btn_kiss"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                android:background="@drawable/glass"
-                android:gravity="center"
-                android:text="💋"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/btn_heart"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                android:background="@drawable/glass"
-                android:gravity="center"
-                android:text="❤️"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/btn_hug"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                android:background="@drawable/glass"
-                android:gravity="center"
-                android:text="🤗"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/btn_felt"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/glass"
-                android:gravity="center"
-                android:text="💗"
-                android:textSize="18sp" />
-        </LinearLayout>
-    </LinearLayout>
+        android:layout_margin="8dp"
+        android:background="@drawable/glass"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingStart="10dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="6dp"
+        android:textColor="#FF23182C"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
 </FrameLayout>

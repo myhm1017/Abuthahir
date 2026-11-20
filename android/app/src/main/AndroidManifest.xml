@@ -28,6 +28,21 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".WidgetPopupActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="app.hearby.widget"
+            android:theme="@style/Theme.Hearby.Popup"
+            android:windowSoftInputMode="adjustResize" />
+
+        <provider
+            android:name=".FramesProvider"
+            android:authorities="app.hearby.frames"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+
         <service
             android:name=".HearbyService"
             android:exported="false"

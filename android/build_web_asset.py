@@ -86,6 +86,25 @@ html.native .controls input[type="text"], html.native .controls select { backgro
 html.native .native-card .n-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 html.native .native-card .n-btns button { padding: 7px 6px; }
 html.native[data-theme="dark"] .card, html.native[data-theme="dark"] .sheet { border-color: rgba(255, 255, 255, .12); }
+/* Live "frosted glass" blur is slow in phone WebViews; the smooth backgrounds look the same without it. */
+html.native *, html.native *::before, html.native *::after { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+html.native .card { background: rgba(var(--k-glass), .5); }
+html.native .app-nav { background: rgba(var(--k-glass), .72); }
+html.native .sheet { background: rgba(var(--k-glass), .92); }
+html.native .banner { background: rgba(var(--k-glass), .88); }
+html.native .who, html.native .chip, html.native .close-w { background: rgba(var(--k-glass), .62); }
+html.native .bubble { background: rgba(var(--k-glass), .66); }
+html.native .actions button { background: rgba(var(--k-glass), .5); }
+html.native .actions .felt { background: rgba(var(--k-tint), .62); }
+html.native .pill { background: rgba(var(--k-glass), .6); }
+html.native .pop { background: rgba(46, 22, 64, .55); }
+html.native .dua-row > span, html.native .bk-row > span { flex: 1 1 0; min-width: 0; }
+/* The widget pop-up: only the expanded widget, over the blurred home screen. */
+html.native.widget-mode, html.native.widget-mode body, html.native.widget-mode .screen, html.native.widget-mode .phone { background: transparent !important; }
+html.native.widget-mode .scrim { background: transparent; }
+html.native.widget-mode .scrim.on::after { content: "Tap outside to close · tap the name to open Hearby"; bottom: 18px; color: #fff; text-shadow: 0 1px 4px rgba(0, 0, 0, .5); }
+html.native.widget-mode .widget.open { height: min(calc(100% - 64px), 112vw); transition: none; }
+html.native.widget-mode .happ, html.native.widget-mode .sleep-layer { display: none !important; }
 html.native[data-theme="dark"] .scene-label { background: rgba(var(--k-glass), .95); color: var(--k-deep); }
 """
 

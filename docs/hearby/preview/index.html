@@ -2186,7 +2186,7 @@ button { cursor: pointer; }
     const U = h / 92;
     // Dreamy depth: the background is softly blurred, more so on the small widget.
     const soft = scene === 'squish' ? 3 : s.open ? 0.6 : 1.4;
-    const B = fn => { c.filter = `blur(${soft}px)`; fn(); c.filter = 'none'; };
+    const B = NATIVE ? fn => fn() : fn => { c.filter = `blur(${soft}px)`; fn(); c.filter = 'none'; };
     const gyAt = x => nearY(s, x, off) + 3;
     const plc = PLACES[s.place];
     if (plc.stage) {
@@ -3949,10 +3949,17 @@ button { cursor: pointer; }
     // Only your own phone is shown. The widget stays open; the app opens over it.
     const _setTab = setTab; setTab = id => { if (id === 'leo') _setTab(id); };
     const _closeW = closeW; closeW = () => {};
+    // WIDGET: the pop-up that opens when you tap the home-screen widget (just the expanded widget).
+    const WIDGET = NCFG.mode === 'widget';
+    let touched = false;
+    document.addEventListener('pointerdown', () => { touched = true; }, true);
+    if (WIDGET) document.documentElement.classList.add('widget-mode');
     const showWidget = () => { if (me.appOpen) closeApp('leo'); if (!me.open) openW('leo'); };
-    const showApp = () => { if (!me.appOpen) openApp('leo'); };
-    me.q('.close-w').addEventListener('click', e => { e.stopPropagation(); showApp(); }, true);
-    me.q('.scrim').addEventListener('click', showApp);
+    const showApp = () => { if (WIDGET) call('openApp'); else if (!me.appOpen) openApp('leo'); };
+    const leave = () => { if (WIDGET) call('close'); else showApp(); };
+    me.q('.close-w').addEventListener('click', e => { e.stopPropagation(); leave(); }, true);
+    me.q('.scrim').addEventListener('click', leave);
+    me.q('.who').addEventListener('click', e => { if (WIDGET) { e.stopImmediatePropagation(); call('openApp'); } }, true);
     me.q('.app-back').setAttribute('aria-label', 'Show the widget');
     me.q('.app-back').textContent = '‹';
 
@@ -3992,7 +3999,11 @@ button { cursor: pointer; }
       }, 1500);
     };
     const _set = store.set;
-    store.set = (k, v) => { _set.call(store, k, v); if (!merging && (k === 'hearby-app2' || k === 'hearby-days' || k === 'hearby-meet')) pushSync(); };
+    store.set = (k, v) => {
+      _set.call(store, k, v);
+      if (WIDGET && touched) call('dirty');
+      if (!merging && (k === 'hearby-app2' || k === 'hearby-days' || k === 'hearby-meet')) pushSync();
+    };
     const mergeSync = raw => {
       const d = swap(raw);
       merging = true;
@@ -4100,25 +4111,67 @@ button { cursor: pointer; }
       renderStatus();
     };
 
-    // The home-screen widget shows the same painted scene as the app.
-    const saveScene = () => { try { if (me.canvas.width > 40) call('saveScene', me.canvas.toDataURL('image/png')); } catch (e) { /* canvas unavailable */ } };
+    // The home-screen widget plays a short loop painted from the same scene: the couple in the current place.
+    const LOOP_SCENES = ['together', 'sit', 'bubbles', 'poke', 'knock', 'peek', 'squish', 'walk'];
+    let capturing = false;
+    const captureFrames = async () => {
+      if (capturing || !me.place) return;
+      capturing = true;
+      try {
+        const aspect = Math.min(1.6, Math.max(0.6, +NCFG.widgetAspect || 1));
+        const cw = 240, ch = Math.round(cw / aspect), k = 2, N = 16, STEP = 0.25;
+        const off = document.createElement('canvas');
+        off.width = cw * k; off.height = ch * k;
+        const octx = off.getContext('2d');
+        const t0 = performance.now() / 1000;
+        const st = Object.assign({}, me, {
+          canvas: off, ctx: octx, w: cw, h: ch, open: false, override: null, overrideUntil: 0,
+          sceneIdx: SCENES.indexOf(pick(LOOP_SCENES)), sceneStart: t0 - 0.6,
+          clouds: me.clouds.map(c => ({ ...c })), motes: me.motes.map(m => ({ ...m }))
+        });
+        if (call('framesBegin') === false) return;
+        for (let i = 0; i < N; i++) {
+          octx.setTransform(k, 0, 0, k, 0, 0);
+          octx.clearRect(0, 0, cw, ch);
+          draw('leo', t0 + i * STEP, STEP, st);
+          call('frame', i, off.toDataURL('image/jpeg', 0.86));
+          await new Promise(res => setTimeout(res, 40));
+        }
+        call('framesDone', N, Math.round(STEP * 1000));
+      } catch (e) { /* keep the old frames */ } finally { capturing = false; }
+    };
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden') saveScene();
-      else { setTimeout(saveScene, 2500); window.hearbyPull(); }
+      if (document.visibilityState === 'visible') { setTimeout(captureFrames, WIDGET ? 1500 : 3000); window.hearbyPull(); }
     });
 
-    // Start: open on the app, then catch up on anything that arrived.
-    openW('leo');
-    openApp('leo');
+    // Leftover preview wording.
+    meTab.querySelectorAll('.hint2').forEach(el => { if (/under the phone/.test(el.textContent)) el.textContent = 'Scenery, status and your character are under "Change my look".'; });
+
+    if (WIDGET) {
+      // Open right where the home-screen widget is, like the preview's widget growing in place.
+      openW('leo');
+      const top = Math.max(0, Math.min(1, +NCFG.top || 0));
+      requestAnimationFrame(() => {
+        const H = window.innerHeight, wh = me.widget.offsetHeight;
+        me.widget.style.top = `${Math.round(Math.max(10, Math.min(top * H, H - wh - 44)))}px`;
+        requestAnimationFrame(() => call('ready'));
+      });
+      setTimeout(window.hearbyPull, 300);
+      setTimeout(captureFrames, 1500);
+    } else {
+      // Start on the app, then catch up on anything that arrived.
+      openW('leo');
+      openApp('leo');
+      setTimeout(window.hearbyPull, 600);
+      setTimeout(captureFrames, 3000);
+    }
     pushLook();
-    setTimeout(window.hearbyPull, 600);
-    setTimeout(saveScene, 3000);
     setInterval(renderStatus, 15000);
   })();
   let last = performance.now() / 1000;
   function frame(ms) {
     const t = ms / 1000, dt = Math.min(0.1, t - last);
-    if (dt >= 1 / 32) { last = t; IDS.forEach(id => { const s = W[id]; if (P[id].screen && !(s.slideOn && s.slides.length)) draw(id, t, reduced.matches ? dt * 0.4 : dt); if (s.appOpen && P[id].screen) { if (s.appUI.tab === 'us' && s.appScene) draw(id, t, dt, s.appScene); else if (s.appUI.tab === 'me') drawMe(id, t); } if (APP.sleep[id]) drawSleep(id, t); }); }
+    if (dt >= 1 / 32) { last = t; (NATIVE ? ['leo'] : IDS).forEach(id => { const s = W[id]; if (P[id].screen && !(NATIVE && s.appOpen) && !(s.slideOn && s.slides.length)) draw(id, t, reduced.matches ? dt * 0.4 : dt); if (s.appOpen && P[id].screen) { if (s.appUI.tab === 'us' && s.appScene) draw(id, t, dt, s.appScene); else if (s.appUI.tab === 'me') drawMe(id, t); } if (APP.sleep[id]) drawSleep(id, t); }); }
     requestAnimationFrame(frame);
   }
   IDS.forEach(id => draw(id, last, 0));

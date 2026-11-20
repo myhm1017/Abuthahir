@@ -53,6 +53,10 @@ object Inbox {
                 val type = try { JSONObject(data).optString("type") } catch (e: Exception) { "" }
                 when (type) { "man" -> pr.partnerLook = "man"; "hijabi" -> pr.partnerLook = "hijab"; "woman" -> pr.partnerLook = "woman" }
             }
+            kind == "touch" -> {
+                // Only while they're actually holding (and not if you're already in Hearby, where it shows live).
+                if (kotlin.math.abs(now - at) < 60 * 1000L && now - pr.meOpenAt > 90 * 1000L) Notifier.touch(ctx, name)
+            }
             kind in LOVE -> {
                 pr.lastKind = kind
                 pr.lastText = when (kind) {

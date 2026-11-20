@@ -52,7 +52,7 @@ class HearbyBridge(private val host: BridgeHost) {
 
     @JavascriptInterface
     fun send(kind: String, text: String, data: String) {
-        if (kind !in setOf("text", "kiss", "heart", "hug", "photos", "felt", "sync", "look")) return
+        if (kind !in setOf("text", "kiss", "heart", "hug", "photos", "felt", "sync", "look", "touch")) return
         Relay.send(act, kind, text, data) { ok ->
             if (!ok && kind != "sync" && kind != "look") Toast.makeText(act, "Couldn't send. Check your internet and try again.", Toast.LENGTH_SHORT).show()
         }

@@ -73,6 +73,34 @@ object Notifier {
         ctx.getSystemService(NotificationManager::class.java).notify(1001, n)
     }
 
+    private var lastTouch = 0L
+
+    /** "🫴🏻 Name is reaching for your hand": tapping opens the expanded widget, where you hold to hug. */
+    fun touch(ctx: Context, name: String) {
+        val now = System.currentTimeMillis()
+        if (now - lastTouch < 20000) return
+        lastTouch = now
+        channels(ctx)
+        if (!canPost(ctx)) { vibrateNow(ctx); return }
+        val open = android.app.PendingIntent.getActivity(
+            ctx, 3, android.content.Intent(ctx, WidgetPopupActivity::class.java).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK),
+            android.app.PendingIntent.FLAG_IMMUTABLE or android.app.PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val public = Notification.Builder(ctx, CH_BEAT).setSmallIcon(R.drawable.ic_stat_heart).setContentTitle("💗 Hearby").build()
+        val n = Notification.Builder(ctx, CH_BEAT)
+            .setSmallIcon(R.drawable.ic_stat_heart)
+            .setContentTitle("🫴🏻 $name is reaching for your hand")
+            .setContentText("Tap, then press and hold the scene to hug")
+            .setContentIntent(open)
+            .setAutoCancel(true)
+            .setTimeoutAfter(30000)
+            .setCategory(Notification.CATEGORY_MESSAGE)
+            .setVisibility(Notification.VISIBILITY_PRIVATE)
+            .setPublicVersion(public)
+            .build()
+        ctx.getSystemService(NotificationManager::class.java).notify(1003, n)
+    }
+
     fun felt(ctx: Context, name: String) {
         channels(ctx)
         if (!canPost(ctx)) return

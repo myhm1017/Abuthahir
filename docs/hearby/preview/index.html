@@ -1026,6 +1026,23 @@ button { cursor: pointer; }
     c.strokeStyle = K('#2f2a3a'); c.lineWidth = 1.6; c.beginPath(); c.moveTo(x, base); c.lineTo(x, ly); c.quadraticCurveTo(x, ly - 4, lx, ly - 3); c.stroke();
     c.fillStyle = '#ffe2a0'; c.beginPath(); c.arc(lx, ly + 1, 2, 0, TAU); c.fill();
   }
+  // Touch together: you walk in from the left, they walk in from the right, you meet in the middle and hug.
+  function drawEmbrace(c, s, me, pa, el, t, gyAt, U) {
+    const { w } = s, walkT = 2.1, meetT = 2.8;
+    const e = Math.min(1, el / walkT), ease = 1 - (1 - e) ** 2, walking = el < walkT;
+    const join = Math.min(1, Math.max(0, (el - walkT) / (meetT - walkT))), hold = join >= 1;
+    const sway = hold ? Math.sin(t * 1.8) * w * 0.004 : 0;
+    const xa = w * (-0.12 + 0.57 * ease + 0.03 * join) + sway, xb = w * (1.12 - 0.57 * ease - 0.03 * join) + sway;
+    const k1 = kid(c, s, xa, gyAt(xa), me, { walk: walking, phase: t * 6.5, face: 1, happy: hold }, t);
+    const k2 = kid(c, s, xb, gyAt(xb), pa, { walk: walking, phase: t * 6.5 + Math.PI, face: -1, happy: hold, holdSide: join > 0 ? -1 : 0, handTo: join > 0 ? { x: xa - k1.u * 1.4, y: k1.sh + k1.u * 2 } : null }, t);
+    if (join > 0) kid(c, s, xa, gyAt(xa), me, { face: 1, happy: hold, holdSide: 1, handTo: { x: xb + k2.u * 1.4, y: k2.sh + k2.u * 2 } }, t);
+    if (hold) {
+      const hy = Math.min(k1.hy, k2.hy) - k1.r * 1.8;
+      heart(c, (xa + xb) / 2, hy + Math.sin(t * 3) * 0.6 * U, 1.8 * U, '#ff6f9f', 0.95);
+      heart(c, (xa + xb) / 2 - 4 * U, hy - 3 * U + Math.sin(t * 2.4 + 1) * 0.6 * U, 1.1 * U, '#ff8fb8', 0.7);
+      heart(c, (xa + xb) / 2 + 4 * U, hy - 2 * U + Math.sin(t * 2.7 + 2) * 0.6 * U, 1.2 * U, '#ff8fb8', 0.75);
+    }
+  }
   function couple(c, s, E, o = {}) {
     const { w } = s, U = E.U, gy = x => nearY(s, x, 0) + 3, xa = w * (o.xa || 0.44), xb = w * (o.xb || 0.56), hand = { x: (xa + xb) / 2, y: gy(xa) - 6.6 * U };
     const k = kid(c, s, xa, gy(xa), E.me, { face: 1, blink: E.blinkMe, holdSide: 1, handTo: hand, happy: o.happy }, E.t);
@@ -1785,7 +1802,9 @@ button { cursor: pointer; }
 
   // A soft chibi character with a full wardrobe: hair, facial hair, hijab styles, tops, bottoms, dresses and shoes.
   // Returns head position and hand anchor.
+  let SKIP_KIDS = false;
   function kid(c, s, x, gy, p, o, t) {
+    if (SKIP_KIDS) { const uu = s.h / 92; return { hx: x, hy: gy - 15 * uu, r: 4.4 * uu, sh: gy - 9 * uu, u: uu, handR: uu }; }
     const man = p.type === 'man', hj = p.type === 'hijabi';
     const u = s.h / 92 * (o.scale || 1) * (man ? 1.05 : 1), face = o.face ?? 1, ph = o.phase || 0, fd = face || 1;
     const c1 = p.outfit, c2 = p.accent, H = p.hair;
@@ -2186,8 +2205,8 @@ button { cursor: pointer; }
     if (t - s.sceneStart > SCENE_LEN) { s.sceneIdx = (s.sceneIdx + 1) % SCENES.length; s.sceneStart = t; }
     let scene = SCENES[s.sceneIdx], prog = (t - s.sceneStart) / SCENE_LEN;
     if (s.override && t < s.overrideUntil) { scene = s.override; prog = (t - s.overrideStart) / (s.overrideUntil - s.overrideStart); } else s.override = null;
-    if (s.place === 'makkah' && !['walk', 'sit', 'together', 'peek', 'hug'].includes(scene)) scene = ['walk', 'sit', 'together', 'peek'][s.sceneIdx % 4];
-    if ((me.quiet || pa.quiet) && scene !== 'hug') scene = 'sleep';
+    if (s.place === 'makkah' && !['walk', 'sit', 'together', 'peek', 'hug', 'embrace'].includes(scene)) scene = ['walk', 'sit', 'together', 'peek'][s.sceneIdx % 4];
+    if ((me.quiet || pa.quiet) && scene !== 'hug' && scene !== 'embrace') scene = 'sleep';
     const night = me.quiet;
     if (scene === 'walk') s.scroll += dt * 16;
     const off = scene === 'walk' ? s.scroll : 0;
@@ -2201,7 +2220,9 @@ button { cursor: pointer; }
     if (plc.stage) {
       const nP = night || !!plc.alwaysNight;
       B(() => { paintSky(c, s, nP, t); if (!plc.dusk && !plc.alwaysNight) paintClouds(c, s, nP, dt); paintHills(c, s, nP, 0, t); });
-      plc.stage(c, s, nP ? tinter(true) : plc.dusk ? duskTint : tinter(false), { me, pa, t, dt, night: nP, U, blinkMe, blinkPa });
+      SKIP_KIDS = scene === 'embrace';
+      try { plc.stage(c, s, nP ? tinter(true) : plc.dusk ? duskTint : tinter(false), { me, pa, t, dt, night: nP, U, blinkMe, blinkPa }); } finally { SKIP_KIDS = false; }
+      if (scene === 'embrace') drawEmbrace(c, s, me, pa, t - s.overrideStart, t, gyAt, U);
       B(() => paintMotes(c, s, nP, t, dt));
       return;
     }
@@ -2237,6 +2258,9 @@ button { cursor: pointer; }
       kid(c, s, w * 0.57, gyAt(w * 0.57), pa, { face: -1, blink: blinkPa }, t);
       const beatK = Math.max(0, Math.sin(t * 5.5)) ** 6;
       heart(c, w * 0.5, k.hy - k.r * 1.5, (1.4 + beatK * 0.55) * U, '#ff6f9f', 0.95);
+    } else if (scene === 'embrace') {
+      B(() => { paintTree(c, s, w * 0.18, night, t); paintGrass(c, s, night, off, t); });
+      drawEmbrace(c, s, me, pa, t - s.overrideStart, t, gyAt, U);
     } else if (scene === 'hug') {
       B(() => { paintTree(c, s, w * 0.2, night, t); paintGrass(c, s, night, off, t); });
       const e = Math.min(1, prog / 0.3), ease = 1 - (1 - e) ** 3;
@@ -3370,8 +3394,8 @@ button { cursor: pointer; }
   function touchStart(id) {
     const o = other(id); W[id].held = true; TOUCH[id] = Date.now() + 8000;
     if (!touching()) {
-      sceneLabel(id, `🤲 Reaching for ${P[o].name}'s hand…`);
-      banner(o, `🤲 ${esc(P[id].name)} is reaching for your hand<small>Press and hold your widget to touch together</small>`);
+      sceneLabel(id, `🫴🏻 Reaching for ${P[o].name}'s hand…`);
+      banner(o, `🫴🏻 ${esc(P[id].name)} is reaching for your hand<small>Press and hold your widget to hug</small>`);
       try { if (navigator.vibrate) navigator.vibrate(40); } catch (e) { /* vibration unavailable */ }
     }
   }
@@ -3381,10 +3405,11 @@ button { cursor: pointer; }
     IDS.forEach(i => { if (W[i].held) TOUCH[i] = Math.max(TOUCH[i], now + 1500); });
     const conn = touching();
     if (conn && !wasTouching) {
-      IDS.forEach(i => { TOUCH[i] = Math.max(TOUCH[i], now + 6000); setOverride(i, 'hug', 6); sceneLabel(i, `🤲 Touching hands with ${P[other(i)].name}`); buzz(i, "🤲 You're touching hands across the distance", 5000); });
+      IDS.forEach(i => { TOUCH[i] = Math.max(TOUCH[i], now + 6000); setOverride(i, 'embrace', 9); sceneLabel(i, `🫂 Hugging ${P[other(i)].name} across the distance`); buzz(i, "🫂 You're hugging across the distance", 5000); });
+      if (NATIVE) { try { NATIVE.heartbeat(); } catch (e) { /* vibration unavailable */ } }
       try { if (navigator.vibrate) navigator.vibrate([0, 90, 110, 90, 110, 90]); } catch (e) { /* vibration unavailable */ }
     }
-    if (conn) IDS.forEach(i => { const st = W[i]; if (st.override === 'hug' && st.overrideUntil - t < 1.5) st.overrideUntil += 3; if (!reduced.matches && rand() < 0.3) twinkles(st.fx, ['💗', '✨'], 2); });
+    if (conn) IDS.forEach(i => { const st = W[i]; if (st.override === 'embrace' && st.overrideUntil - t < 1.5) st.overrideUntil += 3; if (!reduced.matches && rand() < 0.3) twinkles(st.fx, ['💗', '✨'], 2); });
     IDS.forEach(i => { W[i].widget.classList.toggle('touching', conn); W[i].widget.classList.toggle('reaching', !conn && TOUCH[i] > now); });
     wasTouching = conn;
   }, 300);
@@ -4202,11 +4227,33 @@ button { cursor: pointer; }
     here();
     renderPresence();
 
+    // Touch together across both phones: holding sends "reaching" every few seconds until you let go.
+    let reachT = 0;
+    const _touchStart = touchStart;
+    touchStart = id => {
+      _touchStart(id);
+      if (id !== 'leo' || incoming) return;
+      nsend('touch', 'reach');
+      clearInterval(reachT);
+      reachT = setInterval(() => { if (me.held) nsend('touch', 'reach'); else clearInterval(reachT); }, 3000);
+    };
+
     // Receiving: messages your partner sent, also the ones that arrived while the app was closed.
     let seen = +(localStorage.getItem('hearby-seen') || 0);
     const receive = (kind, text, d, at) => {
       if (kind === 'look') { applyLook(d); return; }
       if (kind === 'sync') { mergeSync(d); return; }
+      if (kind === 'touch') {
+        if (Math.abs(Date.now() - at) > 60e3) return;
+        const wasConn = touching();
+        TOUCH.mia = Math.max(TOUCH.mia, Date.now() + 7000);
+        if (!wasConn && !touching()) {
+          if (!typing()) showWidget();
+          banner('leo', `🫴🏻 ${esc(P.mia.name)} is reaching for your hand<small>Press and hold the scene to hug</small>`);
+          sceneLabel('leo', `🫴🏻 ${P.mia.name} is reaching for you…`);
+        }
+        return;
+      }
       const fresh = Date.now() - at < 24 * 3600e3;
       if (kind === 'felt') {
         if (Date.now() - at > 3600e3) return;

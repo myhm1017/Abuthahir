@@ -220,7 +220,7 @@ Opening Hearby feels like the widget opened up: the same calm painted scenery, g
 - **"Open when…" letters:** sealed letters that unlock in a moment (you miss me, you can't sleep, a hard day, our next monthversary).
 - **Bucket list with scenery:** dream places shown as little scenery pictures in the season you'd love to visit (or your own named spot that looks like one). Preview a place on your widget; ticked places join the timeline.
 
-### ⚙️ Me (v1)
+### 👤 Me (v1)
 - Your character with the full wardrobe.
 - **Secret gift ideas** for your partner, saved by occasion (birthday, anniversary, monthversary, Eid, just because) and marked as bought, never visible to them.
 - Privacy: end-to-end encryption status, the safety code to verify with your partner, discreet mode, screenshot protection.

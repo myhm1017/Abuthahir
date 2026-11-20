@@ -42,9 +42,10 @@ class MainActivity : Activity() {
     private var feltButton: Button? = null
     private var batteryButton: Button? = null
 
-    private val ink = Color.parseColor("#2E2338")
-    private val muted = Color.parseColor("#6E6180")
-    private val rose = Color.parseColor("#DB4F84")
+    private lateinit var pal: Palette
+    private val ink: Int get() = pal.ink
+    private val muted: Int get() = pal.muted
+    private val rose: Int get() = pal.accent
 
     private val refresh = object : BroadcastReceiver() {
         override fun onReceive(c: Context, i: Intent) { if (pr.paired) renderMain() }
@@ -78,7 +79,24 @@ class MainActivity : Activity() {
         try { unregisterReceiver(refresh) } catch (e: Exception) { /* not registered */ }
     }
 
-    private fun show() = if (pr.paired) buildMain() else buildSetup()
+    private fun show() {
+        pal = Palette.of(this)
+        applyWindowColors()
+        if (pr.paired) buildMain() else buildSetup()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun applyWindowColors() {
+        window.setBackgroundDrawable(android.graphics.drawable.ColorDrawable(pal.bg))
+        window.statusBarColor = pal.bg
+        window.navigationBarColor = pal.bg
+        var flags = window.decorView.systemUiVisibility
+        flags = if (pal.dark) flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv() and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
+        else flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        window.decorView.systemUiVisibility = flags
+    }
+
+    private fun dialogTheme() = if (pal.dark) android.R.style.Theme_Material_Dialog_Alert else android.R.style.Theme_Material_Light_Dialog_Alert
 
     // ---------- Small UI helpers ----------
     private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
@@ -95,21 +113,22 @@ class MainActivity : Activity() {
 
     private fun button(label: String, primary: Boolean = false, onClick: () -> Unit) = Button(this).apply {
         text = label; isAllCaps = false; textSize = 15f
-        setTextColor(if (primary) Color.WHITE else ink)
-        background = rounded(if (primary) rose else Color.parseColor("#FFFFFFFF"), 14, if (primary) 0 else Color.parseColor("#E6DBEA"))
+        setTextColor(if (primary) pal.onAccent else ink)
+        background = rounded(if (primary) rose else pal.field, 14, if (primary) 0 else pal.stroke)
         stateListAnimator = null
         setOnClickListener { onClick() }
     }
 
     private fun field(hint: String, value: String = "") = EditText(this).apply {
         this.hint = hint; setText(value); textSize = 16f; setSingleLine(true)
-        background = rounded(Color.WHITE, 12, Color.parseColor("#E6DBEA"))
+        setTextColor(ink); setHintTextColor(muted)
+        background = rounded(pal.field, 12, pal.stroke)
         setPadding(dp(12), dp(10), dp(12), dp(10))
     }
 
     private fun card() = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
-        background = rounded(Color.parseColor("#B3FFFFFF"), 20, Color.parseColor("#E6DBEA"))
+        background = rounded(pal.card, 20, pal.stroke)
         setPadding(dp(14), dp(14), dp(14), dp(14))
     }
 
@@ -150,15 +169,17 @@ class MainActivity : Activity() {
 
     private fun toast(s: String) = Toast.makeText(this, s, Toast.LENGTH_SHORT).show()
 
-    private fun lookPicker(label: String, current: String, onPick: (String) -> Unit): View {
+    private fun lookPicker(label: String, current: String, onPick: (String) -> Unit) =
+        choicePicker(label, listOf("man" to "🧔 Man", "hijab" to "🧕 Hijab", "woman" to "👩 Long hair"), current, onPick)
+
+    private fun choicePicker(label: String, opts: List<Pair<String, String>>, current: String, onPick: (String) -> Unit): View {
         val box = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         box.add(text(label, 13f, true, muted), 4)
-        val opts = listOf("man" to "🧔 Man", "hijab" to "🧕 Hijab", "woman" to "👩 Long hair")
         val buttons = mutableListOf<Button>()
         fun paint(sel: String) = buttons.forEachIndexed { i, b ->
             val on = opts[i].first == sel
-            b.background = rounded(if (on) rose else Color.WHITE, 12, if (on) 0 else Color.parseColor("#E6DBEA"))
-            b.setTextColor(if (on) Color.WHITE else ink)
+            b.background = rounded(if (on) rose else pal.field, 12, if (on) 0 else pal.stroke)
+            b.setTextColor(if (on) pal.onAccent else ink)
         }
         opts.forEach { (key, name) -> buttons.add(button(name) { onPick(key); paint(key) }.apply { textSize = 13f }) }
         box.add(row(*buttons.toTypedArray()), 6)
@@ -179,7 +200,14 @@ class MainActivity : Activity() {
         val theirName = field("Their name", pr.partnerName)
         who.add(myName)
         who.add(theirName)
-        who.add(lookPicker("You look like", myLook) { myLook = it })
+        who.add(lookPicker("You look like", myLook) {
+            myLook = it
+            // Recolour right away (blue for 🧔, pink otherwise) while keeping what was typed.
+            val before = Palette.hue(pr)
+            pr.myLook = it; pr.partnerLook = theirLook
+            pr.myName = myName.text.toString(); pr.partnerName = theirName.text.toString()
+            if (Palette.hue(pr) != before) show()
+        })
         who.add(lookPicker("They look like", theirLook) { theirLook = it })
         col.add(who, 18)
 
@@ -333,8 +361,12 @@ class MainActivity : Activity() {
         box.add(theirName)
         box.add(lookPicker("You look like", myLook) { myLook = it })
         box.add(lookPicker("They look like", theirLook) { theirLook = it })
+        var color = pr.themeColor
+        var mode = pr.themeMode
+        box.add(choicePicker("App colour", listOf("auto" to "✨ From my look", "blue" to "💙 Blue", "pink" to "💗 Pink"), color) { color = it }, 14)
+        box.add(choicePicker("Light or dark", listOf("system" to "📱 Like my phone", "light" to "☀️ Light", "dark" to "🌙 Dark"), mode) { mode = it })
         box.add(text("Pair code: ${pr.code}", 14f, true, muted).apply { setTextIsSelectable(true) }, 14)
-        AlertDialog.Builder(this)
+        AlertDialog.Builder(this, dialogTheme())
             .setTitle("Settings")
             .setView(ScrollView(this).apply { addView(box) })
             .setPositiveButton("Save") { _, _ ->
@@ -342,11 +374,13 @@ class MainActivity : Activity() {
                 if (theirName.text.isNotBlank()) pr.partnerName = theirName.text.toString().trim()
                 pr.myLook = myLook
                 pr.partnerLook = theirLook
+                pr.themeColor = color
+                pr.themeMode = mode
                 Inbox.refresh(this)
-                renderMain()
+                show()
             }
             .setNeutralButton("Unpair") { _, _ ->
-                AlertDialog.Builder(this)
+                AlertDialog.Builder(this, dialogTheme())
                     .setTitle("Unpair from ${pr.partnerName}?")
                     .setMessage("This phone stops sending and receiving. You can pair again with a new code.")
                     .setPositiveButton("Unpair") { _, _ ->

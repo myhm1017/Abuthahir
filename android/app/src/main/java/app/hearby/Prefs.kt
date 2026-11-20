@@ -17,6 +17,10 @@ class Prefs(ctx: Context) {
     /** "man", "hijab" or "woman" */
     var myLook: String get() = s("myLook", "man"); set(v) = put("myLook", v)
     var partnerLook: String get() = s("partnerLook", "hijab"); set(v) = put("partnerLook", v)
+    /** "auto" (from my look), "blue" or "pink" */
+    var themeColor: String get() = s("themeColor", "auto"); set(v) = put("themeColor", v)
+    /** "system", "light" or "dark" */
+    var themeMode: String get() = s("themeMode", "system"); set(v) = put("themeMode", v)
     var code: String get() = s("code"); set(v) = put("code", v)
 
     var lastId: String get() = s("lastId"); set(v) = put("lastId", v)

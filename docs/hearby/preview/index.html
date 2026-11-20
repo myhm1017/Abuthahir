@@ -3774,7 +3774,7 @@ button { cursor: pointer; }
     ['text', 'preset', 'photo', 'days', 'meet'].forEach(k => { s.q(`.s-${k}`).hidden = k !== kind; });
     s.q('.sheet-title').textContent = TITLES[kind];
     s.sheet.classList.add('open'); s.sheet.setAttribute('aria-hidden', 'false');
-    setTimeout(() => { const el = kind === 'text' ? s.q('textarea') : s.q(`.s-${kind} button, .s-${kind} input`); el && el.focus(); }, 250);
+    setTimeout(() => { const el = kind === 'text' ? s.q('.s-text textarea') : s.q(`.s-${kind} button, .s-${kind} input`); el && el.focus(); }, 250);
   }
   function closeSheet(id) { const s = W[id]; s.sheet.classList.remove('open'); s.sheet.setAttribute('aria-hidden', 'true'); }
 
@@ -3791,14 +3791,14 @@ button { cursor: pointer; }
     s.widget.addEventListener('keydown', e => { if (!s.open && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openW(id); } });
     q('.close-w').addEventListener('click', e => { e.stopPropagation(); closeW(id); });
     q('.scrim').addEventListener('click', () => closeW(id));
-    const ta = q('textarea'), sendText = q('.send-text');
-    ta.addEventListener('input', () => { q('.count').textContent = `${ta.value.length} / 120`; sendText.disabled = !ta.value.trim(); });
+    const ta = q('.s-text textarea'), sendText = q('.send-text');
+    ta.addEventListener('input', () => { q('.s-text .count').textContent = `${ta.value.length} / 120`; sendText.disabled = !ta.value.trim(); });
     ta.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && ta.value.trim()) { e.preventDefault(); sendText.click(); } });
     const modeOf = () => (root => root ? root.value : 'msg')(q(`input[name="mode-${id}"]:checked`));
     q('.modes').addEventListener('change', () => { const pop = modeOf() === 'pop'; q('.mode-hint').hidden = !pop; sendText.textContent = pop ? 'Pop it ✨' : 'Send 💌'; });
-    sendText.addEventListener('click', () => { const v = ta.value.trim(); if (!v) return; send(id, { text: v, pop: modeOf() === 'pop' }); ta.value = ''; q('.count').textContent = '0 / 120'; sendText.disabled = true; });
+    sendText.addEventListener('click', () => { const v = ta.value.trim(); if (!v) return; send(id, { text: v, pop: modeOf() === 'pop' }); ta.value = ''; q('.s-text .count').textContent = '0 / 120'; sendText.disabled = true; });
     q('.presets').addEventListener('click', e => { const b = e.target.closest('button'); if (b) send(id, { text: b.textContent }); });
-    const file = q('input[type="file"]'), thumbs = q('.thumbs'), sendPhoto = q('.send-photo'), pcount = q('.pcount');
+    const file = q('.s-photo input[type="file"]'), thumbs = q('.thumbs'), sendPhoto = q('.send-photo'), pcount = q('.pcount');
     const showThumbs = () => {
       thumbs.innerHTML = '';
       s.photos.forEach(src => { const im = document.createElement('img'); im.src = src; im.alt = 'Selected photo'; thumbs.appendChild(im); });

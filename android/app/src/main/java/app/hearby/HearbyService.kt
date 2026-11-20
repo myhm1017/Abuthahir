@@ -60,7 +60,9 @@ class HearbyService : Service() {
                         if (line.isBlank()) continue
                         val j = try { JSONObject(line) } catch (e: Exception) { continue }
                         if (j.optString("event") == "message") {
-                            Inbox.handle(this, j.optString("id"), j.optString("message"))
+                            val att = j.optJSONObject("attachment")
+                            val body = if (att != null) download(att.optString("url")) else j.optString("message")
+                            if (body != null) Inbox.handle(this, j.optString("id"), body.trim())
                         }
                     }
                 }
@@ -72,6 +74,19 @@ class HearbyService : Service() {
             }
         }
     }
+
+    /** Photos travel as an encrypted attachment; fetch it (it is still encrypted). */
+    private fun download(url: String): String? = try {
+        if (!url.startsWith(Relay.SERVER)) null
+        else {
+            val c = URL(url).openConnection() as HttpURLConnection
+            c.connectTimeout = 15000
+            c.readTimeout = 60000
+            val t = c.inputStream.bufferedReader().use { it.readText() }
+            c.disconnect()
+            t
+        }
+    } catch (e: Exception) { null }
 
     private fun setStatus(s: String) {
         val pr = Prefs(this)

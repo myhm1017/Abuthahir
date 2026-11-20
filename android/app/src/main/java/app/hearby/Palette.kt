@@ -36,11 +36,11 @@ data class Palette(
             val pr = Prefs(ctx)
             val dark = isDark(ctx, pr)
             return if (hue(pr) == "blue") {
-                if (dark) Palette(true, c("#0F1722"), c("#1A2533"), c("#213040"), c("#2C3D52"), c("#E8F0FA"), c("#9AABC0"), c("#7FB6F0"), c("#0B1420"))
-                else Palette(false, c("#EEF5FC"), c("#CCFFFFFF"), c("#FFFFFF"), c("#D3E3F3"), c("#1F2A3A"), c("#5E6E82"), c("#4A8FD8"), c("#FFFFFF"))
+                if (dark) Palette(true, c("#0E1726"), c("#1A2533"), c("#213040"), c("#2C3D52"), c("#E8F0FA"), c("#9AABC0"), c("#7FB6F0"), c("#0B1420"))
+                else Palette(false, c("#E4F0FC"), c("#CCFFFFFF"), c("#FFFFFF"), c("#D3E3F3"), c("#1F2A3A"), c("#5E6E82"), c("#4A8FD8"), c("#FFFFFF"))
             } else {
-                if (dark) Palette(true, c("#1E1219"), c("#2B1A24"), c("#34202C"), c("#4A2E3D"), c("#FAEAF1"), c("#C29FB0"), c("#F59BC0"), c("#2A0F1C"))
-                else Palette(false, c("#FFF4F8"), c("#CCFFFFFF"), c("#FFFFFF"), c("#F2D6E3"), c("#3A2330"), c("#806272"), c("#E0679A"), c("#FFFFFF"))
+                if (dark) Palette(true, c("#21131D"), c("#2B1A24"), c("#34202C"), c("#4A2E3D"), c("#FAEAF1"), c("#C29FB0"), c("#F59BC0"), c("#2A0F1C"))
+                else Palette(false, c("#F9E3F0"), c("#CCFFFFFF"), c("#FFFFFF"), c("#F2D6E3"), c("#3A2330"), c("#806272"), c("#E0679A"), c("#FFFFFF"))
             }
         }
     }

@@ -14,7 +14,7 @@ import java.net.URL
 object Relay {
     const val SERVER = "https://ntfy.sh"
 
-    fun sendBlocking(ctx: Context, kind: String, text: String = ""): Boolean {
+    fun sendBlocking(ctx: Context, kind: String, text: String = "", data: String = ""): Boolean {
         val pr = Prefs(ctx)
         if (!pr.paired) return false
         val body = JSONObject()
@@ -24,6 +24,7 @@ object Relay {
             .put("kind", kind)
             .put("text", text)
             .put("at", System.currentTimeMillis())
+            .apply { if (data.isNotEmpty()) put("data", data) }
             .toString()
         val enc = HearbyCrypto.encrypt(pr.code, body)
         return try {
@@ -31,7 +32,9 @@ object Relay {
             c.requestMethod = "POST"
             c.doOutput = true
             c.connectTimeout = 15000
-            c.readTimeout = 15000
+            c.readTimeout = 60000
+            // Big messages (photos) are stored by the relay as an encrypted attachment for a few hours.
+            if (enc.length > 3900) c.setRequestProperty("Filename", "hearby.txt")
             c.setRequestProperty("Content-Type", "text/plain; charset=utf-8")
             c.outputStream.use { it.write(enc.toByteArray(Charsets.UTF_8)) }
             val ok = c.responseCode in 200..299
@@ -43,12 +46,12 @@ object Relay {
     }
 
     /** Sends on a background thread and reports back on the main thread. */
-    fun send(ctx: Context, kind: String, text: String = "", done: (Boolean) -> Unit = {}) {
+    fun send(ctx: Context, kind: String, text: String = "", data: String = "", done: (Boolean) -> Unit = {}) {
         val app = ctx.applicationContext
         val main = Handler(Looper.getMainLooper())
         Thread {
-            val ok = sendBlocking(app, kind, text)
-            if (ok) Inbox.recordSent(app, kind, text)
+            val ok = sendBlocking(app, kind, text, data)
+            if (ok && kind in Inbox.LOVE + "felt") Inbox.recordSent(app, kind, text)
             main.post { done(ok) }
         }.start()
     }

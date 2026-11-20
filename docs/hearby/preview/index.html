@@ -516,6 +516,29 @@ button { cursor: pointer; }
     leo: { id: 'leo', name: 'Leo', city: 'London', tz: 'Europe/London', type: 'man', skin: '#e8b894', hair: '#2b1d17', eyes: '#5a3a24', outfit: '#7fa6d9', hijab: '#c98fb4', facial: 'full', hairStyle: 'short', top: 'shirt', bottom: 'trousers', dress: 'abaya', hijabStyle: 'classic', shoes: 'sneakers', accent: '#3f4a66', glasses: false, status: 'free to talk', quiet: false, discreet: false, screen: true },
     mia: { id: 'mia', name: 'Mia', city: 'Toronto', tz: 'America/Toronto', type: 'hijabi', skin: '#f3d0b5', hair: '#2b1d17', eyes: '#6b4a2b', outfit: '#8f7bb8', hijab: '#c98fb4', facial: 'none', hairStyle: 'free', top: 'tshirt', bottom: 'trousers', dress: 'abaya', hijabStyle: 'classic', shoes: 'flats', accent: '#e8d5c4', glasses: false, status: 'at work', quiet: false, discreet: false, screen: true }
   };
+  // ---------- Real phone mode (inside the Hearby Android app) ----------
+  // On the phone, "leo" is always you and "mia" is always your partner; names and looks come from the app.
+  const NATIVE = window.HearbyNative || null;
+  const NCFG = (() => { if (!NATIVE) return null; try { return JSON.parse(NATIVE.config()); } catch (e) { return {}; } })();
+  if (NATIVE) {
+    const TYPE = { man: 'man', hijab: 'hijabi', woman: 'woman' };
+    const base = { man: { ...P.leo }, hijabi: { ...P.mia }, woman: { ...P.mia, type: 'woman', hairStyle: 'long', outfit: '#f2a7bf', accent: '#e8d5c4' } };
+    const read = k => { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } };
+    const city = tz => (String(tz || '').split('/').pop() || '').replace(/_/g, ' ');
+    const myTz = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch (e) { return 'UTC'; } })();
+    const build = (id, look, saved, name, tz) => {
+      const type = TYPE[look] || 'man';
+      const keep = saved && saved.type === type ? saved : {};
+      return Object.assign({}, base[type], keep, { id, type, name: name || (id === 'leo' ? 'You' : 'Your person'), tz, city: city(tz), quiet: false, discreet: false, screen: true });
+    };
+    const paSaved = read('hearby-look-partner');
+    P.leo = build('leo', NCFG.myLook, read('hearby-look-me'), NCFG.myName, myTz);
+    P.mia = build('mia', NCFG.partnerLook, paSaved, NCFG.partnerName, (paSaved && paSaved.tz) || myTz);
+    const root = document.documentElement;
+    root.classList.add('native');
+    root.dataset.hue = NCFG.hue || 'pink';
+    root.dataset.theme = NCFG.dark ? 'dark' : 'light';
+  }
   const IDS = ['leo', 'mia'];
   const other = id => (id === 'leo' ? 'mia' : 'leo');
   const STATUSES = { 'free to talk': '💬', 'at work': '💼', 'studying': '📚', 'sleepy': '😪', 'busy': '⏳', 'missing you': '🥺' };
@@ -860,8 +883,8 @@ button { cursor: pointer; }
     };
     new ResizeObserver(() => fit(W[id])).observe(canvas);
   });
-  W.leo.msg = { from: 'mia', text: 'thinking of you 🤍', at: now - 2 * 3600e3 - 4 * 60e3, kept: false, felt: false, revealed: false };
-  W.mia.msg = { from: 'leo', text: 'good morning, cutie ☀️', at: now - 37 * 60e3, kept: false, felt: true, revealed: false };
+  if (!NATIVE) W.leo.msg = { from: 'mia', text: 'thinking of you 🤍', at: now - 2 * 3600e3 - 4 * 60e3, kept: false, felt: false, revealed: false };
+  if (!NATIVE) W.mia.msg = { from: 'leo', text: 'good morning, cutie ☀️', at: now - 37 * 60e3, kept: false, felt: true, revealed: false };
 
   function fit(s) {
     const r = s.canvas.getBoundingClientRect();
@@ -2390,7 +2413,14 @@ button { cursor: pointer; }
   }
   function renderBubble(id) {
     const s = W[id], m = s.msg, q = s.q;
-    if (!m) return;
+    if (!m) {
+      q('.b-img').hidden = true; q('.b-veil').hidden = true; q('.keep').hidden = true;
+      q('.b-text').textContent = `Nothing from ${P[other(id)].name} yet. Send a little love 💗`;
+      q('.b-when').textContent = '🔒 end-to-end encrypted';
+      q('[data-act="felt"]').disabled = true;
+      return;
+    }
+    q('.keep').hidden = false;
     const img = q('.b-img'), body = q('.b-body'), veil = q('.b-veil'), keep = q('.keep'), felt = q('[data-act="felt"]');
     img.hidden = !m.img; if (m.img) img.src = m.img;
     q('.b-text').textContent = m.img ? (m.text || 'sent you a photo 📷') : m.text;
@@ -2617,6 +2647,7 @@ button { cursor: pointer; }
   function seedDays() {
     const now = new Date(), at = n => { const d = new Date(now); d.setDate(d.getDate() + n); return d; };
     const mk = (id, type, who, title, d, yearsAgo, cel) => ({ id, type, who, title, month: d.getMonth() + 1, day: d.getDate(), year: d.getFullYear() - yearsAgo, countYears: true, cel });
+    if (NATIVE) return [];
     return [
       mk('d1', 'birthday', 'mia', '', at(1), 23, 'auto'),
       mk('d2', 'birthday', 'leo', '', at(64), 26, 'auto'),
@@ -2632,7 +2663,7 @@ button { cursor: pointer; }
   const repeatText = ev => ({ daily: 'every day', weekly: `every ${WEEKDAYS[ev.weekday ?? 0]}`, monthly: `every month on the ${ordinal(ev.day)}`, once: 'one time' }[ev.repeat] || 'every year');
   let MEMORIES = store.get('hearby-memories', []);
   const isoDate = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-  let MEET = store.get('hearby-meet', null) || (() => { const d = new Date(); d.setDate(d.getDate() + 12); return { on: true, date: isoDate(d), note: '' }; })();
+  let MEET = store.get('hearby-meet', null) || (NATIVE ? { on: false, date: null, note: '' } : null) || (() => { const d = new Date(); d.setDate(d.getDate() + 12); return { on: true, date: isoDate(d), note: '' }; })();
   function meetDays() { if (!MEET.date) return null; const [y, m, d] = MEET.date.split('-').map(Number); return Math.round((new Date(y, m - 1, d) - today0()) / 86400000); }
   const saveDays = () => store.set('hearby-days', DAYS);
 
@@ -2959,7 +2990,7 @@ button { cursor: pointer; }
     watch: { title: '', status: 'idle', pos: 0, startedAt: 0, countAt: 0, chat: [] },
     sleep: { leo: false, mia: false, since: 0 }
   });
-  const APP = Object.assign(APP_DEFAULT(), store.get('hearby-app2', {}));
+  const APP = Object.assign(APP_DEFAULT(), NATIVE ? { letters: [], bucket: [], gifts: { leo: [], mia: [] }, albums: [] } : {}, store.get('hearby-app2', {}));
   APP.sleep = { leo: false, mia: false, since: 0 };
   const saveApp = () => store.set('hearby-app2', APP);
   const dayIdx = () => Math.floor(today0().getTime() / 86400000);
@@ -3906,7 +3937,184 @@ button { cursor: pointer; }
   renderDays(); setRibbons();
   setTimeout(checkDays, 2500);
   setInterval(checkDays, 60000);
-  IDS.forEach((id, i) => { const loop = () => { gentleNudge(id); setTimeout(loop, 70000 + rand() * 40000); }; setTimeout(loop, 30000 + i * 12000); });
+  if (!NATIVE) IDS.forEach((id, i) => { const loop = () => { gentleNudge(id); setTimeout(loop, 70000 + rand() * 40000); }; setTimeout(loop, 30000 + i * 12000); });
+  // ---------- Real phone mode: connect the preview to the Hearby app ----------
+  if (NATIVE) (() => {
+    const call = (fn, ...args) => { try { return NATIVE[fn](...args); } catch (e) { return null; } };
+    const nsend = (kind, text = '', data = null) => call('send', kind, text || '', data ? JSON.stringify(data) : '');
+    let incoming = false;
+    const me = W.leo;
+    const typing = () => { const a = document.activeElement; return !!a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName); };
+
+    // Only your own phone is shown. The widget stays open; the app opens over it.
+    const _setTab = setTab; setTab = id => { if (id === 'leo') _setTab(id); };
+    const _closeW = closeW; closeW = () => {};
+    const showWidget = () => { if (me.appOpen) closeApp('leo'); if (!me.open) openW('leo'); };
+    const showApp = () => { if (!me.appOpen) openApp('leo'); };
+    me.q('.close-w').addEventListener('click', e => { e.stopPropagation(); showApp(); }, true);
+    me.q('.scrim').addEventListener('click', showApp);
+    me.q('.app-back').setAttribute('aria-label', 'Show the widget');
+    me.q('.app-back').textContent = '‹';
+
+    // Sending: everything you send also goes, end-to-end encrypted, to your partner's phone.
+    const _send = send;
+    send = (from, payload) => {
+      _send(from, payload);
+      if (from !== 'leo' || incoming) return;
+      if (payload.imgs) nsend('photos', payload.text, { imgs: payload.imgs, trans: payload.trans || 'random' });
+      else nsend('text', payload.text, payload.pop ? { pop: true } : null);
+    };
+    const _fly = sendFly;
+    sendFly = (from, kind) => { _fly(from, kind); if (from === 'leo' && !incoming) nsend(kind); };
+    const _felt = feltIt;
+    feltIt = id => { const m = W[id].msg, can = !!m && !m.felt; _felt(id); if (id === 'leo' && can && !incoming) nsend('felt'); };
+
+    // Shared things (moods, answers, special days, letters, dua list, bucket list, dates, trip) stay in sync.
+    // Secret gift ideas, albums and games stay on your phone.
+    const swap = o => JSON.parse(JSON.stringify(o).replace(/"(leo|mia)"/g, (m, w) => (w === 'leo' ? '"mia"' : '"leo"')));
+    const PER_PERSON = ['mood', 'sleep'];
+    const SHARED = ['duas', 'letters', 'bucket', 'dates', 'goodnights', 'trip'];
+    const snapshot = () => {
+      const o = { days: DAYS, meet: MEET, qa: {} };
+      PER_PERSON.forEach(k => { if (APP[k]) o[k] = { leo: APP[k].leo }; });
+      SHARED.forEach(k => { if (APP[k] !== undefined) o[k] = APP[k]; });
+      Object.keys(APP.qa || {}).forEach(k => { if (APP.qa[k].leo) o.qa[k] = { leo: APP.qa[k].leo }; });
+      return o;
+    };
+    let merging = false, syncT = 0, lastSync = localStorage.getItem('hearby-sync-sent') || '';
+    const pushSync = () => {
+      clearTimeout(syncT);
+      syncT = setTimeout(() => {
+        const j = JSON.stringify(snapshot());
+        if (j === lastSync) return;
+        lastSync = j; try { localStorage.setItem('hearby-sync-sent', j); } catch (e) { /* storage full */ }
+        nsend('sync', '', JSON.parse(j));
+      }, 1500);
+    };
+    const _set = store.set;
+    store.set = (k, v) => { _set.call(store, k, v); if (!merging && (k === 'hearby-app2' || k === 'hearby-days' || k === 'hearby-meet')) pushSync(); };
+    const mergeSync = raw => {
+      const d = swap(raw);
+      merging = true;
+      try {
+        PER_PERSON.forEach(k => { if (d[k] && d[k].mia !== undefined) { APP[k] = APP[k] || {}; APP[k].mia = d[k].mia; } });
+        SHARED.forEach(k => { if (d[k] !== undefined) APP[k] = d[k]; });
+        Object.keys(d.qa || {}).forEach(k => { APP.qa[k] = Object.assign({}, APP.qa[k], { mia: d.qa[k].mia }); });
+        if (Array.isArray(d.days)) { DAYS = d.days; saveDays(); }
+        if (d.meet) { MEET = d.meet; store.set('hearby-meet', MEET); }
+        saveApp();
+        lastSync = JSON.stringify(snapshot());
+      } finally { merging = false; }
+      IDS.forEach(renderHead); renderDays(); setRibbons(); renderAppAll();
+    };
+
+    // Your character: saved on this phone and shared so your partner sees the real you.
+    const LOOK_OF = { man: 'man', hijabi: 'hijab', woman: 'woman' };
+    const lookOf = p => { const o = { ...p }; ['id', 'name', 'quiet', 'discreet', 'screen', 'city'].forEach(k => delete o[k]); return o; };
+    let lookT = 0;
+    const pushLook = () => {
+      clearTimeout(lookT);
+      lookT = setTimeout(() => {
+        const j = JSON.stringify(lookOf(P.leo));
+        try { localStorage.setItem('hearby-look-me', j); } catch (e) { /* storage full */ }
+        call('setMyLook', LOOK_OF[P.leo.type] || 'man');
+        if (j !== localStorage.getItem('hearby-look-sent')) { try { localStorage.setItem('hearby-look-sent', j); } catch (e) { /* storage full */ } nsend('look', '', JSON.parse(j)); }
+      }, 1200);
+    };
+    const applyLook = d => {
+      Object.assign(P.mia, d, { id: 'mia', name: P.mia.name, city: String(d.tz || P.mia.tz).split('/').pop().replace(/_/g, ' ') });
+      try { localStorage.setItem('hearby-look-partner', JSON.stringify(lookOf(P.mia))); } catch (e) { /* storage full */ }
+      call('setPartnerLook', LOOK_OF[P.mia.type] || 'hijab');
+      IDS.forEach(renderHead); renderAppAll();
+    };
+    me.root.querySelector('.avatar').addEventListener('change', pushLook);
+    document.getElementById('status-leo').addEventListener('change', pushLook);
+    const _rename = rename;
+    rename = (id, value) => { _rename(id, value); if (id === 'leo' && value.trim()) call('setNames', P.leo.name, P.mia.name); };
+
+    // "Change my look" opens your character and widget settings as a full-screen panel.
+    const ctl = me.root.querySelector('.controls');
+    const ctlClose = document.createElement('button');
+    ctlClose.className = 'send ctl-done'; ctlClose.textContent = 'Done';
+    ctl.prepend(ctlClose);
+    ctlClose.addEventListener('click', () => ctl.classList.remove('native-open'));
+    me.q('.me-edit').addEventListener('click', e => {
+      e.stopImmediatePropagation();
+      ctl.classList.add('native-open');
+      const d = ctl.querySelector('details.avatar'); if (d) d.open = true;
+      ctl.scrollTop = 0;
+    }, true);
+
+    // Phone settings, the widget and privacy live in the Me tab.
+    const meTab = me.q('.tab[data-tab="me"]');
+    const safety = call('safety');
+    if (safety) meTab.querySelector('.safety').textContent = safety;
+    const card = document.createElement('div');
+    card.className = 'card native-card';
+    card.innerHTML = `<b>📱 On this phone</b>
+      <p class="hint2 n-status"></p>
+      <div class="n-btns">
+        <button class="mini2" data-n="pinWidget">➕ Add the widget</button>
+        <button class="mini2" data-n="battery">🔋 Keep connected</button>
+        <button class="mini2" data-n="heartbeat">💓 Feel the heartbeat</button>
+        <button class="mini2" data-n="settings">⚙️ Names, colours &amp; pairing</button>
+      </div>`;
+    meTab.insertBefore(card, meTab.children[1] || null);
+    card.addEventListener('click', e => { const b = e.target.closest('button[data-n]'); if (b) call(b.dataset.n); });
+    const renderStatus = () => {
+      const st = call('status') || 'starting', name = esc(P.mia.name);
+      card.querySelector('.n-status').innerHTML = st === 'connected' ? `🟢 Connected. Heartbeats from ${name} will reach you.` : st === 'offline' ? '🟠 Offline. Hearby reconnects when you\'re back online.' : '⚪ Connecting…';
+      card.querySelector('[data-n="battery"]').hidden = call('batteryOk') === true;
+    };
+
+    // Receiving: messages your partner sent, also the ones that arrived while the app was closed.
+    let seen = +(localStorage.getItem('hearby-seen') || 0);
+    const receive = (kind, text, d, at) => {
+      if (kind === 'look') { applyLook(d); return; }
+      if (kind === 'sync') { mergeSync(d); return; }
+      const fresh = Date.now() - at < 24 * 3600e3;
+      if (kind === 'felt') {
+        if (Date.now() - at > 3600e3) return;
+        if (!typing()) showWidget();
+        setTimeout(() => { sceneLabel('leo', `${P.mia.name} felt it 💗`); if (!reduced.matches) burst(me.fx, ['💗', '💕'], PA.x, PA.y - 0.15, 6); }, 400);
+        return;
+      }
+      if (!fresh) return;
+      if (!typing()) showWidget(); else toast('leo', `💌 New from ${P.mia.name}`);
+      if (kind === 'kiss' || kind === 'heart') sendFly('mia', kind);
+      else if (kind === 'hug') send('mia', { text: 'sending a hug 🤗' });
+      else if (kind === 'photos' && Array.isArray(d.imgs)) send('mia', { imgs: d.imgs, trans: d.trans, text });
+      else send('mia', { text, pop: !!d.pop });
+      if (kind !== 'kiss' && kind !== 'heart') setTimeout(() => { if (me.msg && me.msg.from === 'mia') { me.msg.at = Math.min(at, Date.now()); renderBubble('leo'); } }, 1300);
+    };
+    window.hearbyPull = () => {
+      let items = [];
+      try { items = JSON.parse(call('inbox') || '[]'); } catch (e) { items = []; }
+      items.sort((a, b) => a.at - b.at).forEach(it => {
+        if (!(it.at > seen)) return;
+        seen = it.at; try { localStorage.setItem('hearby-seen', String(seen)); } catch (e) { /* storage full */ }
+        let d = {}; try { d = it.data ? JSON.parse(it.data) : {}; } catch (e) { d = {}; }
+        incoming = true;
+        try { receive(it.kind, it.text || '', d || {}, it.at || Date.now()); } finally { incoming = false; }
+      });
+      renderStatus();
+    };
+
+    // The home-screen widget shows the same painted scene as the app.
+    const saveScene = () => { try { if (me.canvas.width > 40) call('saveScene', me.canvas.toDataURL('image/png')); } catch (e) { /* canvas unavailable */ } };
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') saveScene();
+      else { setTimeout(saveScene, 2500); window.hearbyPull(); }
+    });
+
+    // Start: open on the app, then catch up on anything that arrived.
+    openW('leo');
+    openApp('leo');
+    pushLook();
+    setTimeout(window.hearbyPull, 600);
+    setTimeout(saveScene, 3000);
+    setInterval(renderStatus, 15000);
+  })();
   let last = performance.now() / 1000;
   function frame(ms) {
     const t = ms / 1000, dt = Math.min(0.1, t - last);

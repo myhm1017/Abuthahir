@@ -31,6 +31,8 @@ class Prefs(ctx: Context) {
     var feltAt: Long get() = l("feltAt"); set(v) = putL("feltAt", v)
     var sentNote: String get() = s("sentNote"); set(v) = put("sentNote", v)
     var sentAt: Long get() = l("sentAt"); set(v) = putL("sentAt", v)
+    /** Recent messages for the app screen, as a JSON array (newest last). */
+    var inbox: String get() = s("inbox", "[]"); set(v) = put("inbox", v)
     var status: String get() = s("status", "starting"); set(v) = put("status", v)
 
     val deviceId: String
@@ -47,6 +49,6 @@ class Prefs(ctx: Context) {
 
     fun unpair() {
         p.edit().remove("code").remove("lastId").remove("lastKind").remove("lastText").remove("lastAt")
-            .remove("feltAt").remove("sentNote").remove("sentAt").apply()
+            .remove("feltAt").remove("sentNote").remove("sentAt").remove("inbox").apply()
     }
 }

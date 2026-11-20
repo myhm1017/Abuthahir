@@ -2,6 +2,7 @@ package app.hearby
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.LinearGradient
 import android.graphics.Paint
@@ -9,6 +10,7 @@ import android.graphics.Path
 import android.graphics.RadialGradient
 import android.graphics.RectF
 import android.graphics.Shader
+import java.io.File
 import java.util.Calendar
 import kotlin.math.sin
 
@@ -40,7 +42,33 @@ object SceneRenderer {
         cv.clipPath(clip)
 
         val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-        val mode = when (hour) { in 6..16 -> 0; in 17..19 -> 1; else -> 2 } // day, sunset, night
+        val mode = modeAt(hour) // day, sunset, night
+
+        // The app saves its painted scene (a new place each time you open it); the widget shows the same picture.
+        val snap = snapshot(ctx)
+        if (snap != null) {
+            val s = maxOf(W / snap.first.width, H / snap.first.height)
+            val dw = snap.first.width * s
+            val dh = snap.first.height * s
+            val left = (W - dw) / 2f
+            val top = (H - dh) * 0.7f
+            cv.drawBitmap(snap.first, null, RectF(left, top, left + dw, top + dh), Paint(Paint.FILTER_BITMAP_FLAG or Paint.ANTI_ALIAS_FLAG))
+            // If the time of day has changed since then, tint it so night still looks like night.
+            if (mode != snap.second) {
+                p.color = when (mode) { 2 -> c(0x7A141B46); 1 -> c(0x40E8707A); else -> c(0x00000000) }
+                cv.drawRect(0f, 0f, W, H, p)
+                if (mode == 2) {
+                    p.color = c(0xCCFFF6D8)
+                    for (i in 0 until 24) {
+                        val x = ((i * 97.31) % 1.0).toFloat() * W
+                        val y = ((i * 0.6180339) % 1.0).toFloat() * H * 0.35f
+                        cv.drawCircle(x, y, if (i % 5 == 0) W * 0.006f else W * 0.0035f, p)
+                    }
+                }
+            }
+            drawEmoji(cv, p, pr, W, H)
+            return bmp
+        }
         val sky = when (mode) {
             0 -> intArrayOf(c(0xFF78B2E3), c(0xFFB9DCF2), c(0xFFFDE5D3))
             1 -> intArrayOf(c(0xFF4B2F73), c(0xFFE8707A), c(0xFFFFC46B))
@@ -129,13 +157,38 @@ object SceneRenderer {
         val head = drawKid(cv, p, xb, nearY(xb, W, H) + 3 * ku, ku, you, -1f, (xa + xb) / 2, handY)
         drawHeart(cv, p, W * 0.5f, head - 7.5f * ku, 1.6f * ku, c(0xFFFF6F9F))
 
-        // A big emoji floats up for a few minutes after a kiss, heart or hug arrives.
+        drawEmoji(cv, p, pr, W, H)
+        return bmp
+    }
+
+    private fun modeAt(hour: Int) = when (hour) { in 6..16 -> 0; in 17..19 -> 1; else -> 2 }
+
+    /** A big emoji floats up for a few minutes after a kiss, heart or hug arrives. */
+    private fun drawEmoji(cv: Canvas, p: Paint, pr: Prefs, W: Float, H: Float) {
         if (pr.lastKind.isNotEmpty() && System.currentTimeMillis() - pr.lastAt < 3 * 60 * 1000L) {
             p.textSize = H * 0.18f
             p.textAlign = Paint.Align.CENTER
+            p.color = c(0xFFFFFFFF)
             cv.drawText(Inbox.emojiFor(pr.lastKind, pr.lastText), W * 0.72f, H * 0.36f, p)
         }
-        return bmp
+    }
+
+    fun sceneFile(ctx: Context) = File(ctx.filesDir, "scene.png")
+
+    private var cached: Bitmap? = null
+    private var cachedAt = 0L
+
+    /** The scene the app last saved and the time of day it was painted, or null. */
+    private fun snapshot(ctx: Context): Pair<Bitmap, Int>? {
+        val f = sceneFile(ctx)
+        if (!f.exists()) return null
+        if (cached == null || cachedAt != f.lastModified()) {
+            cached = try { BitmapFactory.decodeFile(f.path) } catch (e: Exception) { null }
+            cachedAt = f.lastModified()
+        }
+        val b = cached ?: return null
+        val made = Calendar.getInstance().apply { timeInMillis = f.lastModified() }.get(Calendar.HOUR_OF_DAY)
+        return b to modeAt(made)
     }
 
     private fun nearY(x: Float, W: Float, H: Float): Float {

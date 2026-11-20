@@ -32,8 +32,18 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import android.webkit.JavascriptInterface
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.util.Base64
+import java.io.File
+import java.security.MessageDigest
 
 class MainActivity : Activity() {
+    companion object { private const val PICK_PHOTOS = 7 }
+
     private lateinit var pr: Prefs
     private var sceneView: ImageView? = null
     private var partnerView: TextView? = null
@@ -41,6 +51,8 @@ class MainActivity : Activity() {
     private var statusView: TextView? = null
     private var feltButton: Button? = null
     private var batteryButton: Button? = null
+    private var web: WebView? = null
+    private var fileCallback: ValueCallback<Array<Uri>>? = null
 
     private lateinit var pal: Palette
     private val ink: Int get() = pal.ink
@@ -48,7 +60,7 @@ class MainActivity : Activity() {
     private val rose: Int get() = pal.accent
 
     private val refresh = object : BroadcastReceiver() {
-        override fun onReceive(c: Context, i: Intent) { if (pr.paired) renderMain() }
+        override fun onReceive(c: Context, i: Intent) { if (web != null) pull() else if (pr.paired) renderMain() }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,21 +80,159 @@ class MainActivity : Activity() {
         super.onResume()
         val f = IntentFilter(Inbox.ACTION_REFRESH)
         if (Build.VERSION.SDK_INT >= 33) registerReceiver(refresh, f, Context.RECEIVER_NOT_EXPORTED) else registerReceiver(refresh, f)
+        web?.onResume()
         if (pr.paired) {
             HearbyService.start(this)
-            renderMain()
+            if (web != null) pull() else renderMain()
         }
     }
 
     override fun onPause() {
         super.onPause()
+        web?.onPause()
         try { unregisterReceiver(refresh) } catch (e: Exception) { /* not registered */ }
     }
 
     private fun show() {
         pal = Palette.of(this)
         applyWindowColors()
-        if (pr.paired) buildMain() else buildSetup()
+        web?.destroy()
+        web = null
+        if (pr.paired) { if (!buildWeb()) buildMain() } else buildSetup()
+    }
+
+    // ---------- The app screen: the Hearby design, running in real phone mode ----------
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun buildWeb(): Boolean {
+        val wv = try { WebView(this) } catch (e: Exception) { return false }
+        wv.setBackgroundColor(pal.bg)
+        wv.settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            useWideViewPort = true
+            loadWithOverviewMode = true
+            setSupportZoom(false)
+            builtInZoomControls = false
+            textZoom = 100
+            allowFileAccess = false
+            allowContentAccess = false
+        }
+        wv.isVerticalScrollBarEnabled = false
+        wv.addJavascriptInterface(Bridge(), "HearbyNative")
+        wv.webViewClient = object : WebViewClient() {
+            // Everything is inside the app; never open other pages.
+            override fun shouldOverrideUrlLoading(view: WebView, request: android.webkit.WebResourceRequest) = true
+        }
+        wv.webChromeClient = object : WebChromeClient() {
+            override fun onShowFileChooser(view: WebView, cb: ValueCallback<Array<Uri>>, params: FileChooserParams): Boolean {
+                fileCallback?.onReceiveValue(null)
+                fileCallback = cb
+                val pick = Intent(Intent.ACTION_GET_CONTENT).apply {
+                    type = "image/*"
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    putExtra(Intent.EXTRA_ALLOW_MULTIPLE, params.mode == FileChooserParams.MODE_OPEN_MULTIPLE)
+                }
+                return try { startActivityForResult(Intent.createChooser(pick, "Choose photos"), PICK_PHOTOS); true } catch (e: Exception) { fileCallback = null; false }
+            }
+        }
+        setContentView(wv)
+        wv.loadUrl("file:///android_asset/hearby.html")
+        web = wv
+        return true
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != PICK_PHOTOS) return
+        val cb = fileCallback ?: return
+        fileCallback = null
+        if (resultCode != RESULT_OK || data == null) { cb.onReceiveValue(null); return }
+        val uris = mutableListOf<Uri>()
+        data.clipData?.let { c -> for (i in 0 until c.itemCount) uris.add(c.getItemAt(i).uri) }
+        if (uris.isEmpty()) data.data?.let { uris.add(it) }
+        cb.onReceiveValue(if (uris.isEmpty()) null else uris.toTypedArray())
+    }
+
+    private fun pull() { web?.evaluateJavascript("window.hearbyPull && window.hearbyPull()", null) }
+
+    private fun js(code: String) = runOnUiThread { web?.evaluateJavascript(code, null) }
+
+    /** What the app screen can ask the phone to do. Runs on a background thread, so UI work is posted. */
+    inner class Bridge {
+        @JavascriptInterface
+        fun config(): String = org.json.JSONObject()
+            .put("myName", pr.myName).put("partnerName", pr.partnerName)
+            .put("myLook", pr.myLook).put("partnerLook", pr.partnerLook)
+            .put("hue", Palette.hue(pr)).put("dark", Palette.isDark(this@MainActivity, pr))
+            .toString()
+
+        @JavascriptInterface
+        fun send(kind: String, text: String, data: String) {
+            if (kind !in setOf("text", "kiss", "heart", "hug", "photos", "felt", "sync", "look")) return
+            Relay.send(this@MainActivity, kind, text, data) { ok ->
+                if (!ok && kind != "sync" && kind != "look") toast("Couldn't send. Check your internet and try again.")
+            }
+        }
+
+        @JavascriptInterface fun inbox(): String = pr.inbox
+        @JavascriptInterface fun status(): String = pr.status
+        @JavascriptInterface fun batteryOk(): Boolean = getSystemService(PowerManager::class.java).isIgnoringBatteryOptimizations(packageName)
+
+        /** A number both phones show; if they match, nobody else is in the middle. */
+        @JavascriptInterface
+        fun safety(): String {
+            val h = MessageDigest.getInstance("SHA-256").digest(("hearby-safety:" + HearbyCrypto.normalize(pr.code)).toByteArray())
+            val d = h.take(12).joinToString("") { ((it.toInt() and 0xFF) % 10).toString() }
+            return d.chunked(4).joinToString(" ")
+        }
+
+        @JavascriptInterface
+        fun setMyLook(look: String) {
+            if (look !in setOf("man", "hijab", "woman") || look == pr.myLook) return
+            pr.myLook = look
+            Inbox.refresh(this@MainActivity)
+            runOnUiThread {
+                pal = Palette.of(this@MainActivity)
+                applyWindowColors()
+                web?.setBackgroundColor(pal.bg)
+                web?.evaluateJavascript("document.documentElement.dataset.hue='${Palette.hue(pr)}'", null)
+            }
+        }
+
+        @JavascriptInterface
+        fun setPartnerLook(look: String) {
+            if (look in setOf("man", "hijab", "woman") && look != pr.partnerLook) { pr.partnerLook = look; Inbox.refresh(this@MainActivity) }
+        }
+
+        @JavascriptInterface
+        fun setNames(my: String, partner: String) {
+            if (my.isNotBlank()) pr.myName = my.trim().take(20)
+            if (partner.isNotBlank()) pr.partnerName = partner.trim().take(20)
+            Inbox.refresh(this@MainActivity)
+        }
+
+        /** The painted scene, so the home-screen widget shows the same place. */
+        @JavascriptInterface
+        fun saveScene(dataUrl: String) {
+            val comma = dataUrl.indexOf(',')
+            if (!dataUrl.startsWith("data:image/png") || comma < 0) return
+            Thread {
+                try {
+                    val bytes = Base64.decode(dataUrl.substring(comma + 1), Base64.DEFAULT)
+                    val f = SceneRenderer.sceneFile(this@MainActivity)
+                    val tmp = File(f.path + ".tmp")
+                    tmp.writeBytes(bytes)
+                    tmp.renameTo(f)
+                    HearbyWidget.updateAll(applicationContext)
+                } catch (e: Exception) { /* keep the old picture */ }
+            }.start()
+        }
+
+        @JavascriptInterface fun settings() = runOnUiThread { openSettings() }
+        @JavascriptInterface fun pinWidget() = runOnUiThread { this@MainActivity.pinWidget() }
+        @JavascriptInterface fun battery() = runOnUiThread { askBattery() }
+        @JavascriptInterface fun heartbeat() = runOnUiThread { Notifier.vibrateNow(this@MainActivity) }
     }
 
     @Suppress("DEPRECATION")

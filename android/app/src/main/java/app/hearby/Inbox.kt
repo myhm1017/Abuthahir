@@ -2,12 +2,16 @@ package app.hearby
 
 import android.content.Context
 import android.content.Intent
+import org.json.JSONArray
 import org.json.JSONObject
 
 /** Handles messages arriving from your partner and what you've sent. */
 object Inbox {
     const val ACTION_REFRESH = "app.hearby.REFRESH"
     private const val DAY = 24 * 60 * 60 * 1000L
+
+    /** Kinds that are love from your partner: they buzz the heartbeat and show on the widget. */
+    val LOVE = setOf("text", "kiss", "heart", "hug", "photos")
 
     fun handle(ctx: Context, id: String, payload: String) {
         val pr = Prefs(ctx)
@@ -21,17 +25,47 @@ object Inbox {
 
         val name = pr.partnerName.ifBlank { j.optString("name", "Your person") }
         val kind = j.optString("kind")
-        if (kind == "felt") {
-            pr.feltAt = System.currentTimeMillis()
-            Notifier.felt(ctx, name)
-        } else {
-            pr.lastKind = kind
-            pr.lastText = j.optString("text")
-            pr.lastAt = j.optLong("at", System.currentTimeMillis()).coerceAtMost(System.currentTimeMillis())
-            pr.feltSent = false
-            Notifier.heartbeat(ctx, name)
+        val text = j.optString("text")
+        val data = j.optString("data")
+        val at = j.optLong("at", System.currentTimeMillis()).coerceAtMost(System.currentTimeMillis())
+        remember(pr, kind, text, data, at)
+        when {
+            kind == "felt" -> {
+                pr.feltAt = System.currentTimeMillis()
+                Notifier.felt(ctx, name)
+            }
+            kind == "look" -> {
+                // Keep the partner's character type in step, so the widget draws them right.
+                val type = try { JSONObject(data).optString("type") } catch (e: Exception) { "" }
+                when (type) { "man" -> pr.partnerLook = "man"; "hijabi" -> pr.partnerLook = "hijab"; "woman" -> pr.partnerLook = "woman" }
+            }
+            kind in LOVE -> {
+                pr.lastKind = kind
+                pr.lastText = when (kind) {
+                    "photos" -> "📷 ${text.ifBlank { "sent you a photo" }}"
+                    else -> text
+                }
+                pr.lastAt = at
+                pr.feltSent = false
+                Notifier.heartbeat(ctx, name)
+            }
+            // "sync" (moods, answers, special days…) arrives quietly.
         }
         refresh(ctx)
+    }
+
+    /** Keeps recent messages so the app screen can catch up when it opens. */
+    private fun remember(pr: Prefs, kind: String, text: String, data: String, at: Long) {
+        val list = try { JSONArray(pr.inbox) } catch (e: Exception) { JSONArray() }
+        val keep = JSONArray()
+        val cutoff = System.currentTimeMillis() - 3 * DAY
+        var photos = 0
+        // Newest first while trimming, so big photo messages don't pile up.
+        val items = (0 until list.length()).mapNotNull { list.optJSONObject(it) }.filter { it.optLong("at") > cutoff } +
+            JSONObject().put("kind", kind).put("text", text).put("data", data).put("at", at)
+        val trimmed = items.reversed().filter { if (it.optString("kind") == "photos") ++photos <= 3 else true }.take(60).reversed()
+        trimmed.forEach { keep.put(it) }
+        pr.inbox = keep.toString()
     }
 
     fun recordSent(ctx: Context, kind: String, text: String) {
@@ -53,6 +87,7 @@ object Inbox {
         "kiss" -> "💋 a kiss"
         "heart" -> "❤️ love"
         "hug" -> "🤗 a hug"
+        "photos" -> "📷 photos"
         else -> "\"$text\""
     }
 
@@ -80,6 +115,7 @@ object Inbox {
             "kiss" -> "💋 $name sent you a kiss"
             "heart" -> "❤️ $name sent you love"
             "hug" -> "🤗 $name sent you a hug"
+            "photos" -> "📷 $name sent you photos"
             else -> pr.lastText
         }
     }

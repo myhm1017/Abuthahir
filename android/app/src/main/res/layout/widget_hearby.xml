@@ -20,7 +20,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:autoStart="true"
-        android:flipInterval="250"
+        android:flipInterval="5000"
+        android:inAnimation="@anim/place_in"
+        android:outAnimation="@anim/place_out"
         android:visibility="gone" />
 
     <ImageView

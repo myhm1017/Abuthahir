@@ -33,7 +33,7 @@ object Frames {
 
     fun put(ctx: Context, i: Int, dataUrl: String) {
         val comma = dataUrl.indexOf(',')
-        if (i !in 0..31 || !dataUrl.startsWith("data:image/jpeg") || comma < 0) return
+        if (i !in 0..47 || !dataUrl.startsWith("data:image/jpeg") || comma < 0) return
         try { File(dir(ctx), "new_$i.jpg").writeBytes(Base64.decode(dataUrl.substring(comma + 1), Base64.DEFAULT)) } catch (e: Exception) { /* skip */ }
     }
 

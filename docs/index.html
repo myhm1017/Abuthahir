@@ -4334,31 +4334,48 @@ button { cursor: pointer; }
     // Calm moments that repeat smoothly in a short loop.
     const LOOP_SCENES = ['together', 'sit', 'bubbles'];
     let capturing = false;
+    // 8 places, 5 seconds each, a gentle 3-frame loop in each. Painted again every time you open Hearby.
     const captureFrames = async () => {
       if (capturing || !me.place) return;
       capturing = true;
       try {
         const aspect = Math.min(1.6, Math.max(0.6, +NCFG.widgetAspect || 1));
-        const cw = 200, ch = Math.round(cw / aspect), k = 2, N = 24, STEP = 0.125;
+        const cw = 200, ch = Math.round(cw / aspect), k = 2, PER = 3, STEP = 0.35;
+        const fixed = P.leo.scenery && P.leo.scenery !== 'random' ? P.leo.scenery : null;
+        const keys = PLACE_META.map(m => m.key), live = festivalsNow();
+        const set = [fixed || me.place];
+        while (!fixed && set.length < 8) { const key = live.length && rand() < 0.25 ? pick(live) : pick(keys); if (!set.includes(key)) set.push(key); }
         const off = document.createElement('canvas');
         off.width = cw * k; off.height = ch * k;
         const octx = off.getContext('2d');
-        const t0 = performance.now() / 1000;
-        const st = Object.assign({}, me, {
-          canvas: off, ctx: octx, w: cw, h: ch, open: false, override: null, overrideUntil: 0,
-          sceneIdx: SCENES.indexOf(pick(LOOP_SCENES)), sceneStart: t0 - 0.6,
-          clouds: me.clouds.map(c => ({ ...c })), motes: me.motes.map(m => ({ ...m }))
-        });
         if (call('framesBegin') === false) return;
-        for (let i = 0; i < N; i++) {
-          octx.setTransform(k, 0, 0, k, 0, 0);
-          octx.clearRect(0, 0, cw, ch);
-          draw('leo', t0 + i * STEP, STEP, st);
-          call('frame', i, off.toDataURL('image/jpeg', 0.86));
-          await new Promise(res => setTimeout(res, 30));
+        const keep = { place: me.place, season: me.season, seed: me.seed, pal: me.pal, treeKind: me.treeKind, flakes: me.flakes };
+        const scenes = [];
+        let i = 0;
+        for (const key of set) {
+          let plc = keep;
+          if (key !== keep.place) {
+            newPlace('leo', false, key);
+            plc = { place: me.place, season: me.season, seed: me.seed, pal: me.pal, treeKind: me.treeKind, flakes: null };
+            Object.assign(me, keep);
+          }
+          scenes.push({ place: plc.place, season: plc.season, seed: plc.seed });
+          const t0 = performance.now() / 1000;
+          const st = Object.assign({}, me, plc, {
+            canvas: off, ctx: octx, w: cw, h: ch, open: false, override: null, overrideUntil: 0,
+            sceneIdx: SCENES.indexOf(pick(LOOP_SCENES)), sceneStart: t0 - 1,
+            clouds: me.clouds.map(c => ({ ...c })), motes: me.motes.map(m => ({ ...m }))
+          });
+          for (let f = 0; f < PER; f++) {
+            octx.setTransform(k, 0, 0, k, 0, 0);
+            octx.clearRect(0, 0, cw, ch);
+            draw('leo', t0 + f * STEP, STEP, st);
+            call('frame', i++, off.toDataURL('image/jpeg', 0.84));
+            await new Promise(res => setTimeout(res, 25));
+          }
         }
-        call('framesScene', JSON.stringify({ place: me.place, season: me.season, seed: me.seed }));
-        call('framesDone', N, Math.round(STEP * 1000));
+        call('framesScene', JSON.stringify({ groups: set.length, per: PER, places: scenes }));
+        call('framesDone', i, Math.round(STEP * 1000));
       } catch (e) { /* keep the old frames */ } finally { capturing = false; }
     };
     document.addEventListener('visibilitychange', () => {
@@ -4423,7 +4440,8 @@ button { cursor: pointer; }
     if (WIDGET) {
       // Open right where the home-screen widget is, on the same place it shows, like the preview's widget growing.
       try {
-        const fs = NCFG.frameScene ? JSON.parse(NCFG.frameScene) : null;
+        const meta = NCFG.frameScene ? JSON.parse(NCFG.frameScene) : null;
+        const fs = meta && Array.isArray(meta.places) ? meta.places[(+NCFG.frameIndex || 0) % meta.places.length] : meta;
         if (fs && PLACES[fs.place]) {
           newPlace('leo', false, fs.place);
           if (fs.season && !PLACES[fs.place].fixedSeason) me.season = fs.season;
@@ -4442,7 +4460,7 @@ button { cursor: pointer; }
         requestAnimationFrame(() => call('ready'));
       });
       setTimeout(window.hearbyPull, 300);
-      if (!NCFG.frameScene) setTimeout(captureFrames, 1500);
+      setTimeout(captureFrames, 2500);
       // Swiping to another place updates the small widget too.
       const _step = placeStep; let stepT = 0;
       placeStep = (id, dir) => { _step(id, dir); clearTimeout(stepT); stepT = setTimeout(captureFrames, 1200); };

@@ -37,6 +37,8 @@ class Prefs(ctx: Context) {
     var frameMs: Long get() = l("frameMs"); set(v) = putL("frameMs", v)
     /** Which place and season the frames show, so the expanded widget opens on the same one. */
     var frameScene: String get() = s("frameScene"); set(v) = put("frameScene", v)
+    /** When the widget last started its place cycle. */
+    var frameShownAt: Long get() = l("frameShownAt"); set(v) = putL("frameShownAt", v)
     var frameVer: Long get() = l("frameVer"); set(v) = putL("frameVer", v)
     /** Width / height of the home-screen widget, so the frames are painted the right shape. */
     var widgetAspect: Float get() = p.getFloat("widgetAspect", 1f); set(v) = p.edit().putFloat("widgetAspect", v).apply()

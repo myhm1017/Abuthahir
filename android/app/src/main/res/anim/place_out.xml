@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Stays visible while the next place fades in over it, then goes. -->
+<alpha xmlns:android="http://schemas.android.com/apk/res/android" android:duration="200" android:startOffset="520" android:fromAlpha="1" android:toAlpha="0" />

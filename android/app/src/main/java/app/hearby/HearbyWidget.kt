@@ -44,13 +44,23 @@ class HearbyWidget : AppWidgetProvider() {
             // The moving scene: a short loop the app painted. Before that, a still picture.
             val n = Frames.count(ctx)
             if (n > 0) {
+                // Places crossfade every 5 seconds; inside each, a gentle loop of frames.
+                val meta = try { org.json.JSONObject(pr.frameScene) } catch (e: Exception) { null }
+                var per = meta?.optInt("per", n) ?: n
+                if (per <= 0 || n % per != 0) per = n
                 v.removeAllViews(R.id.flipper)
-                for (i in 0 until n) {
-                    val f = RemoteViews(ctx.packageName, R.layout.widget_frame)
-                    f.setImageViewUri(R.id.frame_img, Frames.uri(ctx, i))
-                    v.addView(R.id.flipper, f)
+                for (g in 0 until n / per) {
+                    val place = RemoteViews(ctx.packageName, R.layout.widget_place)
+                    for (f in 0 until per) {
+                        val fr = RemoteViews(ctx.packageName, R.layout.widget_frame)
+                        fr.setImageViewUri(R.id.frame_img, Frames.uri(ctx, g * per + f))
+                        place.addView(R.id.place_flipper, fr)
+                    }
+                    place.setInt(R.id.place_flipper, "setFlipInterval", pr.frameMs.toInt().coerceIn(150, 1000))
+                    v.addView(R.id.flipper, place)
                 }
-                v.setInt(R.id.flipper, "setFlipInterval", pr.frameMs.toInt().coerceIn(80, 1000))
+                v.setInt(R.id.flipper, "setFlipInterval", 5000)
+                pr.frameShownAt = System.currentTimeMillis()
                 v.setViewVisibility(R.id.flipper, View.VISIBLE)
                 v.setViewVisibility(R.id.scene, View.GONE)
                 // Painted earlier in the day? Tint it so night still looks like night.

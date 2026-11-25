@@ -39,3 +39,20 @@ London 03–04, NY AM 10–11, NY PM 14–15.
   Check: when it is 10:00 in New York, your MT5 Market Watch clock should read 17:00.
 
 Python version for CSV data: `backtest/fvg_sweep_backtest.py`.
+
+---
+
+# GoldStraddle (MT5 Expert Advisor)
+
+Straddle / stop-and-reverse breakout bot for XAUUSD (the style shown in the bot_ek99 reel).
+
+- **Straddle:** when flat, a BUY STOP is placed above price and a SELL STOP below
+  (0.5x ATR away by default, or a fixed $ distance with `UseATR = false`). Unfilled orders follow price each candle.
+- **Breakout:** when one side fills, the other is deleted. SL 1x ATR, TP 2x ATR (0 = trailing only), ATR trailing stop.
+- **Stop and reverse:** an opposite stop order is parked at the position's stop loss, so a stop-out flips the trade.
+  Capped at `MaxReversals` (2) flips per cycle; an unfilled reverse order expires after 3 candles.
+- **Lots:** 0.01 start, compounding, halved after a stop loss, reset after a win. Never increases after a loss.
+- **Limits:** spread filter, server-time trading hours (9–21), max 20 trades/day, 3% daily loss stop, close at end of day.
+
+**Spread is the biggest risk for this style.** Backtest with *Every tick based on real ticks* and your broker's real
+spread, and compare it with GoldScalper and GoldSilverBullet over the same period.

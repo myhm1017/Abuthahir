@@ -21,3 +21,21 @@ Fast trend-following scalper for XAUUSD with auto lot sizing.
 3. Run on a **demo** account for at least a month before going live.
 
 No settings are guaranteed to be profitable. Hours are broker server time.
+
+---
+
+# GoldSilverBullet (MT5 Expert Advisor)
+
+"First FVG after a sweep" on XAUUSD M5, in the three Silver Bullet windows (New York time):
+London 03–04, NY AM 10–11, NY PM 14–15.
+
+- **Liquidity:** high/low of the 3 hours before each window (`LookbackHours`).
+- **Sweep:** a 5-min candle in the window trades above that high (look for sells) or below that low (look for buys).
+- **Entry:** limit order at the middle (CE) of the first opposite fair value gap after the sweep. Cancelled if not filled by the end of the window.
+- **Stop:** beyond the sweep wick. **Target:** the opposite liquidity level (e.g. the high for buys), or a fixed RR.
+  Setups whose target is under 1R or whose stop is under $1 are skipped.
+- **Lots:** same as GoldScalper — 0.01 start, compounding, halved after a stop loss, reset after a win.
+- **Time zone:** set `NYOffsetHours` = broker server time minus New York time (7 for most GMT+2/+3 brokers).
+  Check: when it is 10:00 in New York, your MT5 Market Watch clock should read 17:00.
+
+Python version for CSV data: `backtest/fvg_sweep_backtest.py`.

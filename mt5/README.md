@@ -56,3 +56,24 @@ Straddle / stop-and-reverse breakout bot for XAUUSD (the style shown in the bot_
 
 **Spread is the biggest risk for this style.** Backtest with *Every tick based on real ticks* and your broker's real
 spread, and compare it with GoldScalper and GoldSilverBullet over the same period.
+
+---
+
+# GoldCRT (MT5 Expert Advisor)
+
+Candle Range Theory robot that combines the parts of CRT, ICT, MSNR and Quarterly Theory that can be calculated exactly.
+
+| From | Rule |
+|---|---|
+| CRT | Range = previous 4-hour block (aligned to New York 02/06/10/14/18/22). Trade when the current block sweeps one side; target the other side. |
+| ICT | After the sweep, a 5-min candle must close beyond the structure before the sweep (market structure shift). Stop beyond the sweep wick. |
+| MSNR | Confirmation is close-based: the shift candle must close back inside the range. |
+| QT | Sweep and shift must happen in a kill zone: London 02:00–05:00 or New York 07:00–11:00 ET. So the 02:00 block sweeps Asia and the 06:00 block sweeps London. |
+
+- **Entry:** limit at the middle of the sweep → shift leg (`Retrace` 0.5; 0 = enter at market). Expires after 6 candles.
+- **Exit:** target = opposite side of the range; half off at the range midpoint and stop to breakeven (`PartialAtMid`); closes after 8 hours.
+- **Filters:** setups under 1.5R or with a stop under $1 are skipped; one setup per 4H block; spread filter.
+- **Lots:** 0.01 start, compounding, halved after a stop loss, reset after a win. Breakeven stops don't count as losses.
+- **Time zone:** `NYOffsetHours` = server time minus New York time (7 for most brokers).
+
+Python version for CSV data: `backtest/crt_backtest.py`.
